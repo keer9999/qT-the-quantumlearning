@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="1000" height="500">
+  <!-- Background -->
+  <rect width="1000" height="500" fill="#0a0a0a"/>
+  
+  <!-- Title -->
+  <text x="500" y="30" fill="#00d4aa" font-size="20" font-weight="bold" text-anchor="middle" font-family="monospace">BB84 Quantum Key Distribution Protocol</text>
+  
+  <!-- Alice Section -->
+  <rect x="50" y="70" width="180" height="350" fill="#1e293b" stroke="#8b5cf6" stroke-width="3" rx="8"/>
+  <text x="140" y="95" fill="#8b5cf6" font-size="18" font-weight="bold" text-anchor="middle">Alice (Sender)</text>
+  
+  <!-- Alice's Bit Generation -->
+  <rect x="70" y="110" width="140" height="50" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="140" y="130" fill="white" font-size="14" text-anchor="middle">Random Bit</text>
+  <text x="140" y="148" fill="#00d4aa" font-size="16" font-weight="bold" text-anchor="middle">0 or 1</text>
+  
+  <!-- Alice's Basis Selection -->
+  <rect x="70" y="175" width="140" height="50" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="140" y="195" fill="white" font-size="14" text-anchor="middle">Random Basis</text>
+  <text x="140" y="213" fill="#00d4aa" font-size="16" font-weight="bold" text-anchor="middle">+ or ×</text>
+  
+  <!-- Alice's Photon Preparation -->
+  <rect x="70" y="240" width="140" height="60" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="140" y="260" fill="white" font-size="13" text-anchor="middle">Prepare Photon</text>
+  <text x="140" y="278" fill="#00d4aa" font-size="12" text-anchor="middle">|↑⟩ |→⟩ |↗⟩ |↖⟩</text>
+  <text x="140" y="293" fill="#a1a1aa" font-size="11" text-anchor="middle">(polarization)</text>
+  
+  <!-- Alice Send -->
+  <rect x="70" y="315" width="140" height="40" fill="#10b981" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="140" y="340" fill="white" font-size="14" font-weight="bold" text-anchor="middle">Send Photon →</text>
+  
+  <!-- Alice Public Discussion -->
+  <rect x="70" y="370" width="140" height="35" fill="#f59e0b" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="140" y="392" fill="white" font-size="12" text-anchor="middle">Announce Basis</text>
+  
+  <!-- Quantum Channel -->
+  <line x1="230" y1="270" x2="520" y2="270" stroke="#00d4aa" stroke-width="4" stroke-dasharray="10,5"/>
+  <text x="375" y="260" fill="#00d4aa" font-size="14" text-anchor="middle">Quantum Channel</text>
+  
+  <!-- Photon visualization -->
+  <circle cx="300" cy="270" r="8" fill="#00d4aa">
+    <animateMotion dur="3s" repeatCount="indefinite">
+      <mpath href="#photonPath"/>
+    </animateMotion>
+  </circle>
+  <path id="photonPath" d="M 230 270 L 520 270" fill="none"/>
+  
+  <!-- Eve (Eavesdropper) - Optional -->
+  <rect x="350" y="310" width="100" height="80" fill="#1e293b" stroke="#ef4444" stroke-width="2" rx="6" stroke-dasharray="5,5"/>
+  <text x="400" y="330" fill="#ef4444" font-size="14" font-weight="bold" text-anchor="middle">Eve</text>
+  <text x="400" y="348" fill="#a1a1aa" font-size="11" text-anchor="middle">(Eavesdropper)</text>
+  <text x="400" y="365" fill="#ef4444" font-size="10" text-anchor="middle">Intercept &</text>
+  <text x="400" y="380" fill="#ef4444" font-size="10" text-anchor="middle">Measure</text>
+  
+  <!-- Bob Section -->
+  <rect x="550" y="70" width="180" height="350" fill="#1e293b" stroke="#f59e0b" stroke-width="3" rx="8"/>
+  <text x="640" y="95" fill="#f59e0b" font-size="18" font-weight="bold" text-anchor="middle">Bob (Receiver)</text>
+  
+  <!-- Bob's Basis Selection -->
+  <rect x="570" y="110" width="140" height="50" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="640" y="130" fill="white" font-size="14" text-anchor="middle">Random Basis</text>
+  <text x="640" y="148" fill="#00d4aa" font-size="16" font-weight="bold" text-anchor="middle">+ or ×</text>
+  
+  <!-- Bob's Measurement -->
+  <rect x="570" y="175" width="140" height="60" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="640" y="195" fill="white" font-size="14" text-anchor="middle">Measure Photon</text>
+  <text x="640" y="213" fill="#00d4aa" font-size="12" text-anchor="middle">with chosen basis</text>
+  <text x="640" y="228" fill="#a1a1aa" font-size="11" text-anchor="middle">(collapses state)</text>
+  
+  <!-- Bob's Result -->
+  <rect x="570" y="250" width="140" height="50" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="640" y="270" fill="white" font-size="14" text-anchor="middle">Record Bit</text>
+  <text x="640" y="288" fill="#00d4aa" font-size="16" font-weight="bold" text-anchor="middle">0 or 1</text>
+  
+  <!-- Bob Public Discussion -->
+  <rect x="570" y="315" width="140" height="35" fill="#f59e0b" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="640" y="337" fill="white" font-size="12" text-anchor="middle">Announce Basis</text>
+  
+  <!-- Bob Key Sifting -->
+  <rect x="570" y="365" width="140" height="40" fill="#10b981" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="640" y="380" fill="white" font-size="13" text-anchor="middle">Keep if bases</text>
+  <text x="640" y="396" fill="white" font-size="13" text-anchor="middle">match</text>
+  
+  <!-- Classical Channel (Public) -->
+  <path d="M 230 390 Q 400 440 570 390" stroke="#f59e0b" stroke-width="3" fill="none" stroke-dasharray="5,3"/>
+  <text x="400" y="460" fill="#f59e0b" font-size="14" text-anchor="middle">Classical Public Channel (Basis Reconciliation)</text>
+  
+  <!-- Final Key -->
+  <rect x="770" y="70" width="180" height="350" fill="#1e293b" stroke="#10b981" stroke-width="3" rx="8"/>
+  <text x="860" y="95" fill="#10b981" font-size="18" font-weight="bold" text-anchor="middle">Shared Secret Key</text>
+  
+  <!-- Key Sifting Result -->
+  <rect x="790" y="120" width="140" height="60" fill="#10b981" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="860" y="140" fill="white" font-size="13" text-anchor="middle">After Sifting:</text>
+  <text x="860" y="158" fill="white" font-size="12" text-anchor="middle">Keep matching</text>
+  <text x="860" y="173" fill="white" font-size="12" text-anchor="middle">basis bits</text>
+  
+  <!-- Error Check -->
+  <rect x="790" y="195" width="140" height="60" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="860" y="215" fill="white" font-size="13" text-anchor="middle">Error Check:</text>
+  <text x="860" y="233" fill="#00d4aa" font-size="12" text-anchor="middle">Compare subset</text>
+  <text x="860" y="248" fill="#a1a1aa" font-size="11" text-anchor="middle">(detect Eve)</text>
+  
+  <!-- Privacy Amplification -->
+  <rect x="790" y="270" width="140" height="60" fill="#0057b8" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="860" y="290" fill="white" font-size="13" text-anchor="middle">Privacy</text>
+  <text x="860" y="308" fill="white" font-size="13" text-anchor="middle">Amplification</text>
+  <text x="860" y="323" fill="#a1a1aa" font-size="11" text-anchor="middle">(hash function)</text>
+  
+  <!-- Final Secure Key -->
+  <rect x="790" y="345" width="140" height="60" fill="#10b981" stroke="#00d4aa" stroke-width="2" rx="4"/>
+  <text x="860" y="365" fill="white" font-size="14" font-weight="bold" text-anchor="middle">Secure Key 🔐</text>
+  <text x="860" y="383" fill="#00d4aa" font-size="12" text-anchor="middle">101011...</text>
+  <text x="860" y="398" fill="#a1a1aa" font-size="10" text-anchor="middle">(ready for use)</text>
+  
+  <!-- Legend -->
+  <text x="50" y="480" fill="#a1a1aa" font-size="12">+ = Rectilinear (|↑⟩ |→⟩)</text>
+  <text x="250" y="480" fill="#a1a1aa" font-size="12">× = Diagonal (|↗⟩ |↖⟩)</text>
+  <text x="450" y="480" fill="#10b981" font-size="12">■ Quantum-secure communication</text>
+</svg>

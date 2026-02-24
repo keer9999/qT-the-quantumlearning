@@ -1,0 +1,224 @@
+/* ================================
+   GLOBAL RESET / BASICS
+   ================================ */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-y: auto;   /* ✅ external scrollbar */
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ================================
+   GLOBAL BACK BUTTON – ADVANCED
+   ================================ */
+
+.global-back-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 58px;
+  height: 58px;
+  background: rgba(20, 20, 20, 0.85);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3000;
+  font-size: 26px;
+  user-select: none;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
+
+  backdrop-filter: blur(6px);
+  transition: transform 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+}
+
+.global-back-btn::before {
+  content: "←";
+  font-weight: bold;
+}
+
+.global-back-btn:hover {
+  background: #2563eb;
+  transform: scale(1.15);
+}
+
+.global-back-btn:active {
+  transform: scale(1.05);
+}
+
+.global-back-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .global-back-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    bottom: 18px;
+    left: 18px;
+  }
+}
+
+/* ================================
+   APP LAYOUT
+   ================================ */
+
+/* Sidebar + Content wrapper */
+.app {
+  display: flex;
+  height: calc(100vh - 72px); /* header height */
+}
+
+/* Sidebar stays fixed */
+.sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-right: 1px solid #e6eaf0;
+}
+
+/* ================================
+   MIDDLE CONTENT (INTERNAL SCROLL)
+   ================================ */
+
+.content {
+  flex: 1;
+  height: 100%;
+  padding: 40px 30px;
+
+  overflow-y: auto;   /* ✅ internal scroll */
+  overflow-x: hidden;
+
+  background: #f6f8fb;
+}
+
+/* ================================
+   SCROLLBAR STYLING
+   ================================ */
+
+/* -------- External scrollbar (page) -------- */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* ❌ no pale strip */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+}
+
+/* -------- Internal scrollbar (middle panel) -------- */
+.content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 8px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* ================================
+   SMALL UTILITIES
+   ================================ */
+
+.substep {
+  margin-left: 20px;
+  background: #eef2ff;
+  font-size: 0.95em;
+}
+/* ================================
+   SCROLL BEHAVIOR – FINAL FIX
+   ================================ */
+
+/* External page scroll */
+html, body {
+  height: 100%;
+  overflow-y: auto;     /* external scrollbar */
+  overflow-x: hidden;
+}
+
+/* App layout stays fixed */
+.app {
+  height: calc(100vh - 72px); /* header height */
+}
+
+/* Middle panel scrolls */
+.content {
+  height: 100%;
+  overflow-y: auto;     /* ✅ middle scroll works */
+  overflow-x: hidden;
+}
+
+/* ================================
+   SCROLLBAR STYLING (NO SIDE STRIP)
+   ================================ */
+
+/* Browser scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Middle scrollbar */
+.content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 8px;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+}

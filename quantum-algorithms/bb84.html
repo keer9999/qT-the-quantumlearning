@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BB84 Quantum Key Distribution | Quantum Algorithms</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/quiz.css">
+
+    <style>
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-2xl) 0;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f3ff 100%);
+            border-radius: var(--radius-lg);
+        }
+
+        .algorithm-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .algorithm-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+            border-bottom: 3px solid var(--accent-primary);
+            padding-bottom: var(--spacing-sm);
+        }
+
+        .key-concept {
+            background: #e6f3ff;
+            border: 1px solid #0057b8;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .key-concept-title {
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 16px;
+        }
+
+        .circuit-container {
+            text-align: center;
+            margin: var(--spacing-xl) 0;
+            padding: var(--spacing-lg);
+            background: #0a0a0a;
+            border-radius: var(--radius-lg);
+        }
+
+        .circuit-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .back-btn:hover {
+            gap: var(--spacing-md);
+        }
+
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .step-card {
+            background: var(--bg-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: var(--spacing-sm);
+            font-size: 16px;
+        }
+
+        /* Simulator Styles */
+        .simulator {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .simulator-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .simulator-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .simulator-panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .panel {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+        }
+
+        .panel-header {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .alice-panel {
+            border-color: #8b5cf6;
+        }
+
+        .alice-panel .panel-header {
+            color: #8b5cf6;
+        }
+
+        .bob-panel {
+            border-color: #f59e0b;
+        }
+
+        .bob-panel .panel-header {
+            color: #f59e0b;
+        }
+
+        .results-panel {
+            border-color: #10b981;
+        }
+
+        .results-panel .panel-header {
+            color: #10b981;
+        }
+
+        .input-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            font-size: 14px;
+        }
+
+        .bit-display {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 18px;
+            margin: var(--spacing-xs) 0;
+        }
+
+        .basis-selector {
+            display: flex;
+            gap: var(--spacing-sm);
+            justify-content: center;
+        }
+
+        .basis-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .basis-btn:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .basis-btn.selected {
+            border-color: var(--accent-primary);
+            background: var(--accent-light);
+            color: var(--accent-primary);
+        }
+
+        .sim-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: var(--spacing-md);
+            transition: transform 0.2s;
+        }
+
+        .sim-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .sim-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .transmission {
+            background: #0a0a0a;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+            min-height: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photon {
+            width: 20px;
+            height: 20px;
+            background: #00d4aa;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 20px #00d4aa;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--spacing-md);
+            font-size: 13px;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .results-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        .match-yes {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .match-no {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-xs);
+        }
+
+        .controls {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-lg);
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--accent-primary);
+            background: white;
+            color: var(--accent-primary);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .eve-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-md) 0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #ef4444;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .polarization {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2L2 7v10c0 5.5 3.8 10.7 10 12 6.2-1.3 10-6.5 10-12V7l-10-5zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                Quantum Algorithms
+            </div>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-btn">← Back to All Algorithms</a>
+
+        <div class="page-header">
+            <h1 class="algorithm-title">BB84 Protocol</h1>
+            <p class="algorithm-subtitle">Quantum Key Distribution for Secure Communication</p>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">What is Quantum Key Distribution?</h2>
+            <p>
+                <strong>Quantum Key Distribution (QKD)</strong> is a method for two parties (Alice and Bob) to share a
+                secret encryption key
+                that is guaranteed to be secure by the laws of quantum mechanics. The BB84 protocol, invented by Charles
+                Bennett and
+                Gilles Brassard in 1984, was the first QKD protocol and remains one of the most important.
+            </p>
+
+            <div class="key-concept">
+                <div class="key-concept-title">🔐 Why BB84 Matters</div>
+                <p><strong>The Problem:</strong> Traditional key exchange methods (like RSA) can be broken by powerful
+                    computers or quantum computers (Shor's algorithm).</p>
+                <p><strong>The Solution:</strong> BB84 uses quantum mechanics to guarantee that any eavesdropping
+                    attempt is detectable!</p>
+                <p><strong>Key Principle:</strong> Measuring a quantum state disturbs it. If Eve tries to intercept the
+                    key, Alice and Bob will notice.</p>
+            </div>
+
+            <h3>Real-World Applications</h3>
+            <ul>
+                <li><strong>Banking:</strong> Securing financial transactions and data transfers</li>
+                <li><strong>Government:</strong> Protecting classified communications</li>
+                <li><strong>Healthcare:</strong> Securing patient data transmission</li>
+                <li><strong>Quantum Internet:</strong> Foundation for future quantum communication networks</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Prerequisites</h2>
+            <p>Before studying BB84, you should understand:</p>
+
+            <div class="key-concept">
+                <div class="key-concept-title">📚 Recommended Background</div>
+                <ul>
+                    <li><strong>Quantum States:</strong> Basic understanding of qubits and superposition</li>
+                    <li><strong>Photon Polarization:</strong> Light can be polarized vertically, horizontally, or
+                        diagonally</li>
+                    <li><strong>Measurement:</strong> Measuring a quantum system changes its state</li>
+                    <li><strong>No-Cloning Theorem:</strong> You cannot perfectly copy an unknown quantum state</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">How BB84 Works (Simple Explanation)</h2>
+
+            <p>Imagine Alice wants to send Bob a secret key using photons (particles of light):</p>
+
+            <div class="step-grid">
+                <div class="step-card">
+                    <span class="step-number">1</span>
+                    <strong>Alice Prepares</strong>
+                    <p>Alice generates random bits (0 or 1) and chooses random measurement bases (+ or ×) for each bit.
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">2</span>
+                    <strong>Alice Sends</strong>
+                    <p>She encodes each bit as a photon polarization: ↑ (0 in +), → (1 in +), ↗ (0 in ×), or ↖ (1 in ×).
+                    </p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">3</span>
+                    <strong>Bob Receives</strong>
+                    <p>Bob randomly chooses a basis (+ or ×) to measure each incoming photon.</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">4</span>
+                    <strong>Public Discussion</strong>
+                    <p>Alice and Bob publicly announce which bases they used (NOT the bit values!).</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">5</span>
+                    <strong>Key Sifting</strong>
+                    <p>They keep only the bits where both used the same basis. These form the shared secret key.</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">6</span>
+                    <strong>Error Checking</strong>
+                    <p>They compare a random subset of bits. High error rate means eavesdropping detected!</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Protocol Diagram</h2>
+            <div class="circuit-container">
+                <img src="assets/circuits/bb84.svg" alt="BB84 Protocol Diagram">
+            </div>
+
+            <div class="key-concept">
+                <div class="key-concept-title">📖 Understanding the Diagram</div>
+                <ul>
+                    <li><strong>Quantum Channel:</strong> Photons travel from Alice to Bob (can't be cloned!)</li>
+                    <li><strong>Classical Channel:</strong> Alice and Bob publicly discuss bases (anyone can listen)
+                    </li>
+                    <li><strong>Eve (Optional):</strong> An eavesdropper who intercepts and re-sends photons</li>
+                    <li><strong>Bases:</strong> + means rectilinear (↑/→), × means diagonal (↗/↖)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Interactive BB84 Simulator</h2>
+            <p>Experience how BB84 works! Click "Send Photon" to transmit bits from Alice to Bob. Watch how matching
+                bases create a shared secret key.</p>
+
+            <div class="simulator" id="simulator">
+                <div class="simulator-header">
+                    <div class="simulator-title">🔐 BB84 Quantum Key Distribution</div>
+                    <div class="eve-toggle">
+                        <span>Eavesdropper (Eve):</span>
+                        <div class="toggle-switch" id="eveToggle" onclick="toggleEve()">
+                            <div class="toggle-slider"></div>
+                        </div>
+                        <span id="eveStatus">OFF</span>
+                    </div>
+                </div>
+
+                <div class="simulator-panels">
+                    <!-- Alice Panel -->
+                    <div class="panel alice-panel">
+                        <div class="panel-header">👩 Alice (Sender)</div>
+                        <div class="input-group">
+                            <label>Random Bit:</label>
+                            <div class="bit-display" id="aliceBit">-</div>
+                        </div>
+                        <div class="input-group">
+                            <label>Choose Basis:</label>
+                            <div class="basis-selector">
+                                <button class="basis-btn" id="aliceRecti" onclick="selectBasis('alice', 'recti')">+
+                                    (Rectilinear)</button>
+                                <button class="basis-btn" id="aliceDiag" onclick="selectBasis('alice', 'diag')">×
+                                    (Diagonal)</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Polarization:</label>
+                            <div class="polarization" id="alicePolarization">-</div>
+                        </div>
+                        <button class="sim-btn" onclick="sendPhoton()" id="sendBtn">Send Photon →</button>
+                    </div>
+
+                    <!-- Transmission -->
+                    <div class="panel">
+                        <div class="panel-header">📡 Quantum Channel</div>
+                        <div class="transmission" id="transmission">
+                            <div class="photon" id="photon" style="display: none;"></div>
+                        </div>
+                        <div
+                            style="text-align: center; margin-top: var(--spacing-sm); font-size: 12px; color: var(--text-secondary);">
+                            <span id="transmissionStatus">Ready to transmit</span>
+                        </div>
+                    </div>
+
+                    <!-- Bob Panel -->
+                    <div class="panel bob-panel">
+                        <div class="panel-header">👨 Bob (Receiver)</div>
+                        <div class="input-group">
+                            <label>Choose Basis:</label>
+                            <div class="basis-selector">
+                                <button class="basis-btn" id="bobRecti" onclick="selectBasis('bob', 'recti')">+
+                                    (Rectilinear)</button>
+                                <button class="basis-btn" id="bobDiag" onclick="selectBasis('bob', 'diag')">×
+                                    (Diagonal)</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Measured Bit:</label>
+                            <div class="bit-display" id="bobBit">-</div>
+                        </div>
+                        <div class="input-group">
+                            <label>Bases Match:</label>
+                            <div class="bit-display" id="basisMatch">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="panel results-panel">
+                    <div class="panel-header">📊 Transmission Results</div>
+                    <table class="results-table" id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Alice Bit</th>
+                                <th>Alice Basis</th>
+                                <th>Bob Basis</th>
+                                <th>Bob Bit</th>
+                                <th>Match?</th>
+                                <th>In Key?</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: #999;">No transmissions yet</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Statistics -->
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTransmissions">0</div>
+                        <div class="stat-label">Total Transmissions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="basisMatches">0</div>
+                        <div class="stat-label">Basis Matches</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="keyLength">0</div>
+                        <div class="stat-label">Shared Key Length</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="errorRate">0%</div>
+                        <div class="stat-label">Error Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="sharedKey">-</div>
+                        <div class="stat-label">Shared Key (partial)</div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button class="control-btn" onclick="autoRun()">Auto Run (10x)</button>
+                    <button class="control-btn" onclick="reset()">Reset Simulation</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Why Eavesdropping is Detected</h2>
+
+            <div class="key-concept">
+                <div class="key-concept-title">🕵️ How Eve Gets Caught</div>
+                <p>
+                    If Eve intercepts the photons, she must measure them to read the bits. But she doesn't know which
+                    basis
+                    Alice used! If she guesses wrong (50% chance), she'll disturb the photon state.
+                </p>
+                <p>
+                    When Eve re-sends the photon to Bob, the disturbance causes errors. Alice and Bob will notice a
+                    higher-than-expected error rate when they compare a subset of their bits, revealing Eve's presence!
+                </p>
+            </div>
+
+            <h3>Security Guarantee</h3>
+            <p>With BB84:</p>
+            <ul>
+                <li>✅ Any eavesdropping introduces detectable errors</li>
+                <li>✅ The final key is information-theoretically secure</li>
+                <li>✅ Security is based on quantum physics, not computational difficulty</li>
+                <li>✅ Even a quantum computer can't break it!</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Test Your Understanding</h2>
+            <p>Challenge yourself with this 10-question quiz about BB84!</p>
+            <div id="quizContainer"></div>
+        </section>
+    </div>
+
+    <script src="assets/js/quiz.js"></script>
+    <script>
+        // BB84 Simulator Logic
+        let transmissions = [];
+        let eveActive = false;
+        let aliceBasis = null;
+        let bobBasis = null;
+
+        function selectBasis(person, basis) {
+            if (person === 'alice') {
+                aliceBasis = basis;
+                document.getElementById('aliceRecti').classList.remove('selected');
+                document.getElementById('aliceDiag').classList.remove('selected');
+                document.getElementById(basis === 'recti' ? 'aliceRecti' : 'aliceDiag').classList.add('selected');
+
+                // Generate new random bit for Alice
+                const bit = Math.random() < 0.5 ? 0 : 1;
+                document.getElementById('aliceBit').textContent = bit;
+                document.getElementById('aliceBit').dataset.bit = bit;
+
+                // Show polarization
+                const polarizations = {
+                    'recti': ['↑ (0)', '→ (1)'],
+                    'diag': ['↗ (0)', '↖ (1)']
+                };
+                document.getElementById('alicePolarization').textContent = polarizations[basis][bit];
+            } else {
+                bobBasis = basis;
+                document.getElementById('bobRecti').classList.remove('selected');
+                document.getElementById('bobDiag').classList.remove('selected');
+                document.getElementById(basis === 'recti' ? 'bobRecti' : 'bobDiag').classList.add('selected');
+            }
+        }
+
+        function toggleEve() {
+            eveActive = !eveActive;
+            const toggle = document.getElementById('eveToggle');
+            const status = document.getElementById('eveStatus');
+            toggle.classList.toggle('active');
+            status.textContent = eveActive ? 'ON (intercepting!)' : 'OFF';
+            status.style.color = eveActive ? '#ef4444' : '#666';
+        }
+
+        function sendPhoton() {
+            if (!aliceBasis || !bobBasis) {
+                alert('Both Alice and Bob must select a basis first!');
+                return;
+            }
+
+            const aliceBit = parseInt(document.getElementById('aliceBit').dataset.bit);
+
+            // Simulate Eve's interference if active
+            let eveMeasured = false;
+            let eveBasis = null;
+            if (eveActive) {
+                eveBasis = Math.random() < 0.5 ? 'recti' : 'diag';
+                eveMeasured = true;
+            }
+
+            // Animate photon transmission
+            const photon = document.getElementById('photon');
+            photon.style.display = 'block';
+            photon.style.left = '0px';
+
+            let position = 0;
+            const interval = setInterval(() => {
+                position += 5;
+                photon.style.left = position + 'px';
+
+                if (position >= 250) {
+                    clearInterval(interval);
+                    photon.style.display = 'none';
+                    measurePhoton(aliceBit, aliceBasis, bobBasis, eveMeasured, eveBasis);
+                }
+            }, 20);
+
+            document.getElementById('transmissionStatus').textContent = 'Transmitting photon...';
+            document.getElementById('sendBtn').disabled = true;
+        }
+
+        function measurePhoton(aliceBit, aliceBasis, bobBasis, eveMeasured, eveBasis) {
+            let bobBit;
+            let basisMatch = aliceBasis === bobBasis;
+
+            // If Eve measured with wrong basis, introduce error
+            if (eveMeasured && eveBasis !== aliceBasis) {
+                // 50% chance of error when Eve uses wrong basis
+                bobBit = basisMatch ? aliceBit : (Math.random() < 0.5 ? aliceBit : 1 - aliceBit);
+            } else {
+                // Normal measurement: correct if bases match, random if not
+                bobBit = basisMatch ? aliceBit : (Math.random() < 0.5 ? 0 : 1);
+            }
+
+            document.getElementById('bobBit').textContent = bobBit;
+            document.getElementById('basisMatch').textContent = basisMatch ? '✓ Yes' : '✗ No';
+            document.getElementById('basisMatch').className = 'bit-display ' + (basisMatch ? 'match-yes' : 'match-no');
+
+            // Record transmission
+            const transmission = {
+                number: transmissions.length + 1,
+                aliceBit,
+                aliceBasis,
+                bobBasis,
+                bobBit,
+                basisMatch,
+                inKey: basisMatch && (aliceBit === bobBit)
+            };
+            transmissions.push(transmission);
+
+            updateResults();
+            document.getElementById('transmissionStatus').textContent = 'Measurement complete';
+            document.getElementById('sendBtn').disabled = false;
+        }
+
+        function updateResults() {
+            const tbody = document.getElementById('resultsBody');
+            tbody.innerHTML = '';
+
+            transmissions.forEach(t => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${t.number}</td>
+                    <td>${t.aliceBit}</td>
+                    <td>${t.aliceBasis === 'recti' ? '+' : '×'}</td>
+                    <td>${t.bobBasis === 'recti' ? '+' : '×'}</td>
+                    <td>${t.bobBit}</td>
+                    <td class="${t.basisMatch ? 'match-yes' : 'match-no'}">${t.basisMatch ? '✓' : '✗'}</td>
+                    <td class="${t.inKey ? 'match-yes' : 'match-no'}">${t.inKey ? '✓' : '✗'}</td>
+                `;
+            });
+
+            // Update statistics
+            const matches = transmissions.filter(t => t.basisMatch).length;
+            const keyBits = transmissions.filter(t => t.inKey);
+            const errors = transmissions.filter(t => t.basisMatch && t.aliceBit !== t.bobBit).length;
+            const errorRate = matches > 0 ? ((errors / matches) * 100).toFixed(1) : 0;
+
+            document.getElementById('totalTransmissions').textContent = transmissions.length;
+            document.getElementById('basisMatches').textContent = matches;
+            document.getElementById('keyLength').textContent = keyBits.length;
+            document.getElementById('errorRate').textContent = errorRate + '%';
+            document.getElementById('sharedKey').textContent = keyBits.slice(-8).map(t => t.aliceBit).join('') || '-';
+        }
+
+        function autoRun() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    // Random basis selection
+                    selectBasis('alice', Math.random() < 0.5 ? 'recti' : 'diag');
+                    selectBasis('bob', Math.random() < 0.5 ? 'recti' : 'diag');
+
+                    setTimeout(() => {
+                        if (document.getElementById('sendBtn').disabled === false) {
+                            sendPhoton();
+                        }
+                    }, 100);
+                }, i * 1500);
+            }
+        }
+
+        function reset() {
+            transmissions = [];
+            aliceBasis = null;
+            bobBasis = null;
+            document.getElementById('aliceBit').textContent = '-';
+            document.getElementById('bobBit').textContent = '-';
+            document.getElementById('alicePolarization').textContent = '-';
+            document.getElementById('basisMatch').textContent = '-';
+            document.getElementById('basisMatch').className = 'bit-display';
+            document.querySelectorAll('.basis-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('resultsBody').innerHTML = '<tr><td colspan="7" style="text-align: center; color: #999;">No transmissions yet</td></tr>';
+            document.getElementById('totalTransmissions').textContent = '0';
+            document.getElementById('basisMatches').textContent = '0';
+            document.getElementById('keyLength').textContent = '0';
+            document.getElementById('errorRate').textContent = '0%';
+            document.getElementById('sharedKey').textContent = '-';
+            document.getElementById('transmissionStatus').textContent = 'Ready to transmit';
+        }
+
+        // Quiz
+        const bb84Quiz = {
+            algorithmName: "BB84 Protocol",
+            questions: [
+                {
+                    id: 1,
+                    question: "What does BB84 stand for?",
+                    options: [
+                        "Bennett-Brassard 1984",
+                        "Binary Basis 84-bit",
+                        "Bell-Based 84 protocol",
+                        "Bit-by-Bit 84 encryption"
+                    ],
+                    correct: 0,
+                    explanation: "BB84 is named after its inventors Charles Bennett and Gilles Brassard, who proposed it in 1984."
+                },
+                {
+                    id: 2,
+                    question: "What is the main purpose of BB84?",
+                    options: [
+                        "To encrypt messages directly",
+                        "To distribute a shared secret key",
+                        "To factor large numbers",
+                        "To search databases"
+                    ],
+                    correct: 1,
+                    explanation: "BB84 is a Quantum Key Distribution (QKD) protocol used to securely share a secret encryption key between two parties."
+                },
+                {
+                    id: 3,
+                    question: "What quantum property makes BB84 secure?",
+                    options: [
+                        "Superposition",
+                        "Entanglement",
+                        "Measurement disturbs quantum states",
+                        "No-signaling theorem"
+                    ],
+                    correct: 2,
+                    explanation: "BB84's security relies on the fact that measuring a quantum state disturbs it. Any eavesdropper must measure the photons, which introduces detectable errors."
+                },
+                {
+                    id: 4,
+                    question: "How many measurement bases are used in BB84?",
+                    options: ["1", "2", "3", "4"],
+                    correct: 1,
+                    explanation: "BB84 uses two bases: rectilinear (+) for vertical/horizontal polarization, and diagonal (×) for 45°/135° polarization."
+                },
+                {
+                    id: 5,
+                    question: "What information do Alice and Bob share publicly?",
+                    options: [
+                        "The bit values (0 or 1)",
+                        "The measurement bases used",
+                        "The encryption key",
+                        "Nothing at all"
+                    ],
+                    correct: 1,
+                    explanation: "Alice and Bob publicly announce which measurement basis they used for each photon, but NOT the actual bit values. This allows them to sift the key while keeping it secret."
+                },
+                {
+                    id: 6,
+                    question: "What happens when Alice and Bob use different bases?",
+                    options: [
+                        "Bob always gets the wrong bit",
+                        "Bob gets a random bit (50% chance correct)",
+                        "The photon is destroyed",
+                        "The communication fails"
+                    ],
+                    correct: 1,
+                    explanation: "When different bases are used, Bob's measurement result is random with a 50% chance of matching Alice's bit. These bits are discarded during key sifting."
+                },
+                {
+                    id: 7,
+                    question: "How is eavesdropping detected in BB84?",
+                    options: [
+                        "By quantum entanglement",
+                        "Through error rate analysis",
+                        "Using special detectors",
+                        "It cannot be detected"
+                    ],
+                    correct: 1,
+                    explanation: "Alice and Bob compare a subset of their sifted bits. If an eavesdropper intercepted photons, it introduces errors that show up as a higher-than-expected error rate."
+                },
+                {
+                    id: 8,
+                    question: "What percentage of photons typically contribute to the final key?",
+                    options: ["100%", "~75%", "~50%", "~25%"],
+                    correct: 2,
+                    explanation: "On average, Alice and Bob choose the same basis about 50% of the time. Only these matching-basis bits are kept for the final key."
+                },
+                {
+                    id: 9,
+                    question: "Can Shor's algorithm break BB84 encryption?",
+                    options: [
+                        "Yes, easily",
+                        "Yes, but it takes a long time",
+                        "No, BB84 is quantum-resistant",
+                        "Only if the key is very long"
+                    ],
+                    correct: 2,
+                    explanation: "BB84 provides information-theoretic security based on quantum physics, not computational difficulty. Even quantum computers cannot break it."
+                },
+                {
+                    id: 10,
+                    question: "What is 'key sifting' in BB84?",
+                    options: [
+                        "Encrypting the final key",
+                        "Removing photons lost in transmission",
+                        "Keeping only bits where bases matched",
+                        "Detecting eavesdropping attempts"
+                    ],
+                    correct: 2,
+                    explanation: "Key sifting is the process where Alice and Bob discard bits where they used different measurement bases, keeping only the matching-basis bits for their shared key."
+                }
+            ]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            new Quiz(bb84Quiz, 'quizContainer');
+        });
+    </script>
+</body>
+
+</html>

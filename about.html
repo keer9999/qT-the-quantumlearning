@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>About | qT – Quantum Technology Learning Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="About qT – A CSP project by JNTUACEA ECE department, developed under the guidance of Dr. V. Sumalatha, covering quantum physics, gates, algorithms and cryptography.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --void: #020205;
+      --deep: #0a0f1e;
+      --surface: #0f172a;
+      --glass: rgba(15, 23, 42, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #38bdf8;
+      --accent2: #818cf8;
+      --gold: #d4a853;
+      --gold-light: #f0c97a;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --white: #ffffff;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--void);
+      color: var(--text);
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── STARFIELD ─────────────────────────────────────────── */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 20% 30%, rgba(56, 189, 248, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(129, 140, 248, 0.04) 0%, transparent 60%),
+        var(--void);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    #starfield canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ─── HEADER ────────────────────────────────────────────── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(2, 2, 5, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-brand img {
+      height: 38px;
+    }
+
+    .brand-name {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+
+    .brand-name span.q {
+      color: var(--accent);
+    }
+
+    .brand-name span.T {
+      color: var(--white);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: color 0.3s, gap 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--white);
+      gap: 12px;
+    }
+
+    .back-link svg {
+      transition: transform 0.3s;
+    }
+
+    .back-link:hover svg {
+      transform: translateX(-3px);
+    }
+
+    /* ─── HERO ──────────────────────────────────────────────── */
+    .hero-section {
+      position: relative;
+      z-index: 1;
+      padding: 110px 48px 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(212, 168, 83, 0.1);
+      border: 1px solid rgba(212, 168, 83, 0.3);
+      border-radius: 100px;
+      padding: 6px 18px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .hero-title .qt-mark {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 680px;
+      margin: 0 auto 50px;
+      line-height: 1.8;
+    }
+
+    .hero-divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto;
+    }
+
+    /* ─── MAIN CONTENT ──────────────────────────────────────── */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .content-section {
+      padding: 80px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .content-section+.content-section {
+      padding-top: 0;
+    }
+
+    /* Section label */
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .section-eyebrow-line {
+      flex: 0 0 40px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .section-eyebrow span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ─── IDENTITY CARD ─────────────────────────────────────── */
+    .identity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .identity-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-section,
+      .content-section {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      header {
+        padding: 14px 20px;
+      }
+    }
+
+    .pcard {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.4s, transform 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pcard::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .pcard:hover {
+      border-color: rgba(56, 189, 248, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .pcard.gold:hover {
+      border-color: rgba(212, 168, 83, 0.35);
+    }
+
+    .pcard.wide {
+      grid-column: 1 / -1;
+    }
+
+    .pcard-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .pcard.gold .pcard-icon {
+      background: rgba(212, 168, 83, 0.1);
+      border-color: rgba(212, 168, 83, 0.25);
+    }
+
+    .pcard-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .pcard-icon.accent svg {
+      color: var(--accent);
+    }
+
+    .pcard-icon.gold svg {
+      color: var(--gold);
+    }
+
+    .pcard h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+
+    .pcard p {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      line-height: 1.8;
+      margin-bottom: 10px;
+    }
+
+    .pcard p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight-text {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .gold-text {
+      color: var(--gold-light);
+      font-weight: 600;
+    }
+
+    /* metadata pill */
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 14px;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-pill svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .meta-pill.gold {
+      background: rgba(212, 168, 83, 0.08);
+      border-color: rgba(212, 168, 83, 0.2);
+      color: var(--gold-light);
+    }
+
+    /* ─── MENTOR CARD ───────────────────────────────────────── */
+    .mentor-card {
+      background: var(--glass);
+      border: 1px solid rgba(212, 168, 83, 0.2);
+      border-radius: 20px;
+      padding: 36px;
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.4s, transform 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mentor-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212, 168, 83, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .mentor-card:hover {
+      border-color: rgba(212, 168, 83, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .mentor-portrait {
+      flex: 0 0 110px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(212, 168, 83, 0.4);
+      box-shadow: 0 0 30px rgba(212, 168, 83, 0.15);
+    }
+
+    .mentor-info h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .mentor-info .designation {
+      font-size: 0.85rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .mentor-info p {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .mentor-card {
+        flex-direction: column;
+      }
+
+      .mentor-portrait {
+        width: 80px;
+        height: 80px;
+        flex: 0 0 80px;
+      }
+    }
+
+    /* ─── CAPABILITIES GRID ─────────────────────────────────── */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .cap-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.3s, transform 0.3s;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .cap-card:hover {
+      border-color: rgba(56, 189, 248, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .cap-icon {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cap-icon svg {
+      width: 22px;
+      height: 22px;
+      color: var(--accent);
+    }
+
+    .cap-body h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .cap-body p {
+      font-size: 0.855rem;
+      color: #64748b;
+      line-height: 1.65;
+    }
+
+    .cap-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      border-radius: 100px;
+      padding: 3px 10px;
+    }
+
+    /* ─── REFERENCES ────────────────────────────────────────── */
+    .ref-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .ref-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ref-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      backdrop-filter: blur(12px);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .ref-card:hover {
+      border-color: rgba(56, 189, 248, 0.25);
+      transform: translateY(-3px);
+    }
+
+    .ref-logo-box {
+      width: 54px;
+      height: 54px;
+      flex: 0 0 54px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .ref-logo-box.ibm {
+      background: #006699;
+    }
+
+    .ref-logo-box.quvis {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.2);
+    }
+
+    .ref-logo-box svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .ref-info h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .ref-info p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─── DEDICATION ────────────────────────────────────────── */
+    .dedication-wrapper {
+      background: var(--glass);
+      border: 1px solid rgba(212, 168, 83, 0.2);
+      border-radius: 24px;
+      padding: 56px 60px;
+      backdrop-filter: blur(16px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dedication-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .dedication-ornament {
+      margin: 0 auto 28px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(212, 168, 83, 0.1);
+      border: 1px solid rgba(212, 168, 83, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dedication-ornament svg {
+      width: 30px;
+      height: 30px;
+      color: var(--gold);
+    }
+
+    .dedication-wrapper h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .dedication-rule {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 28px;
+    }
+
+    .dedication-text {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      line-height: 1.9;
+      max-width: 700px;
+      margin: 0 auto 20px;
+      font-style: italic;
+    }
+
+    .dedication-sign {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 600px) {
+      .dedication-wrapper {
+        padding: 36px 24px;
+      }
+    }
+
+    /* ─── DONATION SECTION ──────────────────────────────────── */
+    .donations-section {
+      padding: 60px 48px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .glass-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s;
+      backdrop-filter: blur(12px);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(56, 189, 248, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .landing-donation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .donation-img {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .donation-img img {
+      max-height: 60px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .glass-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .glass-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .donate-btn-small {
+      display: inline-block;
+      padding: 8px 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .donate-btn-small:hover {
+      opacity: 0.85;
+    }
+
+    /* ─── DIVIDER ───────────────────────────────────────────── */
+    .section-divider {
+      max-width: 1100px;
+      margin: 0 auto;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── FOOTER ────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    footer .ft-brand {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ─── ACKNOWLEDGEMENT CARDS ─────────────────────────────── */
+    .ack-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.4s, transform 0.4s;
+    }
+
+    .ack-card:hover {
+      border-color: rgba(56, 189, 248, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .ack-banner {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 28px 36px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ibm-banner {
+      background: linear-gradient(135deg, #003f6b 0%, #006699 100%);
+    }
+
+    .quvis-banner {
+      background: linear-gradient(135deg, #0d1f3c 0%, #0f3460 60%, #16213e 100%);
+      border-bottom-color: rgba(56, 189, 248, 0.2);
+    }
+
+    .ack-logo-box {
+      width: 68px;
+      height: 68px;
+      flex: 0 0 68px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .ibm-logo {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .quvis-logo {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .ack-banner-title {
+      flex: 1;
+    }
+
+    .ack-institution {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .ack-sub {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .ack-body {
+      padding: 32px 36px 28px;
+    }
+
+    .ack-statement {
+      font-size: 0.97rem;
+      color: #94a3b8;
+      line-height: 1.85;
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .ack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .ack-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 100px;
+      padding: 4px 12px;
+    }
+
+    .ack-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+      padding-bottom: 2px;
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .ack-link:hover {
+      color: var(--white);
+      border-color: var(--white);
+    }
+
+    /* ─── SCROLL ANIMATIONS ─────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <style>
+    .qt-global-footer {
+      background: rgba(2,2,5,0.95);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 22px 40px;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .qt-global-footer p {
+      font-size: 0.8rem;
+      color: #475569;
+      line-height: 1.8;
+      margin: 0;
+    }
+    .qt-global-footer .ft-brand  { color: #38bdf8; font-weight: 700; }
+    .qt-global-footer .ft-sep    { color: #334155; margin: 0 6px; }
+    .qt-global-footer .ft-ref    { color: #64748b; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Starfield background -->
+  <div id="starfield"><canvas id="stars-canvas"></canvas></div>
+
+  <!-- ─── HEADER ─────────────────────────────────────────── -->
+  <header>
+    <div class="header-brand">
+      <img src="jntu_logo.png" alt="JNTUACEA Logo">
+      <span class="brand-name"><span class="q">q</span><span class="T">T</span> – Quantum Technology</span>
+    </div>
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+        stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      Back to Home
+    </a>
+  </header>
+
+  <main>
+
+    <!-- ─── HERO ─────────────────────────────────────────── -->
+    <section class="hero-section">
+      <div class="hero-eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 8v4l3 3" />
+        </svg>
+        Developed 2026 &nbsp;&bull;&nbsp; CSP Initiative
+      </div>
+      <h1 class="hero-title">About <span class="qt-mark">qT</span></h1>
+      <p class="hero-subtitle">
+        A community service platform dedicated to making quantum technology accessible,
+        structured and intuitive for every engineering student.
+      </p>
+      <div class="hero-divider"></div>
+    </section>
+
+    <!-- ─── IDENTITY SECTION ──────────────────────────────── -->
+    <section class="content-section fade-up">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span>Platform Identity</span>
+      </div>
+
+      <div class="identity-grid">
+
+        <!-- About the Project -->
+        <div class="pcard wide gold">
+          <div class="pcard-icon gold">
+            <!-- Atom clip-art SVG -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+              stroke-linejoin="round" style="color:var(--gold)">
+              <circle cx="12" cy="12" r="2" />
+              <ellipse cx="12" cy="12" rx="10" ry="4" />
+              <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" />
+              <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" />
+            </svg>
+          </div>
+          <h3>About the Project</h3>
+          <p>
+            <span class="gold-text">qT – Quantum Technology Learning Platform</span> is an academic
+            educational initiative developed in the year <span class="gold-text">2025</span> as part of a
+            <span class="gold-text">Community Service Project (CSP)</span> at
+            <span class="highlight-text">JNTUACEA (Jawaharlal Nehru Technological University Anantapur
+              College of Engineering, Anantapuramu)</span>, under the
+            <span class="highlight-text">Department of Electronics and Communication Engineering (ECE)</span>.
+          </p>
+          <p>
+            The platform bridges the gap between traditional engineering education and the rapidly emerging
+            field of quantum technologies, offering a structured, interactive pathway from physical
+            fundamentals to advanced quantum algorithms and cryptography.
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+            <span class="meta-pill gold">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              Developed: 2025
+            </span>
+            <span class="meta-pill gold">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              JNTUACEA, Anantapuramu
+            </span>
+            <span class="meta-pill gold">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                <path d="M6 12v5c3 3 9 3 12 0v-5" />
+              </svg>
+              ECE Department CSP
+            </span>
+          </div>
+        </div>
+
+        <!-- What is qT -->
+        <div class="pcard">
+          <div class="pcard-icon accent">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <h3>What is qT?</h3>
+          <p>
+            <span class="highlight-text">qT</span> stands for <span class="highlight-text">Quantum Technology</span>
+            – a student-built, open-access learning platform designed to take learners from zero knowledge
+            all the way to understanding quantum algorithms and quantum cryptographic protocols.
+          </p>
+          <p>
+            Every module on the platform uses interactive simulators, LaTeX mathematics, 3D visualisations,
+            and step-by-step explanations – all freely accessible through a browser.
+          </p>
+        </div>
+
+        <!-- Objective -->
+        <div class="pcard">
+          <div class="pcard-icon accent">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="6" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+          </div>
+          <h3>Objective</h3>
+          <p>Quantum technologies are transforming computation, communication and security. Yet students often
+            struggle due to abstract mathematics and the absence of structured resources.</p>
+          <p>qT was built to:</p>
+          <ul style="margin-left:18px;color:#64748b;font-size:0.88rem;line-height:1.9;margin-top:6px;">
+            <li>Introduce quantum concepts in an intuitive manner</li>
+            <li>Provide step-by-step learning from fundamentals to advanced topics</li>
+            <li>Bridge physical intuition with mathematical rigour</li>
+            <li>Support students from all academic backgrounds</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── MENTOR SECTION ────────────────────────────────── -->
+    <section class="content-section fade-up">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span>Guidance &amp; Mentorship</span>
+      </div>
+
+      <div class="mentor-card">
+        <img class="mentor-portrait" src="dr_v_sumalatha.png" alt="Dr. V. Sumalatha – Professor ECE, JNTUACEA">
+        <div class="mentor-info">
+          <h3>Dr. V. Sumalatha garu</h3>
+          <div class="designation">Professor &amp; Mentor &nbsp;|&nbsp; Department of ECE, JNTUACEA</div>
+          <p>
+            This platform was developed under the expert <span style="color:var(--gold-light);font-weight:600;">guidance
+              and mentorship</span> of
+            Dr. V. Sumalatha garu Professor, Department of Electronics and Communication Engineering,
+            Jawaharlal Nehru Technological University Anantapur College of Engineering, Anantapuramu.
+          </p>
+          <p style="margin-top:10px;">
+            Her academic direction, encouragement and deep subject expertise shaped the conceptual
+            foundations and educational philosophy of every module on this platform.
+          </p>
+          <div class="meta-pill gold" style="margin-top:16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            </svg>
+            CSP Guide &amp; Academic Mentor
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── PLATFORM CAPABILITIES ────────────────────────── -->
+    <section class="content-section fade-up">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span>Platform Capabilities</span>
+      </div>
+
+      <div class="cap-grid">
+
+        <!-- Physics Foundations -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="12" cy="12" r="2" />
+              <ellipse cx="12" cy="12" rx="10" ry="3.5" />
+              <ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(60 12 12)" />
+              <ellipse cx="12" cy="12" rx="10" ry="3.5" transform="rotate(120 12 12)" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Physics Foundations</h4>
+            <p>Wave-particle duality, superposition principle, uncertainty principle and quantum mechanics fundamentals
+              through interactive visual modules.</p>
+            <span class="cap-tag">physics/physics-foundations.html</span>
+          </div>
+        </div>
+
+        <!-- Qubits & Mathematics -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Qubits &amp; Mathematics</h4>
+            <p>Dirac notation, linear algebra, state vectors and the variational method — the mathematical language of
+              quantum mechanics, rendered in LaTeX.</p>
+            <span class="cap-tag">math/math-foundations.html</span>
+          </div>
+        </div>
+
+        <!-- Superposition & Measurement -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Superposition &amp; Measurement</h4>
+            <p>Interactive modules covering quantum superposition, measurement collapse, probability &amp; shots, and
+              classical vs qubit comparison.</p>
+            <span class="cap-tag">superposition.html · measurement.html</span>
+          </div>
+        </div>
+
+        <!-- 3D Bloch Sphere -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <ellipse cx="12" cy="12" rx="10" ry="4" />
+              <line x1="12" y1="2" x2="12" y2="22" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>3D Bloch Sphere Simulator</h4>
+            <p>A real-time 3D Bloch sphere simulator for visualising qubit states, gate rotations, noise effects, and
+              quantum phase — built with Three.js.</p>
+            <span class="cap-tag">quantum-phase-advanced/index.html</span>
+          </div>
+        </div>
+
+        <!-- Quantum Gates Library -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <rect x="3" y="3" width="18" height="18" rx="3" />
+              <path d="M3 9h18M9 21V9" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Quantum Gates Library</h4>
+            <p>Comprehensive library of single-qubit and multi-qubit gates (Pauli, Hadamard, Phase, CNOT, CZ, SWAP,
+              Rotation) with LaTeX matrix representations.</p>
+            <span class="cap-tag">quantum-gates.html</span>
+          </div>
+        </div>
+
+        <!-- Gate Composer -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Interactive Gate Composer</h4>
+            <p>An advanced visual gate composer for building quantum circuits step-by-step, with real-time Bloch sphere
+              feedback and animation.</p>
+            <span class="cap-tag">single-qubit-gates/gates_advanced.html</span>
+          </div>
+        </div>
+
+        <!-- Quantum Algorithms -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Quantum Algorithms</h4>
+            <p>Step-by-step, LaTeX-rendered explanations of Deutsch-Jozsa, Grover, Shor, Bernstein-Vazirani, Simon's,
+              and QFT algorithms with circuit diagrams.</p>
+            <span class="cap-tag">quantum-algorithms.html</span>
+          </div>
+        </div>
+
+        <!-- Quantum Cryptography -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Quantum Cryptography</h4>
+            <p>Modules on BB84, E91, quantum key distribution, post-quantum cryptography and the security implications
+              of quantum computing for classical encryption.</p>
+            <span class="cap-tag">qt-learning-platform.html · crypto section</span>
+          </div>
+        </div>
+
+        <!-- Noise & Imperfections -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Noise &amp; Imperfections</h4>
+            <p>Dedicated module on quantum decoherence, error types, and why noisy quantum hardware matters — a vital
+              topic for NISQ-era understanding.</p>
+            <span class="cap-tag">noise-imperfections/noise.html</span>
+          </div>
+        </div>
+
+        <!-- Advanced External Courses -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Advanced &amp; External Courses</h4>
+            <p>Curated links to IBM Quantum Learning, qBraid, and NPTEL courses — helping students progress from
+              platform foundations to industry-grade quantum computing.</p>
+            <span class="cap-tag">qt-learning-platform.html · advanced section</span>
+          </div>
+        </div>
+
+        <!-- Quantum Phase -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10" />
+              <path d="M12 22c-5.52 0-10-4.48-10-10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Quantum Phase &amp; Hamiltonians</h4>
+            <p>Interactive exploration of quantum phase, Bloch sphere rotations, Hamiltonians, and quantum phase
+              estimation—visualised in real time.</p>
+            <span class="cap-tag">quantum-phase.html</span>
+          </div>
+        </div>
+
+        <!-- Variational Method -->
+        <div class="cap-card">
+          <div class="cap-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </div>
+          <div class="cap-body">
+            <h4>Variational Method Simulator</h4>
+            <p>Connects quantum mechanics with optimisation algorithms — key for understanding variational quantum
+              eigensolvers (VQE) and near-term quantum computing.</p>
+            <span class="cap-tag">variational.html · variationalMethod.html</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── ACKNOWLEDGEMENTS ──────────────────────────────── -->
+    <section class="content-section fade-up">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span>Acknowledgements</span>
+      </div>
+
+      <p style="color:#64748b;font-size:0.95rem;line-height:1.8;margin-bottom:40px;max-width:780px;">
+        The qT platform gratefully acknowledges the following globally respected institutions and resources
+        for their contribution to quantum education. Their freely available materials, curricula and
+        visualisation tools provided invaluable reference, learning and inspiration throughout the
+        development of this platform.
+      </p>
+
+      <!-- IBM Quantum Learning – full-width acknowledgement card -->
+      <div class="ack-card fade-up" style="margin-bottom:24px;">
+        <div class="ack-banner ibm-banner">
+          <div class="ack-logo-box ibm-logo">
+            <!-- IBM stripes logotype SVG -->
+            <svg viewBox="0 0 80 30" fill="white" xmlns="http://www.w3.org/2000/svg">
+              <!-- I -->
+              <rect x="0" y="2" width="7" height="4" rx="0.7" />
+              <rect x="0" y="9" width="7" height="4" rx="0.7" />
+              <rect x="0" y="16" width="7" height="4" rx="0.7" />
+              <rect x="0" y="23" width="7" height="4" rx="0.7" />
+              <!-- B -->
+              <rect x="11" y="2" width="14" height="4" rx="0.7" />
+              <rect x="11" y="23" width="14" height="4" rx="0.7" />
+              <rect x="11" y="9" width="9" height="9" rx="0.7" />
+              <!-- M -->
+              <rect x="29" y="2" width="7" height="25" rx="0.7" />
+              <rect x="50" y="2" width="7" height="25" rx="0.7" />
+              <rect x="38" y="2" width="7" height="4" rx="0.7" />
+              <rect x="38" y="9" width="7" height="4" rx="0.7" />
+              <rect x="38" y="16" width="7" height="4" rx="0.7" />
+              <!-- Quantum icon -->
+              <circle cx="71" cy="14" r="7" fill="none" stroke="white" stroke-width="1.5" />
+              <line x1="71" y1="7" x2="71" y2="11" stroke="white" stroke-width="1.5" />
+              <line x1="71" y1="17" x2="71" y2="21" stroke="white" stroke-width="1.5" />
+              <line x1="64" y1="14" x2="68" y2="14" stroke="white" stroke-width="1.5" />
+              <line x1="74" y1="14" x2="78" y2="14" stroke="white" stroke-width="1.5" />
+              <circle cx="71" cy="14" r="2.5" fill="white" />
+            </svg>
+          </div>
+          <div class="ack-banner-title">
+            <div class="ack-institution">IBM Quantum Learning</div>
+            <div class="ack-sub">learning.quantum.ibm.com</div>
+          </div>
+        </div>
+        <div class="ack-body">
+          <p class="ack-statement">
+            We sincerely acknowledge <strong style="color:var(--white);">IBM Quantum</strong> and their
+            <strong style="color:var(--white);">IBM Quantum Learning</strong> platform for providing
+            world-class, freely accessible educational resources on quantum computing. The platform's
+            comprehensive coverage of quantum circuit theory, Qiskit documentation, gate operations,
+            algorithm frameworks, and conceptual explanations served as a key technical reference
+            during the development of qT.
+          </p>
+          <div class="ack-tags">
+            <span class="ack-tag">Quantum Gate Theory</span>
+            <span class="ack-tag">Circuit Design Reference</span>
+            <span class="ack-tag">Qiskit Documentation</span>
+            <span class="ack-tag">Algorithm Frameworks</span>
+            <span class="ack-tag">Quantum Computing Concepts</span>
+          </div>
+          <a href="https://learning.quantum.ibm.com" target="_blank" class="ack-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              width="14" height="14">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Visit IBM Quantum Learning
+          </a>
+        </div>
+      </div>
+
+      <!-- QuVis – full-width acknowledgement card -->
+      <div class="ack-card fade-up">
+        <div class="ack-banner quvis-banner">
+          <div class="ack-logo-box quvis-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="5" />
+              <circle cx="12" cy="12" r="1.5" fill="white" />
+              <line x1="12" y1="2" x2="12" y2="7" />
+              <line x1="12" y1="17" x2="12" y2="22" />
+              <line x1="2" y1="12" x2="7" y2="12" />
+              <line x1="17" y1="12" x2="22" y2="12" />
+            </svg>
+          </div>
+          <div class="ack-banner-title">
+            <div class="ack-institution">QuVis – Quantum Mechanics Visualisations</div>
+            <div class="ack-sub">University of St Andrews &nbsp;|&nbsp; st-andrews.ac.uk/physics/quvis</div>
+          </div>
+        </div>
+        <div class="ack-body">
+          <p class="ack-statement">
+            We sincerely acknowledge <strong style="color:var(--white);">QuVis</strong>, the Quantum
+            Mechanics Visualisation project from the <strong style="color:var(--white);">University of
+              St Andrews</strong>, for pioneering the field of interactive quantum visualisation for
+            education. QuVis's freely available simulation tools and visualisation principles deeply
+            influenced the design philosophy behind qT's interactive modules, Bloch sphere simulators,
+            and step-by-step conceptual animations.
+          </p>
+          <div class="ack-tags">
+            <span class="ack-tag">Visualisation Philosophy</span>
+            <span class="ack-tag">Bloch Sphere Concepts</span>
+            <span class="ack-tag">Interactive Simulations</span>
+            <span class="ack-tag">Conceptual Animations</span>
+            <span class="ack-tag">Quantum Education Design</span>
+          </div>
+          <a href="https://www.st-andrews.ac.uk/physics/quvis/" target="_blank" class="ack-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              width="14" height="14">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Visit QuVis
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ─── DEDICATION ────────────────────────────────────── -->
+    <section class="content-section fade-up">
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span>Dedication</span>
+      </div>
+
+      <div class="dedication-wrapper">
+        <div class="dedication-ornament">
+          <!-- Laurel / honour clip-art SVG -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 2L9 9H2l5.5 4-2 7L12 16l6.5 4-2-7L22 9h-7z" />
+          </svg>
+        </div>
+
+        <h2>Dedicated to the Teachers Who Believed</h2>
+        <div class="dedication-rule"></div>
+
+        <p class="dedication-text">
+          This platform is dedicated with the deepest gratitude to every teacher who has been an
+          inspiration — those who chose to believe in their students not just as learners, but as
+          capable minds with the potential to go further than they themselves imagined.
+        </p>
+        <p class="dedication-text">
+          To the educators who gave their time, their patience, and their encouragement — who saw
+          possibility where others saw difficulty, and who never stopped guiding with both wisdom
+          and warmth. This work would not exist without you.
+        </p>
+        <p class="dedication-text" style="font-style:normal;font-size:0.95rem;color:#475569;margin-bottom:30px;">
+          Thank you — for every lesson, every correction, and every word of belief.
+        </p>
+
+        <div class="dedication-sign">— With Gratitude, The qT Team, JNTUACEA ECE</div>
+      </div>
+    </section>
+
+    <!-- ─── DONATIONS ─────────────────────────────────────── -->
+    <div class="section-divider"></div>
+    <div class="donations-section fade-up">
+      <div class="section-eyebrow" style="margin-bottom:36px;">
+        <div class="section-eyebrow-line"></div>
+        <span>Support Our Causes</span>
+      </div>
+      <p style="color:#64748b;font-size:0.95rem;max-width:620px;line-height:1.8;margin-bottom:36px;">
+        Help us support education, wildlife and the environment through these trusted organisations.
+      </p>
+      <div class="landing-donation-grid">
+        <div class="glass-card" onclick="window.open('https://wildlifesos.org/donate/', '_blank')">
+          <div class="donation-img"><img src="images/wildlife_sos.svg" alt="Wildlife SOS"></div>
+          <h3>Wildlife SOS</h3>
+          <p>Rescue and rehabilitation of wildlife across India.</p>
+          <button class="donate-btn-small">Donate</button>
+        </div>
+        <div class="glass-card" onclick="window.open('https://www.wti.org/donate/', '_blank')">
+          <div class="donation-img"><img src="images/wti.svg" alt="Wildlife Trust of India"></div>
+          <h3>Wildlife Trust of India</h3>
+          <p>Conservation programmes &amp; habitat restoration.</p>
+          <button class="donate-btn-small">Donate</button>
+        </div>
+        <div class="glass-card" onclick="window.open('https://www.pratham.org/donate', '_blank')">
+          <div class="donation-img"><img src="images/pratham.svg" alt="Pratham"></div>
+          <h3>Pratham</h3>
+          <p>Quality education for underprivileged children.</p>
+          <button class="donate-btn-small">Donate</button>
+        </div>
+        <div class="glass-card" onclick="window.open('https://goonj.org/donate/', '_blank')">
+          <div class="donation-img"><img src="images/goonj.svg" alt="Goonj"></div>
+          <h3>Goonj</h3>
+          <p>Disaster relief, clothing &amp; livelihood support.</p>
+          <button class="donate-btn-small">Donate</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <footer class="qt-global-footer">
+    <p>
+      &copy; 2025 <span class="ft-brand">qT &ndash; Quantum Technology</span>
+      <span class="ft-sep">&bull;</span>
+      JNTUACEA, ECE Department
+      <span class="ft-sep">&bull;</span>
+      Community Service Project
+    </p>
+    <p class="ft-ref">
+      Developed under the guidance of Dr. V. Sumalatha
+      <span class="ft-sep">&bull;</span>
+      Reference: IBM Quantum Learning &amp; QuVis
+    </p>
+  </footer>
+
+  <!-- ─── SCRIPTS ───────────────────────────────────────── -->
+  <script>
+    /* ── Starfield ───────────────────────────────────────── */
+    (function () {
+      const canvas = document.getElementById('stars-canvas');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function initStars() {
+        stars = [];
+        for (let i = 0; i < 200; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.2 + 0.2,
+            a: Math.random(),
+            speed: Math.random() * 0.3 + 0.05
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(226,232,240,${s.a})`;
+          ctx.fill();
+          s.a += s.speed * 0.005;
+          if (s.a > 1) s.speed = -Math.abs(s.speed);
+          if (s.a < 0.1) s.speed = Math.abs(s.speed);
+        });
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { resize(); initStars(); });
+      resize(); initStars(); draw();
+    })();
+
+    /* ── Scroll fade-up ──────────────────────────────────── */
+    (function () {
+      const els = document.querySelectorAll('.fade-up');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(el => obs.observe(el));
+    })();
+  </script>
+</body>
+
+</html>

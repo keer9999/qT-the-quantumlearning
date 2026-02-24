@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>qT Learning Platform | Quantum Technology Education</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            background: #ffffff;
+            color: #1f2d3d;
+            overflow-x: hidden;
+            width: 100%;
+            opacity: 0;
+            animation: pageLoad 1s ease-out forwards;
+        }
+
+        @keyframes pageLoad {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            height: 72px;
+            background: white;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 80px;
+            margin-right: 10px;
+        }
+
+        .logo span {
+            font-weight: 700;
+            color: #003366;
+        }
+
+        .title {
+            flex: 1;
+            text-align: center;
+        }
+
+        .title h1 {
+            font-size: 22px;
+            color: #003366;
+        }
+
+        .title p {
+            font-size: 13px;
+            color: #0057b8;
+        }
+
+        nav a {
+            margin-left: 16px;
+            text-decoration: none;
+            color: #003366;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #0057b8;
+        }
+
+        .app {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+        .sidebar {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            box-shadow: none;
+            border-right: 1px solid #e6eaf0;
+            position: sticky;
+            top: 72px;
+            height: calc(100vh - 72px);
+            overflow-y: auto;
+        }
+
+        .step {
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #5a6c7d;
+        }
+
+        .step:hover {
+            background: linear-gradient(90deg, #e8f4fd, #dff1ff);
+            color: #0057b8;
+        }
+
+        .step.active {
+            background: linear-gradient(90deg, #0057b8, #0047a0);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 87, 184, 0.3);
+        }
+
+        .fullscreen-container {
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .fullscreen-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00d4aa, #0057b8);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .fullscreen-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+            opacity: 0;
+            animation: sectionFadeIn 0.6s ease-out forwards;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes sectionFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h2 {
+            font-size: 32px;
+            margin-bottom: 24px;
+            color: #003366;
+        }
+
+        .lesson {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+            transition: all 0.3s ease;
+        }
+
+        .lesson:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 87, 184, 0.15);
+        }
+
+        .lesson h3 {
+            color: #0057b8;
+            margin-bottom: 12px;
+        }
+
+        .lesson p {
+            color: #5a6c7d;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .lesson-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #0057b8, #00d4aa);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 87, 184, 0.3);
+        }
+
+        /* Welcome Section Styles */
+        .welcome-container {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-left {
+            flex: 1;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            color: #003366;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #0057b8;
+            background: linear-gradient(135deg, #0057b8, #00d4aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text {
+            font-size: 18px;
+            color: #5a6c7d;
+            line-height: 1.8;
+        }
+
+        .welcome-right {
+            flex: 1;
+        }
+
+        .welcome-right img {
+            width: 100%;
+            max-width: 500px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Physics Section Styles */
+        .physics-hero-section {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+        }
+
+        .physics-hero-left {
+            flex: 1;
+        }
+
+        .physics-hero-left h2 {
+            font-size: 40px;
+            color: #003366;
+            margin-bottom: 16px;
+        }
+
+        .physics-highlight {
+            color: #0057b8;
+        }
+
+        .physics-explore-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #0057b8 0%, #0047a0 100%);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .physics-explore-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, .15);
+        }
+
+        .physics-hero-right {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        #physics-visualization {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ── Premium Footer ─────────────────────────────── */
+        footer.qt-pro-footer {
+            background: linear-gradient(180deg, #001a33 0%, #000d1a 100%);
+            border-top: 1px solid rgba(0, 212, 170, 0.2);
+            padding: 0;
+            color: #94a3b8;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr 1fr;
+            gap: 48px;
+            padding: 56px 60px 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        @media (max-width: 768px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+                padding: 36px 24px 28px;
+                gap: 32px;
+            }
+        }
+
+        .ft-col-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #00d4aa;
+            margin-bottom: 18px;
+        }
+
+        /* Brand column */
+        .ft-brand-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+
+        .ft-brand-name .q {
+            color: #38bdf8;
+        }
+
+        .ft-brand-desc {
+            font-size: 0.84rem;
+            color: #475569;
+            line-height: 1.75;
+            margin-bottom: 18px;
+        }
+
+        .ft-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(0, 212, 170, 0.08);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 100px;
+            padding: 5px 14px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #00d4aa;
+            letter-spacing: 0.06em;
+        }
+
+        /* Nav / links columns */
+        .ft-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .ft-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.25s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .ft-links a::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #1e3a5f;
+            flex-shrink: 0;
+            transition: background 0.25s;
+        }
+
+        .ft-links a:hover {
+            color: #00d4aa;
+        }
+
+        .ft-links a:hover::before {
+            background: #00d4aa;
+        }
+
+        /* Bottom bar */
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                padding: 16px 24px;
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        .footer-bottom .copy {
+            font-size: 0.78rem;
+            color: #334155;
+        }
+
+        .footer-bottom .mentor {
+            font-size: 0.78rem;
+            color: #334155;
+        }
+
+        .footer-bottom .mentor span {
+            color: #00d4aa;
+            font-weight: 600;
+        }
+
+        /* legacy compat */
+        .credits-highlight {
+            color: #00d4aa;
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            .app {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+            }
+
+            .welcome-container,
+            .physics-hero-section {
+                flex-direction: column;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+        }
+
+        /* Advanced Courses Grid */
+        .advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            /* Slightly stronger shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e6eaf0;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 51, 102, 0.15);
+        }
+
+        .course-header {
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* CSS Logo Placeholders */
+        .logo-placeholder {
+            font-size: 24px;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-ibm {
+            background: #006699;
+            /* IBM Blue */
+            font-family: "Courier New", Courier, monospace;
+            /* Serif/Mono for IBM feel */
+        }
+
+        .logo-qbraid {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            /* Purple-Blue Gradient */
+            font-family: sans-serif;
+            text-transform: none;
+            /* qBraid is usually lowercase q */
+        }
+
+        .logo-nptel {
+            background: linear-gradient(90deg, #ff9933 0%, #000080 100%);
+            /* Orange to Blue */
+            font-family: sans-serif;
+        }
+
+        .logo-ibm-gold {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            /* Gold Gradient */
+            color: #000;
+            font-family: "Courier New", Courier, monospace;
+            border: 1px solid #C5A009;
+        }
+
+        .logo-qiskit-nptel {
+            background: linear-gradient(90deg, #6f21d8 0%, #ff9933 100%);
+            /* Purple (Qiskit) to Orange (NPTEL) */
+            font-family: sans-serif;
+            font-size: 20px;
+            /* Slightly smaller for longer text */
+        }
+
+        .course-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-body h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #003366;
+        }
+
+        .course-body p {
+            font-size: 14px;
+            color: #5a6c7d;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .course-btn {
+            display: block;
+            text-align: center;
+            background: white;
+            color: #0057b8;
+            border: 1px solid #0057b8;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .course-btn:hover {
+            background: #0057b8;
+            color: white;
+        }
+    </style>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="https://www.jntuacea.ac.in/" target="_blank"
+                style="display:flex;align-items:center;text-decoration:none;color:inherit;">
+                <img src="jntu_logo.png" alt="JNTUACEA Logo">
+                <span>JNTUACEA</span>
+            </a>
+        </div>
+        <div class="title">
+            <h1>qT Learning Platform – Quantum Technology</h1>
+            <p>Department of Electronics & Communication Engineering | JNTUACEA</p>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <div class="app">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="step active" onclick="openSec('welcome',this)">Welcome</div>
+            <div class="step" onclick="openSec('physics',this)">Physics Foundations</div>
+            <div class="step" onclick="openSec('qubits',this)">Qubits & Math</div>
+            <div class="step" onclick="openSec('basics',this)">Quantum Basics</div>
+            <div class="step" onclick="openSec('gates',this)">Quantum Gates</div>
+            <div class="step" onclick="openSec('algorithms',this)">Algorithms</div>
+            <div class="step" onclick="openSec('crypto',this)">Quantum Cryptography</div>
+            <div class="step" onclick="openSec('advanced',this)">Advanced</div>
+            <div class="fullscreen-container">
+                <button class="fullscreen-btn" onclick="toggleFullscreen()"
+                    style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                    </svg>
+                    Full Screen
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- WELCOME -->
+            <div class="section active" id="welcome">
+                <div class="welcome-container">
+                    <div class="welcome-left">
+                        <h1 class="hero-title">
+                            Welcome to the <br>
+                            <span class="highlight">Quantum World</span>
+                        </h1>
+                        <p class="hero-text">
+                            Visualize how quantum computers work —
+                            qubits flowing, evolving, and interacting beyond classical limits.
+                        </p>
+                    </div>
+                    <div class="welcome-right">
+                        <img src="quantum-computer-3d.png" alt="3D Quantum Computer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHYSICS FOUNDATIONS -->
+            <div class="section" id="physics">
+                <div class="physics-hero-section">
+                    <div class="physics-hero-left">
+                        <h2>Physics <br><span class="physics-highlight">Foundations</span></h2>
+                        <p>Master the fundamental principles of quantum mechanics that power next-generation quantum
+                            technologies</p>
+                        <button class="physics-explore-btn"
+                            onclick="window.location.href='physics/physics-foundations.html'">
+                            <span style="display: inline-flex; align-items: center; gap: 6px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                                </svg>
+                                Explore Foundations →
+                            </span>
+                        </button>
+                    </div>
+                    <div class="physics-hero-right">
+                        <div id="physics-visualization"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUBITS & MATH -->
+            <div class="section" id="qubits">
+                <div class="physics-hero-section" style="background:#f0fff4; border-left: 5px solid #008060;">
+                    <div class="physics-hero-left">
+                        <h2>Qubits & <span style="color:#008060">Mathematics</span></h2>
+                        <p>Master the mathematical language of quantum mechanics: Dirac Notation, Linear Algebra, and
+                            State Vectors.</p>
+                        <button class="physics-explore-btn"
+                            style="background: linear-gradient(135deg, #008060 0%, #004d39 100%);"
+                            onclick="window.location.href='math/math-foundations.html'">
+                            <span style="display: inline-flex; align-items: center; gap: 6px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                                </svg>
+                                Start Math Course →
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lesson">
+                    <h3>The Variational Method</h3>
+                    <p>
+                        Variational techniques connect quantum mechanics,
+                        optimization, and near-term quantum computing.
+                    </p>
+                    <a href="variational.html" class="lesson-link">
+                        Open Variational Simulator →
+                    </a>
+                </div>
+            </div>
+
+            <!-- QUANTUM BASICS -->
+            <div class="section" id="basics">
+                <h2>Quantum Basics</h2>
+
+                <div class="lesson">
+                    <h3>Superposition</h3>
+                    <p>Learn how a qubit can exist in multiple states at the same time.</p>
+                    <a href="superposition.html" class="lesson-link">
+                        Open Superposition Module →
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Measurement Collapse</h3>
+                    <p>Understand how a quantum state collapses into a classical result when measured.</p>
+                    <a href="measurement.html" class="lesson-link">
+                        Open Measurement Module →
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Probability & Shots</h3>
+                    <p>Learn why quantum results make sense only after many measurements.</p>
+                    <a href="probability.html" class="lesson-link">Open Probability & Shots →</a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Bloch Sphere Representation</h3>
+                    <p>
+                        Visualize every qubit state geometrically — pure states, mixed states, gate rotations,
+                        decoherence, density matrices, and the full mathematical treatment with an interactive 3D
+                        simulator.
+                    </p>
+                    <a href="bloch3d.html" class="lesson-link">
+                        Open Bloch Sphere Guide →
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Qubit vs Classical Bit</h3>
+                    <p>Compare how quantum information differs from classical information.</p>
+                    <a href="classical-vs-quantum.html" class="lesson-link">
+                        Open Comparison Module →
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Quantum Phase</h3>
+                    <p>
+                        Understand quantum phase, Bloch sphere rotation, Hamiltonians,
+                        and Quantum Phase Estimation.
+                    </p>
+                    <a href="quantum-phase.html" class="lesson-link">
+                        Open Quantum Phase Module →
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Single-Qubit Gates</h3>
+                    <p>
+                        Understand quantum gates as rotations on the Bloch sphere. Advanced interactive simulator with
+                        real-time
+                        visualization.
+                    </p>
+                    <a href="single-qubit-gates/gates_advanced.html" class="lesson-link">
+                        <span style="display: inline-flex; align-items: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                                <path
+                                    d="M12 15l-3-3a22 22 0 0 1 2-12 13.6 13.6 0 0 1 3.79 3.79A12.63 12.63 0 0 1 15 12z" />
+                            </svg>
+                            The Gate Composer →
+                        </span>
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Noise & Imperfections</h3>
+                    <p>
+                        Learn why quantum computers are noisy, how errors occur,
+                        and what scientists do to reduce them.
+                    </p>
+                    <a href="noise-imperfections/noise.html" class="lesson-link">
+                        Open Noise & Imperfections Module →
+                    </a>
+                </div>
+            </div>
+
+            <!-- QUANTUM GATES -->
+            <div class="section" id="gates">
+                <h2>Quantum Gates</h2>
+
+                <div class="lesson"
+                    style="margin-bottom: 40px; background: linear-gradient(135deg, rgba(0,87,184,0.15), rgba(0,212,170,0.15)); border: 2px solid #0057b8;">
+                    <h3 style="color: #0057b8;">📘 Complete Quantum Gates Library</h3>
+                    <p><strong>Explore our comprehensive quantum gates library</strong> with LaTeX matrix
+                        representations, interactive examples, and detailed explanations for all quantum gates.</p>
+                    <a href="quantum-gates.html" class="lesson-link">→ Open Complete Gates Library</a>
+                </div>
+
+                <div class="lesson">
+                    <h3>1. Pauli-X Gate</h3>
+                    <p><strong>Symbol:</strong> X | <strong>Type:</strong> Single-Qubit</p>
+                    <p>Bit-flip gate. Flips |0⟩ to |1⟩ and |1⟩ to |0⟩.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>2. Pauli-Y Gate</h3>
+                    <p><strong>Symbol:</strong> Y | <strong>Type:</strong> Single-Qubit</p>
+                    <p>Bit and phase flip. Rotates around Y-axis on Bloch sphere.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>3. Pauli-Z Gate</h3>
+                    <p><strong>Symbol:</strong> Z | <strong>Type:</strong> Single-Qubit</p>
+                    <p>Phase flip gate. |0⟩ stays |0⟩, |1⟩ becomes -|1⟩.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>4. Hadamard Gate</h3>
+                    <p><strong>Symbol:</strong> H | <strong>Type:</strong> Single-Qubit</p>
+                    <p>Creates superposition. Maps |0⟩ to (|0⟩+|1⟩)/√2 and |1⟩ to (|0⟩-|1⟩)/√2.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>5. Phase Gate (S Gate)</h3>
+                    <p><strong>Symbol:</strong> S | <strong>Type:</strong> Single-Qubit</p>
+                    <p>Adds π/2 phase to |1⟩ state. Part of universal quantum gates.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>6. T Gate</h3>
+                    <p><strong>Symbol:</strong> T | <strong>Type:</strong> Single-Qubit</p>
+                    <p>Adds π/4 phase to |1⟩ state. Important for universal quantum computation.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>7. CNOT Gate</h3>
+                    <p><strong>Symbol:</strong> ⊕ | <strong>Type:</strong> Two-Qubit</p>
+                    <p>Controlled-NOT gate. Flips target if control qubit is |1⟩. Creates entanglement.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>8. CZ Gate</h3>
+                    <p><strong>Symbol:</strong> CZ | <strong>Type:</strong> Two-Qubit</p>
+                    <p>Controlled-Z gate. Applies Z when both qubits are |1⟩. For entanglement and phase.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>9. SWAP Gate</h3>
+                    <p><strong>Symbol:</strong> ⨯ | <strong>Type:</strong> Two-Qubit</p>
+                    <p>Swaps the states of two qubits. Used for qubit rearrangement.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>10. Toffoli Gate</h3>
+                    <p><strong>Symbol:</strong> CCX | <strong>Type:</strong> Three-Qubit</p>
+                    <p>Controlled-Controlled-NOT. Flips target if both controls are |1⟩. Universal for reversible
+                        computation.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>11. Measurement</h3>
+                    <p><strong>Symbol:</strong> M | <strong>Type:</strong> Measurement</p>
+                    <p>Collapses quantum state to classical bit. Probability = |amplitude|².</p>
+                </div>
+
+                <div class="lesson"
+                    style="margin-top: 40px; background: linear-gradient(135deg, rgba(0,87,184,0.1), rgba(0,212,170,0.1));">
+                    <h3 style="color: #0057b8;">Build Your Own Circuits</h3>
+                    <p>Now build and simulate quantum circuits:</p>
+                    <a href="quantum-composer/jntu-composer.html" class="lesson-link">→ Open JNTU Quantum Composer</a>
+                </div>
+            </div>
+
+            <!-- ALGORITHMS -->
+            <div class="section" id="algorithms">
+                <h2>Quantum Algorithms</h2>
+
+                <div class="lesson"
+                    style="margin-bottom: 40px; background: linear-gradient(135deg, rgba(0,87,184,0.15), rgba(0,212,170,0.15)); border: 2px solid #0057b8;">
+                    <h3 style="color: #0057b8; display: flex; align-items: center; gap: 10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                        </svg>
+                        Complete Quantum Algorithms Library
+                    </h3>
+                    <p><strong>Explore comprehensive algorithm explanations</strong> with step-by-step walkthroughs,
+                        mathematical foundations, circuit diagrams, and real-world applications for major quantum
+                        algorithms.</p>
+                    <a href="quantum-algorithms/index.html" class="lesson-link">→ Open Complete Algorithms Library</a>
+                </div>
+
+                <div class="lesson">
+                    <h3>Deutsch-Jozsa Algorithm</h3>
+                    <p>The first quantum speedup - determines if a function is constant or balanced in one query.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>Grover's Search</h3>
+                    <p>Quadratic speedup for unstructured search - find marked items √N times faster.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>Shor's Factoring</h3>
+                    <p>Exponential speedup breaks RSA encryption using quantum Fourier transform.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>Simon's Algorithm</h3>
+                    <p>Finds hidden periodicity with exponential speedup - inspired Shor's algorithm.</p>
+                </div>
+
+                <div class="lesson">
+                    <h3>VQE & NISQ Algorithms</h3>
+                    <p>Hybrid quantum-classical algorithms for near-term devices - chemistry simulations and
+                        optimization.</p>
+                </div>
+            </div>
+
+            <!-- CRYPTOGRAPHY -->
+            <div class="section" id="crypto">
+                <h2>Quantum Cryptography</h2>
+                <div class="lesson">
+                    <h3 style="color: #0057b8; display: flex; align-items: center; gap: 10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2"
+                            style="flex-shrink: 0;">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        BB84 Quantum Key Distribution
+                    </h3>
+                    <p>
+                        <strong>BB84 Protocol</strong> is the first and most famous quantum key distribution (QKD)
+                        protocol,
+                        invented by Charles Bennett and Gilles Brassard in 1984. It allows two parties (Alice and Bob)
+                        to securely share encryption keys that are guaranteed to be secure by the laws of quantum
+                        mechanics.
+                    </p>
+                    <p>
+                        <strong>Why It Matters:</strong> Unlike classical encryption methods (like RSA) that can be
+                        broken
+                        by powerful computers or quantum computers using Shor's algorithm, BB84 provides
+                        information-theoretic
+                        security. Any eavesdropping attempt is automatically detected!
+                    </p>
+                    <p>
+                        <strong>How It Works:</strong> Alice sends Bob photons with random polarizations (↑, →, ↗, ↖).
+                        Bob measures them with randomly chosen polarizing filters. After transmission, they publicly
+                        compare which filters they used (notthe results!) and keep only the bits where they used
+                        matching filters. If an eavesdropper (Eve) intercepts the photons, the error rate increases,
+                        revealing her presence.
+                    </p>
+                    <p><strong>Real-World Applications:</strong></p>
+                    <ul style="margin-left: 20px; line-height: 1.8; list-style: none;">
+                        <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8"
+                                stroke-width="2" style="flex-shrink: 0;">
+                                <rect x="2" y="5" width="20" height="14" rx="2" />
+                                <line x1="2" y1="10" x2="22" y2="10" />
+                            </svg>
+                            Banking & Financial Institutions
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8"
+                                stroke-width="2" style="flex-shrink: 0;">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
+                            Government Secure Communications
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8"
+                                stroke-width="2" style="flex-shrink: 0;">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                            </svg>
+                            Healthcare Data Protection
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8"
+                                stroke-width="2" style="flex-shrink: 0;">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="2" y1="12" x2="22" y2="12" />
+                                <path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                            </svg>
+                            Future Quantum Internet Infrastructure
+                        </li>
+                    </ul>
+                    <a href="quantum-algorithms/bb84.html" target="_blank" class="lesson-link"
+                        style="display: inline-flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polygon points="10 8 16 12 10 16 10 8" />
+                        </svg>
+                        Launch Interactive BB84 Simulator →
+                    </a>
+                </div>
+
+                <div class="lesson">
+                    <h3 style="display: flex; align-items: center; gap: 10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"
+                            style="flex-shrink: 0;">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2" />
+                        </svg>
+                        Other QKD Protocols
+                    </h3>
+                    <p>
+                        <strong>E91 Protocol:</strong> Uses quantum entanglement instead of individual photons.
+                        Security is guaranteed by Bell's inequality violations.
+                    </p>
+                    <p>
+                        <strong>B92 Protocol:</strong> A simplified version of BB84 using only two non-orthogonal
+                        states.
+                    </p>
+                    <p>
+                        All quantum cryptography protocols share one key advantage: security guaranteed by quantum
+                        physics,
+                        not computational complexity.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ADVANCED -->
+            <div class="section" id="advanced">
+                <h2>Advanced Quantum Courses</h2>
+                <p>Expand your knowledge with these world-class external resources.</p>
+
+                <div class="advanced-grid">
+                    <!-- IBM Quantum -->
+                    <div class="course-card">
+                        <div class="course-header">
+                            <div class="logo-placeholder logo-ibm">IBM</div>
+                        </div>
+                        <div class="course-body">
+                            <h3>IBM Quantum Learning</h3>
+                            <p>The premier platform for quantum education. Interactive courses on Qiskit, quantum
+                                algorithms, and hardware, directly from the industry leaders.</p>
+                            <a href="https://learning.quantum.ibm.com/" target="_blank" class="course-btn">Start
+                                Learning →</a>
+                        </div>
+                    </div>
+
+                    <!-- QBraid -->
+                    <div class="course-card">
+                        <div class="course-header">
+                            <div class="logo-placeholder logo-qbraid">qBraid</div>
+                        </div>
+                        <div class="course-body">
+                            <h3>qBraid Education</h3>
+                            <p>An integrated platform to learn, build, and run quantum programs. Access courses and a
+                                cloud-based development environment.</p>
+                            <a href="https://qbraid.com/learn" target="_blank" class="course-btn">Explore qBraid →</a>
+                        </div>
+                    </div>
+
+                    <!-- NPTEL -->
+                    <div class="course-card">
+                        <div class="course-header">
+                            <div class="logo-placeholder logo-nptel">NPTEL</div>
+                        </div>
+                        <div class="course-body">
+                            <h3>NPTEL Quantum Physics</h3>
+                            <p>Rigorous academic courses from India's top IITs. Covers Quantum Mechanics, Quantum
+                                Information, and Computation in depth.</p>
+                            <a href="https://nptel.ac.in/courses/115/101/115101092/" target="_blank"
+                                class="course-btn">View Course →</a>
+                        </div>
+                    </div>
+
+                    <!-- IBM Certification -->
+                    <div class="course-card">
+                        <div class="course-header">
+                            <div class="logo-placeholder logo-ibm-gold">IBM CERT</div>
+                        </div>
+                        <div class="course-body">
+                            <h3>IBM Certified Associate</h3>
+                            <p><strong>Quantum Developer Certification.</strong> Prove your mastery of Qiskit and
+                                quantum computation with this industry-recognized credential.</p>
+                            <a href="https://www.ibm.com/training/certification/C0010300" target="_blank"
+                                class="course-btn">Get Certified →</a>
+                        </div>
+                    </div>
+
+                    <!-- NPTEL + Qiskit -->
+                    <div class="course-card">
+                        <div class="course-header">
+                            <div class="logo-placeholder logo-qiskit-nptel">Qiskit + NPTEL</div>
+                        </div>
+                        <div class="course-body">
+                            <h3>Quantum Lab with Qiskit</h3>
+                            <p>Hands-on course combining NPTEL's theory with practical Qiskit programming. Learn to run
+                                circuits on real IBM hardware.</p>
+                            <a href="https://nptel.ac.in/courses/106/105/106105153/" target="_blank"
+                                class="course-btn">Start Lab Course →</a>
+                        </div>
+                    </div>
+
+                    <!-- Other Courses Placeholder -->
+                    <div class="course-card">
+                        <div class="course-header">
+                            <div class="logo-placeholder" style="background: #333; font-size: 16px;">More</div>
+                        </div>
+                        <div class="course-body">
+                            <h3>More Resources</h3>
+                            <p>Explore Qureca, MIT OpenCourseWare, and other global quantum initiatives to broaden your
+                                expertise.</p>
+                            <a href="https://quantumcomputingreport.com/education/" target="_blank"
+                                class="course-btn">Find More →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="qt-pro-footer">
+        <div class="footer-top">
+
+            <!-- Brand column -->
+            <div>
+                <div class="ft-brand-name"><span class="q">q</span>T &ndash; Quantum Technology</div>
+                <p class="ft-brand-desc">
+                    An interactive quantum computing learning platform developed as a
+                    Community Service Project at JNTUACEA, bridging the gap between
+                    engineering education and the quantum era.
+                </p>
+                <span class="ft-badge">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                        <circle cx="5" cy="5" r="5" />
+                    </svg>
+                    ECE Dept &nbsp;&bull;&nbsp; JNTUACEA &nbsp;&bull;&nbsp; 2025
+                </span>
+            </div>
+
+            <!-- Platform links -->
+            <div>
+                <div class="ft-col-title">Platform</div>
+                <ul class="ft-links">
+                    <li><a href="qt-learning-platform.html">Learning Platform</a></li>
+                    <li><a href="quantum-algorithms.html">Quantum Algorithms</a></li>
+                    <li><a href="quantum-gates.html">Quantum Gates</a></li>
+                    <li><a href="bloch3d.html">Bloch Sphere 3D</a></li>
+                    <li><a href="quantum-phase-advanced/index.html">Phase &amp; Hamiltonians</a></li>
+                    <li><a href="variational.html">Variational Simulator</a></li>
+                </ul>
+            </div>
+
+            <!-- Info links -->
+            <div>
+                <div class="ft-col-title">References &amp; Info</div>
+                <ul class="ft-links">
+                    <li><a href="about.html">About qT</a></li>
+                    <li><a href="team.html">Our Team</a></li>
+                    <li><a href="https://learning.quantum.ibm.com" target="_blank">IBM Quantum Learning</a></li>
+                    <li><a href="https://www.st-andrews.ac.uk/physics/quvis/" target="_blank">QuVis – St Andrews</a>
+                    </li>
+                    <li><a href="https://nptel.ac.in" target="_blank">NPTEL Courses</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copy">&copy; 2025 qT &ndash; Quantum Technology Learning Platform &nbsp;&bull;&nbsp; Community
+                Service Project</div>
+            <div class="mentor">Developed under the guidance of <span>Dr. V. Sumalatha</span>, Professor, ECE, JNTUACEA
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Section Navigation
+        function openSec(sectionId, element) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            // Remove active from all steps
+            const steps = document.querySelectorAll('.step');
+            steps.forEach(step => step.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Highlight active step
+            element.classList.add('active');
+
+            // Scroll to top of content
+            document.querySelector('.content').scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fullscreen toggle
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Initialize Physics Visualization
+        function initPhysicsVisualization() {
+            const container = document.getElementById('physics-visualization');
+            if (!container || container.children.length > 0) return;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf5f7fb);
+
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 1.6, 5);
+            camera.lookAt(0, 1, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            mainLight.position.set(3, 5, 4);
+            scene.add(mainLight);
+
+            // Create simple quantum visualization
+            const particles = [];
+            for (let i = 0; i < 50; i++) {
+                const geometry = new THREE.SphereGeometry(0.05, 16, 16);
+                const material = new THREE.MeshPhongMaterial({
+                    color: Math.random() > 0.5 ? 0x0057b8 : 0x00d4aa,
+                    emissive: Math.random() > 0.5 ? 0x0057b8 : 0x00d4aa,
+                    emissiveIntensity: 0.3
+                });
+                const particle = new THREE.Mesh(geometry, material);
+
+                particle.position.set(
+                    (Math.random() - 0.5) * 4,
+                    (Math.random() - 0.5) * 4,
+                    (Math.random() - 0.5) * 4
+                );
+
+                particle.velocity = new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02
+                );
+
+                particles.push(particle);
+                scene.add(particle);
+            }
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                particles.forEach(particle => {
+                    particle.position.add(particle.velocity);
+
+                    // Bounce off boundaries
+                    if (Math.abs(particle.position.x) > 2) particle.velocity.x *= -1;
+                    if (Math.abs(particle.position.y) > 2) particle.velocity.y *= -1;
+                    if (Math.abs(particle.position.z) > 2) particle.velocity.z *= -1;
+
+                    particle.rotation.x += 0.01;
+                    particle.rotation.y += 0.01;
+                });
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (container.clientWidth > 0) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
+        }
+
+        // Initialize on section change
+        document.addEventListener('DOMContentLoaded', () => {
+            // Observer for physics section
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.target.id === 'physics') {
+                        setTimeout(initPhysicsVisualization, 100);
+                    }
+                });
+            });
+
+            const physicsSection = document.getElementById('physics');
+            if (physicsSection) {
+                observer.observe(physicsSection);
+            }
+        });
+    </script>
+</body>
+
+</html>

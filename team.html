@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team - The qT (JNTU Quantum)</title>
+
+    <link rel="stylesheet" href="global-ui.css?v=2.0">
+    <link rel="stylesheet" href="landing.css?v=2.0">
+
+    <!-- Font Awesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?v=2.0">
+
+    <style>
+        /* Team Specific Styles */
+        /* Team Specific Styles */
+        body.landing-active {
+            overflow-y: auto !important;
+            /* Force scrolling override */
+            padding-top: 80px;
+            /* Space for fixed nav */
+            height: auto !important;
+            min-height: 100vh;
+        }
+
+        .team-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .team-header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .team-title {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #fff 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .team-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Social Layout - Icon Top, Text Bottom */
+        .member-socials {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .social-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .social-item:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Icon Boxes */
+        .icon-box {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: box-shadow 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            /* Subtle border */
+        }
+
+        .social-item:hover .icon-box {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Brand Specific Shapes & Colors */
+
+        /* GitHub: Circle, Black */
+        .social-item.github .icon-box {
+            background-color: #181717 !important;
+            border-radius: 50%;
+        }
+
+        .social-item.github .social-label {
+            color: #e2e8f0;
+            /* Light gray for dark theme visibility */
+        }
+
+        /* LinkedIn: Rounded Square, Blue */
+        .social-item.linkedin .icon-box {
+            background-color: #0077b5 !important;
+            border-radius: 12px;
+        }
+
+        .social-item.linkedin .social-label {
+            color: #38bdf8;
+            /* Brighter blue for text */
+        }
+
+        /* Email: Rounded Square, Red */
+        .social-item.email .icon-box {
+            background-color: #EA4335 !important;
+            border-radius: 12px;
+        }
+
+        .social-item.email .social-label {
+            color: #f87171;
+            /* Brighter red for text */
+        }
+
+        /* Text Labels */
+        .social-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Enhanced Glass Card */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 35px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Bouncy effect */
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Placeholder for missing images */
+        .member-img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+        }
+
+        .bg-gradient-1 {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+        }
+
+        .bg-gradient-2 {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .bg-gradient-3 {
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+        }
+
+        .bg-gradient-4 {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+        }
+
+        /* Mentor Section */
+        .mentor-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 80px;
+            animation: fadeIn 1.5s ease-out;
+            position: relative;
+            z-index: 5;
+        }
+
+        .mentor-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            padding: 50px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .mentor-img-wrapper {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, #00d4ff, #0057b8);
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .mentor-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #0f172a;
+        }
+
+        .mentor-badge {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .mentor-name {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .mentor-role {
+            font-size: 1.2rem;
+            color: #38bdf8;
+            margin-bottom: 20px;
+        }
+
+        .mentor-desc {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 90%;
+            margin-bottom: 20px;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-member-card {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .member-img-wrapper {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid rgba(56, 189, 248, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .member-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .team-member-card:hover .member-img {
+            transform: scale(1.1);
+        }
+
+        .member-name {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .member-role {
+            font-size: 0.9rem;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .member-contrib {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .member-socials {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+
+
+        /* Lead Card Styling Override */
+        .lead-card {
+            border-color: rgba(56, 189, 248, 0.5);
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .lead-card .member-img-wrapper {
+            width: 140px;
+            height: 140px;
+            border-color: #38bdf8;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+  <style>
+    .qt-global-footer {
+      background: rgba(2,2,5,0.95);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 22px 40px;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .qt-global-footer p {
+      font-size: 0.8rem;
+      color: #475569;
+      line-height: 1.8;
+      margin: 0;
+    }
+    .qt-global-footer .ft-brand  { color: #38bdf8; font-weight: 700; }
+    .qt-global-footer .ft-sep    { color: #334155; margin: 0 6px; }
+    .qt-global-footer .ft-ref    { color: #64748b; }
+  </style>
+</head>
+
+<body class="landing-active" style="background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);">
+
+    <!-- Navigation (Copied from Landing) -->
+    <nav class="landing-nav">
+        <div class="landing-nav-logo">
+            <img src="jntu_logo.png" alt="Logo" class="nav-logo-img">
+            Using qT
+        </div>
+        <div class="landing-nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="team.html" style="color:var(--accent-color)">Team</a>
+            <a href="qt-learning-platform.html">Courses</a>
+            <a href="about.html#donate" class="donations-nav-link">Donations</a>
+        </div>
+    </nav>
+
+    <div class="team-container">
+
+        <div class="team-header">
+            <h1 class="team-title">The Minds Behind qT</h1>
+            <p class="team-subtitle">Meet the visionaries, developers, and researchers from JNTU Anantapur driven by a
+                passion for Quantum Technology.</p>
+        </div>
+
+        <!-- MENTOR SECTION -->
+        <div class="mentor-section">
+            <div class="glass-card mentor-card">
+                <span class="mentor-badge">Project Mentor & Guide</span>
+                <div class="mentor-img-wrapper">
+                    <img src="team/dr_v_sumalatha.png" alt="Dr. V Sumalatha Garu" class="mentor-img">
+                </div>
+                <h2 class="mentor-name">Dr. V Sumalatha Garu</h2>
+                <div class="mentor-role">
+                    Professor of ECE<br>
+                    Jawaharlal Nehru Technological University Anantapur, Anantapuram
+                </div>
+                <p class="mentor-desc">
+                    Guiding the JNTU Quantum Initiative with expertise and vision. Her mentorship fosters innovation and
+                    research excellence, empowering students to explore the future of technology.
+                    <br><br>
+                    <strong>Email:</strong> <a href="mailto:vsumalatha.ece@jntua.ac.in"
+                        style="color: #38bdf8; text-decoration: none;">vsumalatha.ece@jntua.ac.in</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- TEAM LEADERS -->
+        <div class="team-header" style="margin-bottom: 30px;">
+            <h2 class="team-title" style="font-size: 2.5rem;">Core Development Team</h2>
+        </div>
+
+        <div class="team-grid">
+            <!-- V S Keerthan -->
+            <div class="glass-card team-member-card lead-card">
+                <div class="member-img-wrapper">
+                    <img src="team/keerthan.png" alt="V S Keerthan" class="member-img">
+                </div>
+                <h3 class="member-name">V S Keerthan</h3>
+                <div class="member-role">Lead Developer & Architect</div>
+                <p class="member-contrib">
+                    Lead Developer & Architect of the qT Platform. Designed the core structure and built interactive
+                    quantum simulators to visualize complex concepts effectively.
+                </p>
+                <div class="member-socials">
+                    <!-- GitHub -->
+                    <a href="https://github.com/keer9999" target="_blank" class="social-item github" title="GitHub">
+                        <div class="icon-box">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <span class="social-label">GitHub</span>
+                    </a>
+
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/keerthan-v-s-557033361" target="_blank"
+                        class="social-item linkedin" title="LinkedIn">
+                        <div class="icon-box">
+                            <i class="fab fa-linkedin-in"></i>
+                        </div>
+                        <span class="social-label">LinkedIn</span>
+                    </a>
+
+                    <!-- Email -->
+                    <a href="mailto:keerthanroyal8@gmail.com" class="social-item email" title="Email">
+                        <div class="icon-box">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <span class="social-label">Email</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- A Poorvitha Reddy -->
+            <div class="glass-card team-member-card lead-card">
+                <div class="member-img-wrapper">
+                    <img src="team/poorvitha.png" alt="A Poorvitha Reddy" class="member-img">
+                </div>
+                <h3 class="member-name">A Poorvitha Reddy</h3>
+                <div class="member-role">Co-Lead & Algorithm Lead</div>
+                <p class="member-contrib">
+                    Leads the team in ensuring accurate algorithmic implementation. Curates rigorous educational content
+                    for Quantum Algorithms, making advanced topics accessible and understandable.
+                </p>
+            </div>
+        </div>
+
+        <!-- TEAM MEMBERS -->
+        <div class="team-grid">
+            <!-- M Mahesh Kumar -->
+            <div class="glass-card team-member-card">
+                <div class="member-img-wrapper">
+                    <img src="team/mahesh.png" alt="M Mahesh Kumar" class="member-img">
+                </div>
+                <h3 class="member-name">M Mahesh Kumar</h3>
+                <div class="member-role">Resource & Content Strategist</div>
+                <p class="member-contrib">
+                    Content Strategist managing academic resources. Structured the Quantum Cryptography sections and
+                    verified technical details against standard references.
+                </p>
+            </div>
+
+            <!-- Sk Youns -->
+            <div class="glass-card team-member-card">
+                <div class="member-img-wrapper">
+                    <img src="team/youns.png" alt="Sk Youns" class="member-img">
+                </div>
+                <h3 class="member-name">Sk Youns</h3>
+                <div class="member-role">Frontend & Interactive UI</div>
+                <p class="member-contrib">
+                    Frontend Developer focused on responsiveness and interactivity. Created seamless UI transitions for
+                    an optimal learning experience on all devices.
+                </p>
+            </div>
+
+            <!-- B Ganesh -->
+            <div class="glass-card team-member-card">
+                <div class="member-img-wrapper">
+                    <img src="team/ganesh.png" alt="B Ganesh" class="member-img">
+                </div>
+                <h3 class="member-name">B Ganesh</h3>
+                <div class="member-role">Visual Assets & Design</div>
+                <p class="member-contrib">
+                    Visual Designer responsible for the project's identity. Created clear graphical assets for the Bloch
+                    Sphere and algorithm diagrams to enhance understanding.
+                </p>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div style="text-align: center; margin-top: 60px;">
+            <a href="index.html" style="
+                display: inline-block;
+                padding: 15px 40px;
+                background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 30px;
+                font-weight: bold;
+                font-size: 1.1rem;
+                box-shadow: 0 10px 25px rgba(2, 132, 199, 0.4);
+                transition: transform 0.3s, box-shadow 0.3s;
+            " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 35px rgba(2, 132, 199, 0.5)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px rgba(2, 132, 199, 0.4)'">
+                ← Back to Home
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Footer (Simulated) -->
+    <div
+        style="text-align: center; color: #64748b; padding: 40px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05);">
+        &copy; 2026 JNTU Anantapur. The qT Project.
+    </div>
+
+
+<footer class="qt-global-footer">
+    <p>
+      &copy; 2025 <span class="ft-brand">qT &ndash; Quantum Technology</span>
+      <span class="ft-sep">&bull;</span>
+      JNTUACEA, ECE Department
+      <span class="ft-sep">&bull;</span>
+      Community Service Project
+    </p>
+    <p class="ft-ref">
+      Developed under the guidance of Dr. V. Sumalatha
+      <span class="ft-sep">&bull;</span>
+      Reference: IBM Quantum Learning &amp; QuVis
+    </p>
+  </footer>
+</body>
+
+</html>

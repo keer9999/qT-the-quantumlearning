@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="stylesheet" href="global-ui.css">
+
+  <meta charset="UTF-8">
+  <title>Classical Bit vs Qubit</title>
+  <link rel="stylesheet" href="classical-vs-qubit.css">
+</head>
+
+<body>
+    <!-- Global Back Button -->
+<div class="global-back-btn" onclick="goBackGlobal()" title="Go Back"></div>
+  ←
+</div>
+
+<!-- Side Branding -->
+<!-- Side Branding -->
+<div class="side-brand" id="sideBrand">
+  <a href="https://jntuacea.ac.in/" target="_blank" title="Visit JNTUACEA Website">
+    <img src="jntuacea-logo.png" alt="JNTUACEA Logo">
+  </a>
+  <div class="dept-text">
+    JNTUACEA<br>
+    <span>Department of ECE</span>
+  </div>
+</div>
+
+
+
+<header>
+  <h1>Classical Bit vs Quantum Bit (Qubit)</h1>
+  <p>Understanding information: Classical vs Quantum</p>
+</header>
+
+<section class="theory">
+  <h2>What is a Classical Bit?</h2>
+  <p>
+    A <b>classical bit</b> is the smallest unit of information in classical
+    computers. It can be in only one state at a time:
+  </p>
+
+  <div class="bit-box">
+    <div class="bit">0</div>
+    <div class="bit">1</div>
+  </div>
+
+  <p>
+    Examples:
+    <ul>
+      <li>Light switch: ON or OFF</li>
+      <li>Door: Open or Closed</li>
+      <li>Electric signal: Low or High voltage</li>
+    </ul>
+  </p>
+</section>
+
+<hr>
+
+<section class="theory">
+  <h2>What is a Qubit?</h2>
+  <p>
+    A <b>quantum bit (qubit)</b> is the basic unit of quantum information.
+    Unlike a classical bit, a qubit can be:
+  </p>
+
+  <ul>
+    <li>|0⟩</li>
+    <li>|1⟩</li>
+    <li><b>Both at the same time</b> (this is called <b>superposition</b>)</li>
+  </ul>
+
+  <div class="equation">
+    |ψ⟩ = α|0⟩ + β|1⟩
+  </div>
+
+  <p>
+    Here:
+    <ul>
+      <li>α and β are <b>probability amplitudes</b></li>
+      <li>|α|² + |β|² = 1</li>
+    </ul>
+  </p>
+</section>
+
+<hr>
+
+<section class="animation">
+  <h2>Visual Difference </h2>
+
+  <div class="compare">
+    <div class="card">
+      <h3>Classical Bit</h3>
+      <div class="classic-anim">0 → 1 → 0</div>
+    </div>
+
+    <div class="card">
+      <h3>Qubit</h3>
+      <div class="quantum-anim">|0⟩ + |1⟩</div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<section class="simulator">
+  <h2>Quantum Uncertainty Simulator</h2>
+
+  <p class="note">
+    This interactive simulation is adapted from the University of St Andrews
+    QuVis project for educational purposes.
+  </p>
+
+<div class="sim-container" id="simContainer">
+
+  <div class="sim-controls">
+    <button onclick="openFullscreen()">⛶ Fullscreen</button>
+    <button onclick="closeFullscreen()">🗗 Exit</button>
+  </div>
+
+  <iframe
+    src="uncertainty/uncertainty.html"
+    class="sim-frame"
+    title="Quantum Uncertainty Simulator">
+  </iframe>
+
+</div>
+
+</section>
+
+<hr>
+
+<section class="summary">
+  <h2>Key Differences</h2>
+
+  <table>
+    <tr>
+      <th>Classical Bit</th>
+      <th>Qubit</th>
+    </tr>
+    <tr>
+      <td>0 or 1</td>
+      <td>0 and 1 together</td>
+    </tr>
+    <tr>
+      <td>Deterministic</td>
+      <td>Probabilistic</td>
+    </tr>
+    <tr>
+      <td>No superposition</td>
+      <td>Superposition</td>
+    </tr>
+    <tr>
+      <td>No interference</td>
+      <td>Interference effects</td>
+    </tr>
+  </table>
+</section>
+
+<script src="classical-vs-qubit.js"></script>
+<script src="global-ui.js"></script>
+
+
+
+<!-- ── Advanced Qubit vs Classical Bit Quiz (self-contained) ─────────────────────── -->
+<style>
+/* ── Advanced Quiz ─────────────────────────────────────────────────────── */
+.adv-quiz-section{background:#fff;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.08);margin:28px 0;padding:28px;}
+.adv-quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.adv-quiz-title{font-size:15px;font-weight:700;color:#003366;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:7px;}
+.adv-quiz-title::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:#0057b8;box-shadow:0 0 8px #0057b8;}
+.adv-quiz-prog-label{font-size:13px;color:#64748b;font-weight:500;}
+.adv-quiz-bar{height:5px;background:#e2e8f0;border-radius:4px;margin-bottom:18px;overflow:hidden;}
+.adv-quiz-bar-fill{height:100%;background:linear-gradient(90deg,#0057b8,#00b4d8);border-radius:4px;transition:width .35s ease;}
+.adv-quiz-card{background:#fff;border:2px solid #e2e8f0;border-radius:14px;padding:26px 28px;box-shadow:0 4px 16px rgba(0,70,150,.07);}
+.adv-quiz-q{font-size:17px;font-weight:600;color:#1e293b;line-height:1.55;margin-bottom:20px;}
+.adv-quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.adv-quiz-opt{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:14px;}
+.adv-quiz-opt:hover{border-color:#0057b8;background:rgba(0,87,184,.05);}
+.adv-quiz-opt.selected{border-color:#0057b8;background:rgba(0,87,184,.12);}
+.adv-quiz-opt.correct{border-color:#10b981;background:rgba(16,185,129,.12);}
+.adv-quiz-opt.incorrect{border-color:#ef4444;background:rgba(239,68,68,.12);}
+.adv-quiz-opt.disabled{cursor:not-allowed;}
+.adv-opt-letter{width:32px;height:32px;border-radius:50%;border:2px solid #cbd5e1;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#64748b;flex-shrink:0;transition:all .22s;}
+.adv-quiz-opt.selected .adv-opt-letter{background:#0057b8;border-color:#0057b8;color:#fff;}
+.adv-quiz-opt.correct .adv-opt-letter{background:#10b981;border-color:#10b981;color:#fff;}
+.adv-quiz-opt.incorrect .adv-opt-letter{background:#ef4444;border-color:#ef4444;color:#fff;}
+.adv-opt-text{flex:1;font-size:15px;color:#475569;line-height:1.4;}
+.adv-quiz-opt.selected .adv-opt-text{color:#1e293b;}
+.adv-quiz-explain{display:none;margin-top:14px;background:#eef6ff;border-left:4px solid #0057b8;border-radius:8px;padding:14px 16px;}
+.adv-quiz-explain.show{display:block;animation:aqSlide .3s ease;}
+.adv-explain-title{font-size:11px;font-weight:700;color:#0057b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.adv-explain-text{font-size:14px;color:#334155;line-height:1.6;}
+.adv-quiz-controls{display:flex;justify-content:center;gap:12px;margin-top:20px;}
+.adv-quiz-btn{padding:10px 24px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.adv-quiz-btn:disabled{opacity:.45;cursor:not-allowed;}
+.adv-quiz-btn-primary{background:linear-gradient(135deg,#0057b8,#0094d4);color:#fff;}
+.adv-quiz-btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,87,184,.35);}
+.adv-quiz-btn-secondary{background:transparent;border:2px solid #e2e8f0;color:#475569;}
+.adv-quiz-btn-secondary:hover:not(:disabled){border-color:#0057b8;color:#0057b8;}
+.adv-quiz-results{background:#fff;border:2px solid #0057b8;border-radius:14px;padding:36px;text-align:center;display:none;}
+.adv-quiz-results.show{display:block;animation:aqZoom .4s ease;}
+.adv-quiz-score-pct{font-size:60px;font-weight:800;background:linear-gradient(135deg,#0057b8,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.adv-quiz-score-label{font-size:20px;color:#475569;margin:8px 0 4px;}
+.adv-quiz-score-detail{font-size:15px;color:#94a3b8;margin-bottom:20px;}
+.adv-quiz-feedback{font-size:17px;color:#1e293b;background:#eef6ff;border-radius:10px;padding:16px 20px;margin-bottom:22px;}
+@keyframes aqSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes aqZoom{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+</style>
+
+<div style="max-width:1100px;margin:28px auto;padding:0 24px;">
+<div class="adv-quiz-section">
+  <div id="advQuizMount_qubitClassicalQuizData"></div>
+</div>
+</div>
+
+<script>
+(function(){
+
+class AdvQuiz {
+  constructor(data, mountId) {
+    this.data=data; this.mount=document.getElementById(mountId);
+    this.cur=0; this.score=0; this.answers=[]; this.answered=false;
+    this.render();
+  }
+  render() {
+    if(!this.mount)return;
+    const q=this.data.questions[this.cur];
+    const pct=(this.cur/this.data.questions.length)*100;
+    this.mount.innerHTML=`
+      <div class="adv-quiz-header">
+        <div class="adv-quiz-title">${this.data.topicName} Quiz</div>
+        <div class="adv-quiz-prog-label">Q${this.cur+1}&nbsp;/&nbsp;${this.data.questions.length}</div>
+      </div>
+      <div class="adv-quiz-bar"><div class="adv-quiz-bar-fill" style="width:${pct}%"></div></div>
+      <div class="adv-quiz-card">
+        <div class="adv-quiz-q">${q.question}</div>
+        <div class="adv-quiz-opts">
+          ${q.options.map((o,i)=>`
+            <div class="adv-quiz-opt" data-i="${i}">
+              <div class="adv-opt-letter">${'ABCD'[i]}</div>
+              <div class="adv-opt-text">${o}</div>
+            </div>`).join('')}
+        </div>
+        <div class="adv-quiz-explain" id="aqqExp">
+          <div class="adv-explain-title">Explanation</div>
+          <div class="adv-explain-text">${q.explanation}</div>
+        </div>
+      </div>
+      <div class="adv-quiz-controls">
+        <button class="adv-quiz-btn adv-quiz-btn-secondary" id="aqPrev" ${this.cur===0?'disabled':''}>&larr; Prev</button>
+        <button class="adv-quiz-btn adv-quiz-btn-primary" id="aqSubmit" disabled>Submit</button>
+        <button class="adv-quiz-btn adv-quiz-btn-secondary" id="aqNext" style="display:none">Next &rarr;</button>
+      </div>`;
+    this.restoreAnswer(); this.bind();
+  }
+  bind() {
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach(el=>el.addEventListener('click',()=>{if(!this.answered)this.select(el);}));
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.addEventListener('click',()=>this.submit());
+    const prv=this.mount.querySelector('#aqPrev'); if(prv)prv.addEventListener('click',()=>{this.cur--;this.answered=!!this.answers[this.cur];this.render();});
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt)nxt.addEventListener('click',()=>{
+      if(this.cur<this.data.questions.length-1){this.cur++;this.answered=!!this.answers[this.cur];this.render();}
+      else this.showResults();
+    });
+  }
+  select(el){
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.disabled=false;
+  }
+  submit(){
+    const sel=this.mount.querySelector('.adv-quiz-opt.selected'); if(!sel)return;
+    this.answered=true;
+    const i=parseInt(sel.dataset.i),q=this.data.questions[this.cur],ok=i===q.correct;
+    if(ok&&!this.answers[this.cur])this.score++;
+    this.answers[this.cur]={selected:i,correct:ok};
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach((o,idx)=>{
+      o.classList.add('disabled');
+      if(idx===q.correct)o.classList.add('correct');
+      else if(idx===i&&!ok)o.classList.add('incorrect');
+    });
+    const exp=this.mount.querySelector('#aqqExp'); if(exp)exp.classList.add('show');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.style.display='none';
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt){
+      nxt.style.display='inline-flex';
+      if(this.cur===this.data.questions.length-1)nxt.textContent='View Results';
+    }
+    if(ok&&typeof startFireworks==='function')startFireworks();
+  }
+  restoreAnswer(){
+    const prev=this.answers[this.cur]; if(!prev)return;
+    this.answered=true;
+    const q=this.data.questions[this.cur];
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach((o,idx)=>{
+      o.classList.add('disabled');
+      if(idx===q.correct)o.classList.add('correct');
+      if(idx===prev.selected){o.classList.add('selected');if(!prev.correct)o.classList.add('incorrect');}
+    });
+    const exp=this.mount.querySelector('#aqqExp'); if(exp)exp.classList.add('show');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.style.display='none';
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt)nxt.style.display='inline-flex';
+  }
+  showResults(){
+    const pct=Math.round((this.score/this.data.questions.length)*100);
+    const fb=pct>=90?'Outstanding! You have mastered this topic!':pct>=70?'Great job! Solid understanding of the concepts.':pct>=50?'Good effort! Review the material to strengthen your understanding.':'Keep learning! Re-read the theory and try again.';
+    this.mount.innerHTML=`
+      <div class="adv-quiz-results show">
+        <div class="adv-quiz-score-pct">${pct}%</div>
+        <div class="adv-quiz-score-label">Your Score</div>
+        <div class="adv-quiz-score-detail">${this.score} out of ${this.data.questions.length} correct</div>
+        <div class="adv-quiz-feedback">${fb}</div>
+        <div class="adv-quiz-controls">
+          <button class="adv-quiz-btn adv-quiz-btn-secondary" onclick="location.reload()">Try Again</button>
+        </div>
+      </div>`;
+  }
+}
+
+const qubitClassicalQuizData = {
+  topicName: "Qubit vs Classical Bit",
+  questions: [
+    {
+      question: "What is the fundamental difference between a classical bit and a qubit?",
+      options: ["Qubits are faster", "A qubit can exist in superposition (0 and 1 simultaneously)", "Qubits store more than 2 values", "Classical bits use AC current"],
+      correct: 1,
+      explanation: "A classical bit is always exactly 0 or 1. A qubit can exist in superposition α|0⟩ + β|1⟩, representing both simultaneously until measured."
+    },
+    {
+      question: "What values can a classical bit hold?",
+      options: ["One of infinitely many values", "A complex number", "Exactly 0 or 1", "Two values simultaneously"],
+      correct: 2,
+      explanation: "A classical bit (binary digit) holds one definite value at a time: 0 or 1."
+    },
+    {
+      question: "How many distinct pure states can a single qubit represent?",
+      options: ["Exactly 2", "3", "4", "Infinitely many"],
+      correct: 3,
+      explanation: "A qubit is parameterised by continuous angles θ and φ on the Bloch sphere — infinitely many distinct pure states."
+    },
+    {
+      question: "What enables quantum speedups over classical computers?",
+      options: ["Faster clock speeds", "Colder hardware", "Superposition and entanglement", "More transistors"],
+      correct: 2,
+      explanation: "Quantum algorithms exploit superposition (explore many states at once) and entanglement (quantum correlations) to solve certain problems exponentially faster."
+    },
+    {
+      question: "How many classical bits are needed to simulate N qubits exactly?",
+      options: ["N bits", "2N bits", "2^N complex numbers (exponential)", "N² bits"],
+      correct: 2,
+      explanation: "Simulating N qubits requires 2^N complex amplitudes — exponential cost. This is why quantum computation is hard to simulate classically."
+    },
+    {
+      question: "Measuring a qubit in |+⟩ always gives which classic bit?",
+      options: ["Always 0", "Always 1", "0 or 1 with 50% each", "A complex amplitude"],
+      correct: 2,
+      explanation: "|+⟩ = (|0⟩+|1⟩)/√2 gives P(0)=P(1)=0.5. Each measurement is a random 50/50 classical bit."
+    },
+    {
+      question: "Which quantum effect produces correlations stronger than any classical system?",
+      options: ["Superposition", "Tunnelling", "Entanglement", "Decoherence"],
+      correct: 2,
+      explanation: "Entanglement produces correlations that violate Bell inequalities — impossible with any classical shared-variable model."
+    },
+    {
+      question: "Is quantum computing a universal replacement for classical computing?",
+      options: ["Yes — quantum is always faster", "No — classical is more practical for most everyday tasks", "Yes — qubits are cheaper", "No — qubits cannot store any digital data"],
+      correct: 1,
+      explanation: "Quantum computers excel at specific tasks (cryptography, simulation, optimisation) but classical computers remain more practical for everyday computing."
+    },
+  ]
+};
+// Wait for DOM to be ready
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', function(){ new AdvQuiz(qubitClassicalQuizData, 'advQuizMount_qubitClassicalQuizData'); });
+} else {
+  new AdvQuiz(qubitClassicalQuizData, 'advQuizMount_qubitClassicalQuizData');
+}
+})();
+</script>
+
+
+<!-- QT-ENHANCEMENTS-v1 -->
+<style>
+/* ── QT Enhancements ─────────────────────────────────────────────────── */
+.qt-enhance-wrap{max-width:1100px;margin:0 auto;padding:0 24px 48px;}
+/* Key Concepts */
+.qt-concepts{background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,40,120,.08);padding:28px 32px;margin-bottom:24px;}
+.qt-concepts-title{font-size:13px;font-weight:700;letter-spacing:.12em;color:#0057b8;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.qt-concepts-title::before{content:'';width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#0057b8,#00b4d8);display:inline-block;flex-shrink:0;}
+.qt-concepts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.qt-concept-card{background:linear-gradient(135deg,#f0f7ff,#e8f4ff);border:1.5px solid #c7deff;border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;}
+.qt-concept-card::before{content:'';position:absolute;top:-20px;right:-20px;width:70px;height:70px;border-radius:50%;background:rgba(0,87,184,.07);}
+.qt-concept-card h4{margin:0 0 7px;font-size:14px;color:#003380;font-weight:700;}
+.qt-concept-card p{margin:0;font-size:13px;color:#475569;line-height:1.6;}
+.qt-concept-card.green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;}
+.qt-concept-card.green h4{color:#166534;}
+.qt-concept-card.purple{background:linear-gradient(135deg,#faf5ff,#ede9fe);border-color:#c4b5fd;}
+.qt-concept-card.purple h4{color:#581c87;}
+.qt-concept-card.orange{background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fed7aa;}
+.qt-concept-card.orange h4{color:#9a3412;}
+/* Formula reference */
+.qt-formula-box{background:#0f172a;border-radius:14px;padding:24px 28px;margin-bottom:24px;color:#e2e8f0;}
+.qt-formula-box-title{font-size:12px;font-weight:700;letter-spacing:.15em;color:#38bdf8;text-transform:uppercase;margin-bottom:16px;}
+.qt-formula-row{display:flex;align-items:flex-start;gap:16px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.qt-formula-row:last-child{border-bottom:none;}
+.qt-formula-tag{background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.3);color:#38bdf8;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.qt-formula-math{font-family:'Courier New',monospace;font-size:15px;color:#f1f5f9;flex:1;}
+.qt-formula-desc{font-size:12px;color:#94a3b8;margin-top:3px;}
+/* Did You Know */
+.qt-dyk{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:14px;padding:22px 26px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px;color:#fff;}
+.qt-dyk-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.qt-dyk-title{font-size:11px;font-weight:700;letter-spacing:.14em;color:#a5b4fc;text-transform:uppercase;margin-bottom:6px;}
+.qt-dyk-text{font-size:14px;color:#e0e7ff;line-height:1.7;}
+/* Notebook */
+.qt-notebook{background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,40,120,.1);overflow:hidden;margin-bottom:24px;}
+.qt-nb-header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:16px 22px;display:flex;align-items:center;gap:10px;}
+.qt-nb-dots{display:flex;gap:6px;}
+.qt-nb-dot{width:12px;height:12px;border-radius:50%;}
+.qt-nb-dot.red{background:#ff5f57;}
+.qt-nb-dot.yellow{background:#febc2e;}
+.qt-nb-dot.green{background:#28c840;}
+.qt-nb-title{color:#94a3b8;font-size:13px;font-family:monospace;margin-left:8px;}
+.qt-nb-body{padding:20px 22px;}
+.qt-nb-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:#0057b8;text-transform:uppercase;margin-bottom:8px;}
+.qt-nb-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.qt-nb-tab{padding:5px 13px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;color:#64748b;background:#f8fafc;transition:all .18s;}
+.qt-nb-tab:hover,.qt-nb-tab.active{background:#0057b8;border-color:#0057b8;color:#fff;}
+.qt-nb-editor{position:relative;}
+.qt-nb-code{
+  width:100%;min-height:120px;background:#0f172a;color:#a5f3fc;
+  font-family:'Courier New',monospace;font-size:13px;line-height:1.7;
+  border:2px solid #1e293b;border-radius:10px;padding:14px;
+  resize:vertical;outline:none;box-sizing:border-box;
+  transition:border-color .2s;
+}
+.qt-nb-code:focus{border-color:#0057b8;}
+.qt-nb-actions{display:flex;gap:10px;margin-top:10px;}
+.qt-nb-run{background:linear-gradient(135deg,#0057b8,#0094d4);color:#fff;border:none;border-radius:8px;padding:9px 22px;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;}
+.qt-nb-run:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,87,184,.4);}
+.qt-nb-clear{background:transparent;border:2px solid #e2e8f0;border-radius:8px;padding:9px 16px;font-size:13px;color:#64748b;cursor:pointer;transition:all .2s;}
+.qt-nb-clear:hover{border-color:#ef4444;color:#ef4444;}
+.qt-nb-output{margin-top:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px 16px;min-height:56px;font-family:monospace;font-size:13px;color:#334155;white-space:pre-wrap;line-height:1.7;}
+.qt-nb-output.error{background:#fff1f2;border-color:#fca5a5;color:#991b1b;}
+.qt-nb-output.success{background:#f0fdf4;border-color:#86efac;color:#166534;}
+@media(max-width:600px){.qt-concepts-grid{grid-template-columns:1fr;}.qt-formula-row{flex-direction:column;gap:6px;}}
+</style>
+<div class="qt-enhance-wrap">
+
+  <!-- Key Concepts -->
+  <div class="qt-concepts">
+    <div class="qt-concepts-title">Key Concepts</div>
+    <div class="qt-concepts-grid">
+      <div class="qt-concept-card"><h4>🔘 Classical Bit</h4><p>Always exactly 0 or 1. Deterministic. No superposition. Information is perfectly copyable (COPY gate exists).</p></div>
+<div class="qt-concept-card green"><h4>⚛️ Qubit</h4><p>α|0⟩+β|1⟩ — can be infinitely many states before measurement. Cannot be perfectly copied (No-Cloning Theorem).</p></div>
+<div class="qt-concept-card purple"><h4>📈 Exponential Power</h4><p>N qubits represent 2ᴺ states simultaneously. 50 qubits: 2⁵⁰ ≈ 10¹⁵ states. Classical needs exponential RAM.</p></div>
+<div class="qt-concept-card orange"><h4>🔗 Entanglement</h4><p>Two entangled qubits cannot be described independently. This creates quantum correlations impossible classically.</p></div>
+
+    </div>
+  </div>
+
+  <!-- Formula Reference -->
+  <div class="qt-formula-box">
+    <div class="qt-formula-box-title">📐 Formula Reference</div>
+    <div class="qt-formula-row">
+  <span class="qt-formula-tag">Qubit state</span>
+  <div><div class="qt-formula-math">|ψ⟩ = α|0⟩ + β|1⟩</div><div class="qt-formula-desc">|α|²+|β|²=1</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">N-qubit space</span>
+  <div><div class="qt-formula-math">2ᴺ complex amplitudes</div><div class="qt-formula-desc">Exponential classical simulation cost</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">No-cloning</span>
+  <div><div class="qt-formula-math">U|ψ⟩|0⟩ ≠ |ψ⟩|ψ⟩</div><div class="qt-formula-desc">Cannot copy unknown quantum state</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">Bell state</span>
+  <div><div class="qt-formula-math">|Φ+⟩=(|00⟩+|11⟩)/√2</div><div class="qt-formula-desc">Maximally entangled pair</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">Holevo bound</span>
+  <div><div class="qt-formula-math">χ ≤ n qubits → n classical bits</div><div class="qt-formula-desc">Info accessible from n qubits</div></div>
+</div>
+
+  </div>
+
+  <!-- Did You Know -->
+  <div class="qt-dyk">
+    <div class="qt-dyk-icon">💡</div>
+    <div>
+      <div class="qt-dyk-title">Did You Know?</div>
+      <div class="qt-dyk-text">Despite holding exponential state space, a qubit measurement yields only 1 classical bit. You can't directly read all 2ᴺ amplitudes — that's why quantum algorithms must cleverly interfere states to extract useful information.</div>
+    </div>
+  </div>
+
+  <!-- Quantum Notebook -->
+  <div class="qt-notebook">
+    <div class="qt-nb-header">
+      <div class="qt-nb-dots">
+        <div class="qt-nb-dot red"></div>
+        <div class="qt-nb-dot yellow"></div>
+        <div class="qt-nb-dot green"></div>
+      </div>
+      <div class="qt-nb-title">📓 classical_vs_quantum.ipynb</div>
+    </div>
+    <div class="qt-nb-body">
+      <div class="qt-nb-label">Interactive Quantum Notebook</div>
+      <p style="font-size:13px;color:#64748b;margin:0 0 10px;">Run JavaScript code to explore quantum concepts. Select an example or write your own:</p>
+      <div class="qt-nb-tabs" id="qtnbTabs_classical_vs_quantum">
+        <div class="qt-nb-tab active" onclick="qtnbSetTab(this,'classical_vs_quantum',0)">Comparison</div><div class="qt-nb-tab" onclick="qtnbSetTab(this,'classical_vs_quantum',1)">No Cloning</div><div class="qt-nb-tab" onclick="qtnbSetTab(this,'classical_vs_quantum',2)">Bell State</div>
+      </div>
+      <div class="qt-nb-editor">
+        <textarea class="qt-nb-code" id="qtnbCode_classical_vs_quantum" spellcheck="false"></textarea>
+      </div>
+      <div class="qt-nb-actions">
+        <button class="qt-nb-run" onclick="qtnbRun('classical_vs_quantum')">▶ Run Code</button>
+        <button class="qt-nb-clear" onclick="qtnbClear('classical_vs_quantum')">✕ Clear</button>
+      </div>
+      <div class="qt-nb-output" id="qtnbOut_classical_vs_quantum">// Output will appear here...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const _examples_classical_vs_quantum = [
+`// Classical vs Quantum information capacity
+function classicalStates(n){ return n; }
+function quantumStates(n){ return 2**n; }
+console.log('States representable:');
+[1,2,4,8,16].forEach(n=>{
+  console.log(\`n=\${n}: Classical=\${classicalStates(n)} | Quantum=2^\${n}=\${quantumStates(n)}\`);
+});
+console.log(\`\\n300 qubits: 2^300 ≈ 10^90 (more than atoms in universe!)\`);`,
+`// Demonstrate no-cloning: can't copy superposition
+function tryClone(alpha){
+  // Classical: trivially copy a=0.6 → [0.6, 0.6]
+  const classicalCopy = [alpha, alpha];
+  // Quantum: measuring destroys superposition
+  const measured = Math.random() < alpha**2 ? 0 : 1;
+  // After measurement we have a definite bit, but lost phase info
+  return {classical: classicalCopy, quantum_after_measure: measured};
+}
+const res=tryClone(0.6);
+console.log(\`Classical copy: [\${res.classical}]\`);
+console.log(\`Quantum: measured \${res.quantum_after_measure}, original superposition GONE\`);
+console.log('No-Cloning Theorem: quantum information cannot be perfectly duplicated');`,
+`// Generate Bell state measurements
+const shots=500; let c00=0,c01=0,c10=0,c11=0;
+for(let i=0;i<shots;i++){
+  // |Φ+⟩ = (|00⟩+|11⟩)/√2 → P(00)=P(11)=0.5
+  const r=Math.random();
+  if(r<0.5) c00++; else c11++;
+}
+console.log(\`Bell state |Φ+⟩ = (|00⟩+|11⟩)/√2\`);
+console.log(\`|00⟩: \${c00}/\${shots} (\${(c00/shots*100).toFixed(1)}%)\`);
+console.log(\`|01⟩: 0 (impossible in this Bell state)\`);
+console.log(\`|10⟩: 0 (impossible in this Bell state)\`);
+console.log(\`|11⟩: \${c11}/\${shots} (\${(c11/shots*100).toFixed(1)}%)\`);`
+];
+  window.qtnbSetTab = window.qtnbSetTab || function(el,pg,idx){
+    el.closest('[id^="qtnbTabs_"]').querySelectorAll('.qt-nb-tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('qtnbCode_'+pg).value=window['_nbex_'+pg][idx];
+  };
+  window['_nbex_classical_vs_quantum'] = _examples_classical_vs_quantum;
+  window.qtnbRun = window.qtnbRun || function(pg){
+    const code=document.getElementById('qtnbCode_'+pg).value;
+    const out=document.getElementById('qtnbOut_'+pg);
+    const logs=[]; const origLog=console.log;
+    console.log=(...a)=>logs.push(a.map(x=>typeof x==='object'?JSON.stringify(x,null,2):String(x)).join(' '));
+    try{
+      new Function(code)();
+      out.textContent=logs.join('\n')||'(no output)';
+      out.className='qt-nb-output success';
+    }catch(e){
+      out.textContent='❌ Error: '+e.message;
+      out.className='qt-nb-output error';
+    }finally{console.log=origLog;}
+  };
+  window.qtnbClear = window.qtnbClear || function(pg){
+    document.getElementById('qtnbCode_'+pg).value='';
+    const out=document.getElementById('qtnbOut_'+pg);
+    out.textContent='// Output will appear here...';
+    out.className='qt-nb-output';
+  };
+  // Load first example by default
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){
+      document.getElementById('qtnbCode_classical_vs_quantum').value=_examples_classical_vs_quantum[0];
+    });
+  } else {
+    document.getElementById('qtnbCode_classical_vs_quantum').value=_examples_classical_vs_quantum[0];
+  }
+})();
+</script>
+
+</body>
+</html>

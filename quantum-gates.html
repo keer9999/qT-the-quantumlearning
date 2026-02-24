@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Gates - The qT Learning Platform</title>
+
+    <!-- MathJax Configuration (must come before loading MathJax) -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady();
+                }
+            }
+        };
+    </script>
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
+    <!-- Three.js for 3D Bloch Sphere Visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6f8fb 0%, #e8f0fe 100%);
+            color: #1f2d3d;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-section h1 {
+            font-size: 24px;
+            color: #003366;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #0057b8 0%, #0047a0 100%);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 87, 184, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #003366 0%, #0057b8 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-100px);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Search Bar */
+        .search-section {
+            max-width: 1400px;
+            margin: -30px auto 40px;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #1f2d3d;
+        }
+
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Category Filters */
+        .category-filters {
+            max-width: 1400px;
+            margin: 0 auto 40px;
+            padding: 0 40px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            border-color: #0057b8;
+            color: #0057b8;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #0057b8 0%, #0047a0 100%);
+            color: white;
+            border-color: #0057b8;
+        }
+
+        /* Gates Container */
+        .gates-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        .category-section {
+            margin-bottom: 60px;
+        }
+
+        .category-title {
+            font-size: 28px;
+            color: #003366;
+            margin-bottom: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-title::before {
+            content: '';
+            width: 4px;
+            height: 32px;
+            background: linear-gradient(135deg, #0057b8 0%, #00d4aa 100%);
+            border-radius: 2px;
+        }
+
+        .gates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        /* Gate Card */
+        .gate-card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gate-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 87, 184, 0.15);
+        }
+
+        .gate-header {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e0f0ff 100%);
+            padding: 24px;
+            border-bottom: 2px solid #0057b8;
+        }
+
+        .gate-name {
+            font-size: 24px;
+            color: #003366;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .gate-symbol {
+            font-size: 18px;
+            color: #0057b8;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .gate-body {
+            padding: 24px;
+        }
+
+        .gate-description {
+            color: #475569;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .gate-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .gate-card.expanded .gate-details {
+            max-height: 2000px;
+        }
+
+        .matrix-section {
+            background: #f0f7ff;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 16px 0;
+            border: 2px solid #0057b8;
+            box-shadow: 0 2px 8px rgba(0, 87, 184, 0.15);
+        }
+
+        .matrix-title {
+            font-size: 14px;
+            color: #0057b8;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .matrix {
+            font-family: 'Courier New', monospace;
+            color: #003366;
+            line-height: 1.8;
+            white-space: pre;
+            font-size: 15px;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 300px;
+            border: 1px solid #d0e4f7;
+            scrollbar-width: thin;
+            scrollbar-color: #0057b8 #f0f7ff;
+        }
+
+        .matrix::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .matrix::-webkit-scrollbar-track {
+            background: #f0f7ff;
+            border-radius: 4px;
+        }
+
+        .matrix::-webkit-scrollbar-thumb {
+            background: #0057b8;
+            border-radius: 4px;
+        }
+
+        .matrix::-webkit-scrollbar-thumb:hover {
+            background: #0070dd;
+        }
+
+        .use-case {
+            background: #f0f7ff;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #0057b8;
+            margin: 16px 0;
+        }
+
+        .use-case-title {
+            font-weight: 600;
+            color: #003366;
+            margin-bottom: 8px;
+        }
+
+        .code-section {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .expand-btn {
+            background: linear-gradient(135deg, #0057b8 0%, #0047a0 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 87, 184, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .gates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .category-filters {
+                gap: 8px;
+            }
+
+            .filter-btn {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+
+        /* Info Badge */
+        .info-badge {
+            display: inline-block;
+            background: #e0f0ff;
+            color: #0057b8;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .beginner-note {
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            color: #92400e;
+            font-size: 14px;
+        }
+
+        /* Bloch Sphere Visualization */
+        .bloch-sphere-section {
+            background: linear-gradient(135deg, #050b1a 0%, #0a1628 100%);
+            padding: 20px;
+            border-radius: 14px;
+            margin: 16px 0;
+            border: 1px solid rgba(0, 212, 170, 0.25);
+            box-shadow: 0 0 24px rgba(0, 212, 170, 0.08), 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .bloch-sphere-title {
+            font-size: 11px;
+            color: #00d4aa;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .bloch-sphere-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00d4aa;
+            box-shadow: 0 0 8px #00d4aa;
+        }
+
+        .bloch-sphere-container {
+            width: 100%;
+            height: 340px;
+            background: #050b1a;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(56, 189, 248, 0.12);
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .bloch-sphere-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .bloch-sphere-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #475569;
+            font-size: 13px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1>🔬 Quantum Gates Library</h1>
+            </div>
+            <button class="back-btn" onclick="history.back()">← Back</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Master Quantum Gates</h2>
+            <p>Learn the fundamental building blocks of quantum computing with interactive, beginner-friendly
+                explanations</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Search for gates... (e.g., Hadamard, CNOT, Pauli)">
+        </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-filters">
+        <button class="filter-btn active" data-category="all">All Gates</button>
+        <button class="filter-btn" data-category="basic">Basic Gates</button>
+        <button class="filter-btn" data-category="phase">Phase Gates</button>
+        <button class="filter-btn" data-category="rotation">Rotation Gates</button>
+        <button class="filter-btn" data-category="multi">Multi-Qubit</button>
+        <button class="filter-btn" data-category="advanced">Advanced</button>
+    </div>
+
+    <!-- Gates Container -->
+    <div class="gates-container" id="gatesContainer">
+        <!-- Basic Gates -->
+        <div class="category-section" data-category="basic">
+            <h3 class="category-title">Basic Single-Qubit Gates</h3>
+            <div class="gates-grid">
+
+                <!-- I Gate -->
+                <div class="gate-card" data-gate="identity">
+                    <div class="gate-header">
+                        <div class="gate-name">Identity Gate (I) <span class="info-badge">BEGINNER</span></div>
+                        <div class="gate-symbol">I</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The Identity gate does nothing to the qubit. It leaves the quantum
+                            state unchanged, like multiplying by 1 in classical computing.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> Think of this as a "do nothing" gate. It's useful as a
+                                placeholder in quantum circuits.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="bloch-sphere-section">
+                                <div class="bloch-sphere-title">🌐 Bloch Sphere Visualization:</div>
+                                <div class="bloch-sphere-container"></div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Timing control in quantum circuits<br>
+                                • Padding operations for alignment<br>
+                                • Testing without changing state
+                            </div>
+
+                            <div class="code-section">
+                                QASM: id q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- X Gate -->
+                <div class="gate-card" data-gate="pauli-x">
+                    <div class="gate-header">
+                        <div class="gate-name">Pauli-X Gate (NOT) <span class="info-badge">BEGINNER</span></div>
+                        <div class="gate-symbol">X</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The quantum NOT gate flips |0⟩ to |1⟩ and vice versa. It's the
+                            quantum equivalent of the classical NOT gate.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> Just like flipping a coin from heads to tails! If you
+                                have |0⟩, it becomes |1⟩, and if you have |1⟩, it becomes |0⟩.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$X = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="bloch-sphere-section">
+                                <div class="bloch-sphere-title">🌐 Bloch Sphere Visualization:</div>
+                                <div class="bloch-sphere-container"></div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Bit flipping operations<br>
+                                • Creating superposition with H gate<br>
+                                • Quantum arithmetic circuits<br>
+                                • Error correction algorithms
+                            </div>
+
+                            <div class="code-section">
+                                QASM: x q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- Y Gate -->
+                <div class="gate-card" data-gate="pauli-y">
+                    <div class="gate-header">
+                        <div class="gate-name">Pauli-Y Gate <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">Y</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The Y gate flips the qubit and adds a phase factor. It's like
+                            combining X and Z gates with an extra imaginary component.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> This gate rotates the qubit around the Y-axis on the
+                                Bloch sphere. It's more complex than X or Z because it involves imaginary numbers.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$Y = \begin{bmatrix} 0 & -i \\ i & 0 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="bloch-sphere-section">
+                                <div class="bloch-sphere-title">🌐 Bloch Sphere Visualization:</div>
+                                <div class="bloch-sphere-container"></div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Rotation operations around Y-axis<br>
+                                • Quantum algorithm implementations<br>
+                                • Creating specific superpositions
+                            </div>
+
+                            <div class="code-section">
+                                QASM: y q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- Z Gate -->
+                <div class="gate-card" data-gate="pauli-z">
+                    <div class="gate-header">
+                        <div class="gate-name">Pauli-Z Gate <span class="info-badge">BEGINNER</span></div>
+                        <div class="gate-symbol">Z</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The Z gate leaves |0⟩ unchanged but flips the sign of |1⟩. It
+                            creates a phase flip without changing probabilities.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> The Z gate is sneaky! It doesn't change whether you
+                                have 0 or 1, but it flips the "phase" of |1⟩. This matters in superposition!
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$Z = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="bloch-sphere-section">
+                                <div class="bloch-sphere-title">🌐 Bloch Sphere Visualization:</div>
+                                <div class="bloch-sphere-container"></div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Phase flip operations<br>
+                                • Grover's search algorithm<br>
+                                • Phase kickback techniques<br>
+                                • Oracle implementations
+                            </div>
+
+                            <div class="code-section">
+                                QASM: z q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- H Gate -->
+                <div class="gate-card" data-gate="hadamard">
+                    <div class="gate-header">
+                        <div class="gate-name">Hadamard Gate <span class="info-badge">ESSENTIAL</span></div>
+                        <div class="gate-symbol">H</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The Hadamard gate creates superposition. It's one of the most
+                            important gates in quantum computing, transforming definite states into equal
+                            superpositions.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> This is THE gate for superposition! Apply it to |0⟩
+                                and you get (|0⟩ + |1⟩)/√2 - the qubit is now in BOTH states at once!
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$H = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1
+                                    \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="bloch-sphere-section">
+                                <div class="bloch-sphere-title">🌐 Bloch Sphere Visualization:</div>
+                                <div class="bloch-sphere-container"></div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Creating superposition states<br>
+                                • Quantum Fourier Transform<br>
+                                • Beginning of most quantum algorithms<br>
+                                • Basis transformation (computational ↔ Hadamard)
+                            </div>
+
+                            <div class="code-section">
+                                QASM: h q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Phase Gates -->
+        <div class="category-section" data-category="phase">
+            <h3 class="category-title">Phase Gates</h3>
+            <div class="gates-grid">
+
+                <!-- P Gate -->
+                <div class="gate-card" data-gate="phase">
+                    <div class="gate-header">
+                        <div class="gate-name">Phase Gate (P) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">P(λ)</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The Phase gate adds a phase shift of λ to the |1⟩ state. It's a
+                            parameterized gate that rotates around the Z-axis.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> Think of this as adjusting the "angle" of the |1⟩
+                                state. The parameter λ controls how much you rotate.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$P(\lambda) = \begin{bmatrix} 1 & 0 \\ 0 & e^{i\lambda}
+                                    \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="bloch-sphere-section">
+                                <div class="bloch-sphere-title">🌐 Bloch Sphere Visualization:</div>
+                                <div class="bloch-sphere-container"></div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Controlled phase operations<br>
+                                • Quantum phase estimation<br>
+                                • Creating arbitrary phase shifts
+                            </div>
+
+                            <div class="code-section">
+                                QASM: p(lambda) q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- S Gate -->
+                <div class="gate-card" data-gate="s-gate">
+                    <div class="gate-header">
+                        <div class="gate-name">S Gate (Phase-90) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">S</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The S gate is a 90° rotation around the Z-axis. It applies a phase
+                            of i to the |1⟩ state.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> S = P(π/2). It's a special case of the Phase gate!
+                                Apply it twice and you get the Z gate.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$S = \begin{bmatrix} 1 & 0 \\ 0 & i \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="bloch-sphere-section">
+                                <div class="bloch-sphere-title">🌐 Bloch Sphere Visualization:</div>
+                                <div class="bloch-sphere-container"></div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Building complex gates<br>
+                                • Phase corrections<br>
+                                • Quantum error correction
+                            </div>
+
+                            <div class="code-section">
+                                QASM: s q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- T Gate -->
+                <div class="gate-card" data-gate="t-gate">
+                    <div class="gate-header">
+                        <div class="gate-name">T Gate (π/8) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">T</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The T gate is a 45° rotation around the Z-axis. It's crucial for
+                            universal quantum computing when combined with Hadamard and CNOT.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> T = P(π/4). Apply it twice to get the S gate! It's
+                                called the "π/8 gate" because of the phase it adds.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$T = \begin{bmatrix} 1 & 0 \\ 0 & e^{i\pi/4} \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Universal gate set (H, T, CNOT)<br>
+                                • Fault-tolerant quantum computing<br>
+                                • Precision phase control
+                            </div>
+
+                            <div class="code-section">
+                                QASM: t q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- S† Gate -->
+                <div class="gate-card" data-gate="sdg">
+                    <div class="gate-header">
+                        <div class="gate-name">S† Gate (S-dagger) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">S†</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The inverse of the S gate. It rotates -90° around the Z-axis,
+                            effectively undoing what the S gate does.</p>
+
+                        <div class="gate-details">
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$S^\dagger = \begin{bmatrix} 1 & 0 \\ 0 & -i \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Reversing S gate operations<br>
+                                • Phase corrections<br>
+                                • Uncomputing operations
+                            </div>
+
+                            <div class="code-section">
+                                QASM: sdg q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- T† Gate -->
+                <div class="gate-card" data-gate="tdg">
+                    <div class="gate-header">
+                        <div class="gate-name">T† Gate (T-dagger) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">T†</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The inverse of the T gate. It rotates -45° around the Z-axis.</p>
+
+                        <div class="gate-details">
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$T^\dagger = \begin{bmatrix} 1 & 0 \\ 0 & e^{-i\pi/4}
+                                    \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Reversing T gate operations<br>
+                                • Phase uncomputing<br>
+                                • Adjoint circuits
+                            </div>
+
+                            <div class="code-section">
+                                QASM: tdg q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Rotation Gates -->
+        <div class="category-section" data-category="rotation">
+            <h3 class="category-title">Rotation Gates</h3>
+            <div class="gates-grid">
+
+                <!-- RX Gate -->
+                <div class="gate-card" data-gate="rx">
+                    <div class="gate-header">
+                        <div class="gate-name">RX Gate (X-Rotation) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">RX(θ)</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Rotates a qubit around the X-axis of the Bloch sphere by angle θ.
+                            Essential for creating arbitrary single-qubit states.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> Imagine the Bloch sphere as a globe. RX spins the
+                                qubit around the X-axis (like Earth's rotation). The angle θ controls how far you spin.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$RX(\theta) = \begin{bmatrix} \cos(\theta/2) & -i\sin(\theta/2) \\
+                                    -i\sin(\theta/2) & \cos(\theta/2) \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • State preparation<br>
+                                • Variational quantum algorithms<br>
+                                • Arbitrary rotations<br>
+                                • Quantum machine learning
+                            </div>
+
+                            <div class="code-section">
+                                QASM: rx(theta) q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- RY Gate -->
+                <div class="gate-card" data-gate="ry">
+                    <div class="gate-header">
+                        <div class="gate-name">RY Gate (Y-Rotation) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">RY(θ)</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Rotates a qubit around the Y-axis of the Bloch sphere by angle θ.
+                            Commonly used in quantum machine learning.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> RY is great for smoothly transitioning between |0⟩ and
+                                |1⟩ without adding complex phases like RX does.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$RY(\theta) = \begin{bmatrix} \cos(\theta/2) & -\sin(\theta/2) \\
+                                    \sin(\theta/2) & \cos(\theta/2) \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Quantum neural networks<br>
+                                • State preparation without phase<br>
+                                • Amplitude encoding<br>
+                                • Variational circuits
+                            </div>
+
+                            <div class="code-section">
+                                QASM: ry(theta) q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- RZ Gate -->
+                <div class="gate-card" data-gate="rz">
+                    <div class="gate-header">
+                        <div class="gate-name">RZ Gate (Z-Rotation) <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">RZ(φ)</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Rotates a qubit around the Z-axis of the Bloch sphere by angle φ.
+                            Creates phase shifts without changing amplitudes.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> RZ only changes the phase, not the probabilities. It's
+                                like adjusting a clock hand without changing the time zone.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$RZ(\phi) = \begin{bmatrix} e^{-i\phi/2} & 0 \\ 0 & e^{i\phi/2}
+                                    \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Phase encoding<br>
+                                • Quantum phase estimation<br>
+                                • Building U3 gates<br>
+                                • Virtual Z rotations
+                            </div>
+
+                            <div class="code-section">
+                                QASM: rz(phi) q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- U3 Gate -->
+                <div class="gate-card" data-gate="u3">
+                    <div class="gate-header">
+                        <div class="gate-name">U3 Gate (Universal) <span class="info-badge">ADVANCED</span></div>
+                        <div class="gate-symbol">U3(θ,φ,λ)</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The most general single-qubit gate. Any single-qubit operation can
+                            be expressed as a U3 gate with appropriate parameters.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> U3 is the Swiss Army knife of quantum gates! With
+                                three parameters (θ, φ, λ), you can create ANY single-qubit gate.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$U3(\theta,\phi,\lambda) = \begin{bmatrix} \cos(\theta/2) &
+                                    -e^{i\lambda}\sin(\theta/2) \\ e^{i\phi}\sin(\theta/2) &
+                                    e^{i(\phi+\lambda)}\cos(\theta/2) \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Arbitrary state preparation<br>
+                                • Gate decomposition<br>
+                                • Optimal circuit synthesis<br>
+                                • Universal gate implementation
+                            </div>
+
+                            <div class="code-section">
+                                QASM: u3(theta, phi, lambda) q[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Multi-Qubit Gates -->
+        <div class="category-section" data-category="multi">
+            <h3 class="category-title">Multi-Qubit Gates</h3>
+            <div class="gates-grid">
+
+                <!-- CNOT Gate -->
+                <div class="gate-card" data-gate="cnot">
+                    <div class="gate-header">
+                        <div class="gate-name">CNOT Gate (CX) <span class="info-badge">ESSENTIAL</span></div>
+                        <div class="gate-symbol">CNOT / CX</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The Controlled-NOT gate is the fundamental 2-qubit gate. It flips
+                            the target qubit if and only if the control qubit is |1⟩.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> This gate creates ENTANGLEMENT! It's like saying "if
+                                the first qubit is 1, flip the second one." This is how qubits become connected.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation (4x4):</div>
+                                <div class="matrix">$$CNOT = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0
+                                    & 1 \\ 0 & 0 & 1 & 0 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Creating entanglement<br>
+                                • Bell state preparation<br>
+                                • Quantum teleportation<br>
+                                • Error correction codes<br>
+                                • Universal quantum computing
+                            </div>
+
+                            <div class="code-section">
+                                QASM: cx q[0], q[1];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- SWAP Gate -->
+                <div class="gate-card" data-gate="swap">
+                    <div class="gate-header">
+                        <div class="gate-name">SWAP Gate <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">SWAP</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The SWAP gate exchanges the states of two qubits. What was in qubit
+                            1 goes to qubit 2, and vice versa.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> Imagine two boxes: SWAP simply exchanges their
+                                contents. Qubit A becomes B, and B becomes A!
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$SWAP = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 1 & 0
+                                    & 0 \\ 0 & 0 & 0 & 1 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Qubit routing in circuits<br>
+                                • Overcoming connectivity constraints<br>
+                                • Quantum communication protocols<br>
+                                • Data movement in algorithms
+                            </div>
+
+                            <div class="code-section">
+                                QASM: swap q[0], q[1];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- Toffoli Gate -->
+                <div class="gate-card" data-gate="toffoli">
+                    <div class="gate-header">
+                        <div class="gate-name">Toffoli Gate (CCX) <span class="info-badge">ADVANCED</span></div>
+                        <div class="gate-symbol">CCNOT / Toffoli</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The Toffoli gate has two control qubits and one target. It flips the
+                            target only when BOTH controls are |1⟩.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> Think of it as a quantum AND gate! The target flips
+                                only if control1 AND control2 are both 1. It's reversible, unlike classical AND.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation (8x8):</div>
+                                <div class="matrix">Identity for first 6 states,
+                                    swaps |110⟩ ↔ |111⟩</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Quantum arithmetic<br>
+                                • Reversible classical computing<br>
+                                • Universal quantum computing<br>
+                                • Grover's algorithm oracles
+                            </div>
+
+                            <div class="code-section">
+                                QASM: ccx q[0], q[1], q[2];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- CZ Gate -->
+                <div class="gate-card" data-gate="cz">
+                    <div class="gate-header">
+                        <div class="gate-name">Controlled-Z Gate <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">CZ</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Applies a Z gate to the target qubit if the control qubit is |1⟩.
+                            Symmetric gate - control and target are interchangeable.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> CZ is special because it's symmetric! Unlike CNOT, it
+                                doesn't matter which qubit is "control" and which is "target."
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$CZ = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 &
+                                    0 \\ 0 & 0 & 0 & -1 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Phase kickback<br>
+                                • Cluster state preparation<br>
+                                • Some error correction codes<br>
+                                • Symmetric entangling operations
+                            </div>
+
+                            <div class="code-section">
+                                QASM: cz q[0], q[1];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- CP Gate -->
+                <div class="gate-card" data-gate="cp">
+                    <div class="gate-header">
+                        <div class="gate-name">Controlled-Phase Gate <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">CP(λ)</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Applies a phase gate P(λ) to the target if the control is |1⟩.
+                            Generalizes the CZ gate.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> CP is like a controlled dial! If the control is 1,
+                                adjust the phase by λ. If control is 0, do nothing.
+                            </div>
+
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$CP(\lambda) = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0
+                                    & 0 & 1 & 0 \\ 0 & 0 & 0 & e^{i\lambda} \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Quantum Fourier Transform<br>
+                                • Phase estimation algorithm<br>
+                                • Controlled rotations<br>
+                                • Parameterized circuits
+                            </div>
+
+                            <div class="code-section">
+                                QASM: cp(lambda) q[0], q[1];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- CY Gate -->
+                <div class="gate-card" data-gate="cy">
+                    <div class="gate-header">
+                        <div class="gate-name">Controlled-Y Gate <span class="info-badge">INTERMEDIATE</span></div>
+                        <div class="gate-symbol">CY</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Applies a Y gate to the target qubit if the control qubit is |1⟩.
+                        </p>
+
+                        <div class="gate-details">
+                            <div class="matrix-section">
+                                <div class="matrix-title">Matrix Representation:</div>
+                                <div class="matrix">$$CY = \begin{bmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 &
+                                    -i \\ 0 & 0 & i & 0 \end{bmatrix}$$</div>
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Specific algorithm implementations<br>
+                                • Controlled Y-rotations<br>
+                                • Building complex gates
+                            </div>
+
+                            <div class="code-section">
+                                QASM: cy q[0], q[1];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Advanced Gates -->
+        <div class="category-section" data-category="advanced">
+            <h3 class="category-title">Advanced Gates</h3>
+            <div class="gates-grid">
+
+                <!-- C3X Gate -->
+                <div class="gate-card" data-gate="c3x">
+                    <div class="gate-header">
+                        <div class="gate-name">C3X Gate (3-Controlled) <span class="info-badge">ADVANCED</span></div>
+                        <div class="gate-symbol">C3X</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">A 3-controlled X gate. Flips the target qubit only when all THREE
+                            control qubits are |1⟩.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> This is like a triple lock! All three controls must be
+                                "on" (|1⟩) for the target to flip. Used in complex quantum circuits.
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Complex quantum arithmetic<br>
+                                • Multi-controlled operations<br>
+                                • Advanced algorithm implementations<br>
+                                • Oracle constructions
+                            </div>
+
+                            <div class="code-section">
+                                QASM: c3x q[0], q[1], q[2], q[3];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- C4X Gate -->
+                <div class="gate-card" data-gate="c4x">
+                    <div class="gate-header">
+                        <div class="gate-name">C4X Gate (4-Controlled) <span class="info-badge">ADVANCED</span></div>
+                        <div class="gate-symbol">C4X</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">A 4-controlled X gate. Requires FOUR control qubits to be |1⟩ to
+                            flip the target.</p>
+
+                        <div class="gate-details">
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Highly conditional operations<br>
+                                • Complex oracles<br>
+                                • Advanced quantum algorithms
+                            </div>
+
+                            <div class="code-section">
+                                QASM: c4x q[0], q[1], q[2], q[3], q[4];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- QFT Gate -->
+                <div class="gate-card" data-gate="qft">
+                    <div class="gate-header">
+                        <div class="gate-name">Quantum Fourier Transform <span class="info-badge">ADVANCED</span></div>
+                        <div class="gate-symbol">QFT</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The quantum version of the discrete Fourier transform. Essential for
+                            many quantum algorithms including Shor's algorithm.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> QFT transforms your quantum state into its "frequency"
+                                representation. It's exponentially faster than classical FFT!
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Shor's factoring algorithm<br>
+                                • Phase estimation<br>
+                                • Quantum period finding<br>
+                                • Hidden subgroup problems
+                            </div>
+
+                            <div class="code-section">
+                                # QFT typically built from H and CP gates
+                                # Applied to n qubits
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- iQFT Gate -->
+                <div class="gate-card" data-gate="iqft">
+                    <div class="gate-header">
+                        <div class="gate-name">Inverse QFT <span class="info-badge">ADVANCED</span></div>
+                        <div class="gate-symbol">iQFT / QFT†</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">The inverse Quantum Fourier Transform. Reverses the QFT operation,
+                            transforming from frequency back to computational basis.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> iQFT "undoes" the QFT. It's often used at the end of
+                                algorithms to read out results in the standard basis.
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Completing QFT-based algorithms<br>
+                                • Phase estimation readout<br>
+                                • Shor's algorithm final step<br>
+                                • Basis conversion
+                            </div>
+
+                            <div class="code-section">
+                                # iQFT is the adjoint of QFT
+                                # Reverses all operations
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+                <!-- Measurement -->
+                <div class="gate-card" data-gate="measurement">
+                    <div class="gate-header">
+                        <div class="gate-name">Measurement <span class="info-badge">ESSENTIAL</span></div>
+                        <div class="gate-symbol">M</div>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Measurement collapses the quantum state to a classical bit. It's
+                            irreversible and probabilistic.</p>
+
+                        <div class="gate-details">
+                            <div class="beginner-note">
+                                <strong>💡 Beginner Tip:</strong> This is where quantum becomes classical! When you
+                                measure, the superposition collapses to either 0 or 1. You can only measure once!
+                            </div>
+
+                            <div class="use-case">
+                                <div class="use-case-title">When to use:</div>
+                                • Extracting classical results<br>
+                                • Mid-circuit measurements<br>
+                                • Quantum error correction<br>
+                                • Conditional operations based on outcomes
+                            </div>
+
+                            <div class="code-section">
+                                QASM: measure q[0] -> c[0];
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleCard(this)">Learn More ▼</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ─────────────────────────────────────────────────────────────
+           Advanced Bloch Sphere Visualizer
+           Convention (standard physics / IBM Qiskit):
+             +Y  →  |0⟩  (north pole)
+             -Y  →  |1⟩  (south pole)
+             +X  →  |+⟩  (right equator)
+             -X  →  |−⟩  (left equator)
+             +Z  →  |i⟩  (front equator)
+             -Z  →  |−i⟩ (back equator)
+           Three.js uses Y-up coordinates, mapping perfectly.
+        ─────────────────────────────────────────────────────────────── */
+        class BlochSphereVisualizer {
+            constructor(container, gateType) {
+                this.container = container;
+                this.gateType = gateType;
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.stateArrow = null;   // ArrowHelper for state vector
+                this.trailPoints = [];
+                this.trailLine = null;
+                this.targetBloch = { x: 0, y: 1, z: 0 }; // |0⟩
+                this.currentBloch = { x: 0, y: 1, z: 0 };
+                this.animationId = null;
+                this.orbitAngle = 0;
+                this.isDragging = false;
+                this.prevMouse = { x: 0, y: 0 };
+                this.spherical = { theta: 0.65, phi: 0.85, r: 3.8 };
+
+                this.init();
+            }
+
+            init() {
+                const width = this.container.clientWidth || 300;
+                const height = this.container.clientHeight || 280;
+
+                // ── Scene ─────────────────────────────────────────
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x050b1a);
+                this.scene.fog = new THREE.FogExp2(0x050b1a, 0.18);
+
+                // ── Camera (must be created before updateCamPos) ───
+                this.camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+                this.updateCamPos();
+
+                // ── Renderer ──────────────────────────────────────
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.setSize(width, height);
+                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                this.container.appendChild(this.renderer.domElement);
+
+                // ── Lighting ──────────────────────────────────────
+                this.scene.add(new THREE.AmbientLight(0x334466, 1.2));
+                const ptLight = new THREE.PointLight(0x38bdf8, 1.6, 8);
+                ptLight.position.set(2, 2, 2);
+                this.scene.add(ptLight);
+                const ptLight2 = new THREE.PointLight(0x818cf8, 0.8, 8);
+                ptLight2.position.set(-2, -1, -2);
+                this.scene.add(ptLight2);
+
+                // ── Build scene objects ──────────────────────────
+                this.createSphere();
+                this.createEquatorialCircles();
+                this.createAxes();
+                this.createPoleLabels();
+                this.createStateArrow();
+                this.createTrail();
+
+                // Compute target from gate
+                this.targetBloch = this.gateToBloch(this.gateType);
+
+                this.setupMouseControls();
+                this.animate();
+            }
+
+            updateCameraFromSpherical() { }
+
+            updateCameraPosition() {
+                const { theta, phi, r } = this.spherical;
+                const x = r * Math.sin(phi) * Math.cos(theta);
+                const y = r * Math.cos(phi);
+                const z = r * Math.sin(phi) * Math.sin(theta);
+                if (this.camera) {
+                    this.camera.position.set(x, y, z);
+                    this.camera.lookAt(0, 0, 0);
+                } else {
+                    // first call before camera exists – store for use after creation
+                    this._initCamPos = new THREE.Vector3(x, y, z);
+                }
+            }
+
+            createSphere() {
+                // Glowing transparent sphere
+                const geom = new THREE.SphereGeometry(1, 64, 64);
+                const mat = new THREE.MeshPhongMaterial({
+                    color: 0x0a1a3a,
+                    emissive: 0x0a1f4f,
+                    emissiveIntensity: 0.3,
+                    transparent: true,
+                    opacity: 0.18,
+                    side: THREE.DoubleSide,
+                    depthWrite: false
+                });
+                this.scene.add(new THREE.Mesh(geom, mat));
+
+                // Outer glow wireframe
+                const wMat = new THREE.MeshBasicMaterial({
+                    color: 0x1e40af,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.12
+                });
+                this.scene.add(new THREE.Mesh(new THREE.SphereGeometry(1, 24, 24), wMat));
+            }
+
+            createEquatorialCircles() {
+                const mkCircle = (color, opacity, rotX, rotZ) => {
+                    const pts = [];
+                    for (let i = 0; i <= 128; i++) {
+                        const a = (i / 128) * Math.PI * 2;
+                        pts.push(new THREE.Vector3(Math.cos(a), 0, Math.sin(a)));
+                    }
+                    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+                    const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
+                    if (rotX) line.rotation.x = rotX;
+                    if (rotZ) line.rotation.z = rotZ;
+                    this.scene.add(line);
+                };
+                // XZ equator (latitude 0)
+                mkCircle(0x2563eb, 0.5, 0, 0);
+                // XY meridian
+                mkCircle(0x1e40af, 0.3, 0, Math.PI / 2);
+                // YZ meridian
+                mkCircle(0x1e40af, 0.3, Math.PI / 2, 0);
+            }
+
+            createAxes() {
+                // Standard Bloch sphere physics convention (Y-up = |0⟩):
+                //   +Y → |0⟩   -Y → |1⟩
+                //   +X → |+⟩   -X → |−⟩
+                //   +Z → |i⟩   -Z → |−i⟩
+                const axes = [
+                    { dir: new THREE.Vector3(1, 0, 0), color: 0xf87171, label: '|+⟩', negLabel: '|−⟩' },
+                    { dir: new THREE.Vector3(0, 1, 0), color: 0x34d399, label: '|0⟩', negLabel: '|1⟩' },
+                    { dir: new THREE.Vector3(0, 0, 1), color: 0x60a5fa, label: '|i⟩', negLabel: '|−i⟩' },
+                ];
+                axes.forEach(({ dir, color }) => {
+                    // Full axis line (both directions)
+                    const pts = [dir.clone().multiplyScalar(-1.4), dir.clone().multiplyScalar(1.4)];
+                    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+                    this.scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.7 })));
+
+                    // Positive arrow tip using ArrowHelper-style cone
+                    const coneH = 0.18, coneR = 0.055;
+                    const cone = new THREE.Mesh(
+                        new THREE.ConeGeometry(coneR, coneH, 12),
+                        new THREE.MeshPhongMaterial({ color, emissive: color, emissiveIntensity: 0.4 })
+                    );
+                    // ArrowHelper convention: cone default points +Y;
+                    // setFromUnitVectors rotates from +Y to dir
+                    cone.position.copy(dir.clone().multiplyScalar(1.4));
+                    cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+                    this.scene.add(cone);
+                });
+            }
+
+            createPoleLabels() {
+                // CSS2D-style labels via absolutely positioned divs over the canvas
+                const poles = [
+                    { pos: new THREE.Vector3(0, 1.6, 0), text: '|0⟩', color: '#34d399' },
+                    { pos: new THREE.Vector3(0, -1.6, 0), text: '|1⟩', color: '#f87171' },
+                    { pos: new THREE.Vector3(1.6, 0, 0), text: '|+⟩', color: '#f87171' },
+                    { pos: new THREE.Vector3(-1.6, 0, 0), text: '|−⟩', color: '#f87171' },
+                    { pos: new THREE.Vector3(0, 0, 1.6), text: '|i⟩', color: '#60a5fa' },
+                ];
+                this._poleData = poles;  // store for projection in animate()
+
+                // Create overlay div
+                this._labelOverlay = document.createElement('div');
+                Object.assign(this._labelOverlay.style, {
+                    position: 'absolute', top: '0', left: '0',
+                    width: '100%', height: '100%',
+                    pointerEvents: 'none', overflow: 'hidden'
+                });
+                this.container.style.position = 'relative';
+                this.container.appendChild(this._labelOverlay);
+
+                this._labelEls = poles.map(p => {
+                    const el = document.createElement('div');
+                    Object.assign(el.style, {
+                        position: 'absolute', fontSize: '11px', fontWeight: '700',
+                        fontFamily: 'monospace', color: p.color,
+                        textShadow: `0 0 6px ${p.color}`,
+                        transform: 'translate(-50%, -50%)',
+                        userSelect: 'none', pointerEvents: 'none',
+                        letterSpacing: '0.05em'
+                    });
+                    el.textContent = p.text;
+                    this._labelOverlay.appendChild(el);
+                    return el;
+                });
+            }
+
+            createStateArrow() {
+                const origin = new THREE.Vector3(0, 0, 0);
+                const dir = new THREE.Vector3(0, 1, 0);  // |0⟩ = +Y
+                this.stateArrow = new THREE.ArrowHelper(dir, origin, 0.92, 0xff6b00, 0.22, 0.10);
+                // Make shaft a bit thicker
+                this.stateArrow.line.material.linewidth = 3;
+                this.scene.add(this.stateArrow);
+
+                // Glow halo at arrow tip
+                this.glowSphere = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.07, 16, 16),
+                    new THREE.MeshBasicMaterial({ color: 0xff8c00, transparent: true, opacity: 0.8 })
+                );
+                this.scene.add(this.glowSphere);
+            }
+
+            createTrail() {
+                const maxPts = 80;
+                this._trailPositions = new Float32Array(maxPts * 3);
+                const geo = new THREE.BufferGeometry();
+                geo.setAttribute('position', new THREE.BufferAttribute(this._trailPositions, 3));
+                geo.setDrawRange(0, 0);
+                this.trailLine = new THREE.Line(geo,
+                    new THREE.LineBasicMaterial({ color: 0xff8c00, transparent: true, opacity: 0.35, linewidth: 2 })
+                );
+                this.scene.add(this.trailLine);
+                this._trailCount = 0;
+                this._trailMax = maxPts;
+            }
+
+            gateToBloch(gate) {
+                // Returns the Bloch vector {x,y,z} for the OUTPUT state
+                // when the gate is applied to |0⟩ (which sits at +Y in Three.js).
+                // Computed directly from the gate's action on |0⟩ = [1,0]ᵀ.
+                // Bloch sphere convention: θ=polar angle from +Z (physics),
+                // but in Three.js Y-up: bx=sinθ·cosφ, by=cosθ, bz=sinθ·sinφ
+                const PI = Math.PI;
+                const bloch = {
+                    'identity': { x: 0, y: 1, z: 0 },  // |0⟩ +Y
+                    'pauli-x': { x: 0, y: -1, z: 0 },  // |1⟩ -Y
+                    'pauli-y': { x: 0, y: -1, z: 0 },  // |1⟩ (up to global phase)
+                    'pauli-z': { x: 0, y: 1, z: 0 },  // |0⟩ (Z·|0⟩ = |0⟩)
+                    'hadamard': { x: 1, y: 0, z: 0 },  // |+⟩ +X
+                    's-gate': { x: 0, y: 1, z: 0 },  // S·|0⟩ = |0⟩
+                    't-gate': { x: 0, y: 1, z: 0 },  // T·|0⟩ = |0⟩
+                    'sdg': { x: 0, y: 1, z: 0 },
+                    'tdg': { x: 0, y: 1, z: 0 },
+                    'phase': { x: 0, y: 1, z: 0 },
+                    // RX(π/2)·|0⟩ → (|0⟩ - i|1⟩)/√2 → Bloch: (0,0,-1) = -Z = |−i⟩
+                    'rx': { x: 0, y: 0, z: -1 },
+                    // RY(π/2)·|0⟩ → (|0⟩+|1⟩)/√2 → |+⟩ → +X
+                    'ry': { x: 1, y: 0, z: 0 },
+                    // RZ(π/2)·|0⟩ = e^{-iπ/4}|0⟩ → still |0⟩ on Bloch (phase only)
+                    'rz': { x: 0, y: 1, z: 0 },
+                    // U3(π/3, π/4, π/6) – general position
+                    'u3': (() => {
+                        const th = PI / 3, ph = PI / 4;
+                        return { x: Math.sin(th) * Math.cos(ph), y: Math.cos(th), z: Math.sin(th) * Math.sin(ph) };
+                    })()
+                };
+                return bloch[gate] || { x: 0, y: 1, z: 0 };
+            }
+
+            setupMouseControls() {
+                const el = this.container;
+                el.style.cursor = 'grab';
+
+                el.addEventListener('mousedown', (e) => {
+                    this.isDragging = true;
+                    this.prevMouse = { x: e.clientX, y: e.clientY };
+                    el.style.cursor = 'grabbing';
+                });
+
+                window.addEventListener('mousemove', (e) => {
+                    if (!this.isDragging) return;
+                    const dx = e.clientX - this.prevMouse.x;
+                    const dy = e.clientY - this.prevMouse.y;
+                    this.prevMouse = { x: e.clientX, y: e.clientY };
+
+                    this.spherical.theta -= dx * 0.012;
+                    this.spherical.phi = Math.max(0.05, Math.min(Math.PI - 0.05,
+                        this.spherical.phi + dy * 0.012));
+                    this.updateCamPos();
+                });
+
+                window.addEventListener('mouseup', () => {
+                    this.isDragging = false;
+                    el.style.cursor = 'grab';
+                });
+
+                el.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    this.spherical.r = Math.max(2, Math.min(8, this.spherical.r + e.deltaY * 0.01));
+                    this.updateCamPos();
+                }, { passive: false });
+            }
+
+            updateCamPos() {
+                const { theta, phi, r } = this.spherical;
+                this.camera.position.set(
+                    r * Math.sin(phi) * Math.cos(theta),
+                    r * Math.cos(phi),
+                    r * Math.sin(phi) * Math.sin(theta)
+                );
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            projectToScreen(vec3) {
+                const v = vec3.clone().project(this.camera);
+                const w = this.container.clientWidth;
+                const h = this.container.clientHeight;
+                return {
+                    x: (v.x + 1) / 2 * w,
+                    y: (1 - (v.y + 1) / 2) * h,
+                    behind: v.z > 1
+                };
+            }
+
+            animate() {
+                this.animationId = requestAnimationFrame(() => this.animate());
+                const t = performance.now() * 0.001;
+
+                // ── Smooth interpolate state vector to target ──
+                const lerp = 0.04;
+                this.currentBloch.x += (this.targetBloch.x - this.currentBloch.x) * lerp;
+                this.currentBloch.y += (this.targetBloch.y - this.currentBloch.y) * lerp;
+                this.currentBloch.z += (this.targetBloch.z - this.currentBloch.z) * lerp;
+
+                const bv = new THREE.Vector3(
+                    this.currentBloch.x,
+                    this.currentBloch.y,
+                    this.currentBloch.z
+                ).normalize();
+
+                // Update ArrowHelper direction and glow position
+                this.stateArrow.setDirection(bv);
+                this.glowSphere.position.copy(bv.clone().multiplyScalar(0.92));
+
+                // Pulse glow
+                const pulse = 0.06 + 0.04 * Math.sin(t * 4);
+                this.glowSphere.material.opacity = pulse + 0.55;
+
+                // ── Trail ──────────────────────────────────────
+                const tp = this._trailPositions;
+                const n = this._trailCount;
+                const max = this._trailMax;
+                // Shift existing points
+                if (n >= max) {
+                    tp.copyWithin(0, 3);
+                    this._trailCount = max - 1;
+                }
+                const idx = Math.min(n, max - 1);
+                tp[idx * 3] = bv.x * 0.95;
+                tp[idx * 3 + 1] = bv.y * 0.95;
+                tp[idx * 3 + 2] = bv.z * 0.95;
+                this._trailCount = idx + 1;
+                this.trailLine.geometry.setDrawRange(0, this._trailCount);
+                this.trailLine.geometry.attributes.position.needsUpdate = true;
+
+                // ── Project pole labels to 2D ──────────────────
+                if (this._poleData && this._labelEls) {
+                    this._poleData.forEach((p, i) => {
+                        const s = this.projectToScreen(p.pos);
+                        const el = this._labelEls[i];
+                        if (s.behind) { el.style.opacity = '0'; return; }
+                        el.style.opacity = '1';
+                        el.style.left = s.x + 'px';
+                        el.style.top = s.y + 'px';
+                    });
+                }
+
+                // ── Slow auto-rotate when not dragging ────────
+                if (!this.isDragging) {
+                    this.spherical.theta += 0.003;
+                    this.updateCamPos();
+                }
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            destroy() {
+                if (this.animationId) cancelAnimationFrame(this.animationId);
+                if (this.renderer) {
+                    this.renderer.dispose();
+                    if (this.container.contains(this.renderer.domElement))
+                        this.container.removeChild(this.renderer.domElement);
+                }
+                if (this._labelOverlay && this.container.contains(this._labelOverlay))
+                    this.container.removeChild(this._labelOverlay);
+            }
+        }
+
+        // Toggle card expansion
+        function toggleCard(button) {
+            const card = button.closest('.gate-card');
+            card.classList.toggle('expanded');
+
+            if (card.classList.contains('expanded')) {
+                button.textContent = 'Show Less ▲';
+
+                // Initialize Bloch sphere if it hasn't been created yet
+                const blochContainer = card.querySelector('.bloch-sphere-container');
+                if (blochContainer && !blochContainer.dataset.initialized) {
+                    const gateType = card.dataset.gate;
+                    setTimeout(() => {
+                        new BlochSphereVisualizer(blochContainer, gateType);
+                        blochContainer.dataset.initialized = 'true';
+                    }, 100); // Small delay to ensure container is visible
+                }
+            } else {
+                button.textContent = 'Learn More ▼';
+            }
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
+            const gateCards = document.querySelectorAll('.gate-card');
+
+            gateCards.forEach(card => {
+                const gateName = card.querySelector('.gate-name').textContent.toLowerCase();
+                const gateDesc = card.querySelector('.gate-description').textContent.toLowerCase();
+                const gateSymbol = card.querySelector('.gate-symbol').textContent.toLowerCase();
+
+                if (gateName.includes(searchTerm) || gateDesc.includes(searchTerm) || gateSymbol.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Category filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const category = this.dataset.category;
+                const categorySections = document.querySelectorAll('.category-section');
+
+                if (category === 'all') {
+                    categorySections.forEach(section => section.style.display = 'block');
+                } else {
+                    categorySections.forEach(section => {
+                        if (section.dataset.category === category) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

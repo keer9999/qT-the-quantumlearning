@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quantum Phase & Phase Estimation</title>
+  <link rel="stylesheet" href="quantum-phase.css">
+  <link rel="stylesheet" href="global-ui.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+</head>
+
+<body>
+<div class="global-back-btn" onclick="goBackGlobal()" title="Go Back">←</div>
+
+<header>
+  <div class="left-header">
+    <a href="https://www.jntuacea.ac.in/" target="_blank" class="logo-link">
+      <img src="jntu_logo.png" alt="JNTUACEA Logo">
+      <div class="logo-text">
+        <span>JNTUACEA</span>
+        <span class="dept">Dept of ECE</span>
+      </div>
+    </a>
+  </div>
+  <div class="center-header">
+    <h1>Quantum Phase</h1>
+    <p>From Bloch Sphere to Phase Estimation</p>
+  </div>
+  <div class="right-header">
+    <div class="vs-container">
+      <span class="vs" id="vs">VS</span>
+      <img src="keerthan.png" alt="Keerthan" class="profile-photo" id="profilePhoto">
+    </div>
+    <button onclick="toggleFullscreenMode()" class="fullscreen-btn">Toggle Fullscreen</button>
+  </div>
+</header>
+
+<main>
+
+<!-- SECTION 1 -->
+<section class="card">
+  <h2>What is Quantum Phase?</h2>
+  <p>
+    Quantum phase is the heart of quantum interference and computation. Unlike classical bits, qubits carry phase information that enables superposition and entanglement. Understanding phase is key to mastering quantum algorithms like Shor's and quantum simulations.
+  </p>
+  <p>
+    Phase evolves over time according to the Hamiltonian, creating dynamic quantum behaviors that classical systems can't replicate.
+  </p>
+
+  <div class="formula">
+    |ψ⟩ = α|0⟩ + e<sup>iφ</sup>β|1⟩
+  </div>
+
+  <ul>
+    <li>α, β → amplitudes (probabilities)</li>
+    <li>φ → quantum phase (interference driver)</li>
+    <li>Phase enables quantum speedup and secure communication</li>
+  </ul>
+</section>
+
+<!-- SECTION 2 -->
+<section class="card">
+  <h2>Phase on the Bloch Sphere</h2>
+  <p>
+    Immerse yourself in a stunning 3D Bloch sphere visualization. Rotate the sphere, adjust phase with live animations, and see how quantum states evolve in real-time. This interactive 3D model brings quantum mechanics to life with glowing effects and dynamic transitions.
+  </p>
+
+  <div id="bloch3dContainer" style="width: 400px; height: 400px; margin: 20px auto; border-radius: 10px; overflow: hidden;"></div>
+
+  <div class="controls">
+    <label>Polar Angle (θ) – Elevation</label>
+    <input type="range" min="0" max="180" value="90" id="thetaSlider">
+    <span id="thetaValue">90°</span>
+    <br><br>
+    <label>Azimuthal Angle (φ) – Rotation</label>
+    <input type="range" min="0" max="360" value="0" id="phaseSlider">
+    <span id="phaseValue">0°</span>
+    <br><br>
+    <label>Energy Level (H)</label>
+    <input type="range" min="0" max="5" step="0.1" value="1" id="energySlider">
+    <br><br>
+    <button onclick="toggleBlochSize()">Toggle Bloch Size</button>
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section class="card">
+  <h2>Hamiltonian & Phase Evolution</h2>
+
+  <p>
+    The Hamiltonian operator governs how quantum systems evolve. Phase accumulates as the system interacts with its environment, leading to time-dependent behaviors essential for quantum computing.
+  </p>
+
+  <div class="formula">
+    |ψ(t)⟩ = e<sup>-iHt/ħ</sup>|ψ(0)⟩
+  </div>
+
+  <p>
+    Adjust the energy in the Bloch controls to see phase evolution in action.
+  </p>
+</section>
+
+<!-- SECTION 4 -->
+<section class="card">
+  <h2>Phase Noise & Decoherence</h2>
+
+  <p>
+    Real quantum devices suffer from noise, causing phase decoherence. This "dephasing" destroys quantum advantages, making error correction crucial for scalable quantum computers.
+  </p>
+
+  <div class="controls">
+    <label>Noise Strength – Simulate decoherence</label>
+    <input type="range" min="0" max="1" step="0.01" value="0" id="noiseSlider">
+  </div>
+
+  <canvas id="noiseCanvas" width="320" height="120"></canvas>
+</section>
+
+<!-- SECTION 5 -->
+<section class="card">
+  <h2>Quantum Phase Estimation (QPE)</h2>
+
+  <p>
+    QPE is a cornerstone of quantum algorithms, estimating eigenvalues (phases) with exponential precision. It's the backbone of Shor's factoring, quantum chemistry simulations, and more.
+  </p>
+
+  <p>
+    Used in groundbreaking applications:
+  </p>
+
+  <ul>
+    <li>Shor's Algorithm for factoring large numbers</li>
+    <li>Quantum chemistry for molecular simulations</li>
+    <li>Hamiltonian simulation for complex systems</li>
+  </ul>
+
+  <div class="qpe-box">
+    Control Qubits apply phase kicks → Measure to extract φ<br>
+    Target Qubit encodes the eigenstate
+  </div>
+
+  <p class="note">
+    Explore the full QPE circuit in the Advanced module below.
+  </p>
+</section>
+
+<!-- SECTION 6 -->
+
+
+<!-- SECTION 7 -->
+<section class="card">
+  <h2>Interactive Quantum Notebook</h2>
+  <p>
+    Experiment with quantum concepts directly! Enter JavaScript code to manipulate the Bloch sphere, simulate phases, or run simple calculations. For example, try <code>alert('Phase: ' + phase)</code> or custom functions.
+  </p>
+  <textarea id="notebookCell" rows="4" style="width:100%; font-family: monospace;"></textarea>
+  <br><br>
+  <button onclick="runNotebook()">Run Code</button>
+  <div id="notebookOutput" style="margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; min-height: 50px;"></div>
+</section>
+
+<!-- SECTION 8 -->
+<section class="card">
+  <h2>Advanced: 3D Bloch Sphere & QPE Simulation</h2>
+
+  <p>
+    Dive deeper with an interactive 3D Bloch sphere, real-time phase evolution,
+    quantum phase estimation experiments, and a quantum notebook for custom simulations.
+  </p>
+
+  <a href="quantum-phase-advanced/index.html" class="lesson-link">
+    Open Advanced Quantum Phase Module →
+  </a>
+</section>
+
+
+</main>
+
+<script src="quantum-phase.js"></script>
+<script src="global-ui.js"></script>
+
+<!-- ── Advanced Quantum Phase Quiz (self-contained) ─────────────────────── -->
+<style>
+/* ── Advanced Quiz ─────────────────────────────────────────────────────── */
+.adv-quiz-section{background:#fff;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.08);margin:28px 0;padding:28px;}
+.adv-quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.adv-quiz-title{font-size:15px;font-weight:700;color:#003366;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:7px;}
+.adv-quiz-title::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:#0057b8;box-shadow:0 0 8px #0057b8;}
+.adv-quiz-prog-label{font-size:13px;color:#64748b;font-weight:500;}
+.adv-quiz-bar{height:5px;background:#e2e8f0;border-radius:4px;margin-bottom:18px;overflow:hidden;}
+.adv-quiz-bar-fill{height:100%;background:linear-gradient(90deg,#0057b8,#00b4d8);border-radius:4px;transition:width .35s ease;}
+.adv-quiz-card{background:#fff;border:2px solid #e2e8f0;border-radius:14px;padding:26px 28px;box-shadow:0 4px 16px rgba(0,70,150,.07);}
+.adv-quiz-q{font-size:17px;font-weight:600;color:#1e293b;line-height:1.55;margin-bottom:20px;}
+.adv-quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.adv-quiz-opt{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:14px;}
+.adv-quiz-opt:hover{border-color:#0057b8;background:rgba(0,87,184,.05);}
+.adv-quiz-opt.selected{border-color:#0057b8;background:rgba(0,87,184,.12);}
+.adv-quiz-opt.correct{border-color:#10b981;background:rgba(16,185,129,.12);}
+.adv-quiz-opt.incorrect{border-color:#ef4444;background:rgba(239,68,68,.12);}
+.adv-quiz-opt.disabled{cursor:not-allowed;}
+.adv-opt-letter{width:32px;height:32px;border-radius:50%;border:2px solid #cbd5e1;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#64748b;flex-shrink:0;transition:all .22s;}
+.adv-quiz-opt.selected .adv-opt-letter{background:#0057b8;border-color:#0057b8;color:#fff;}
+.adv-quiz-opt.correct .adv-opt-letter{background:#10b981;border-color:#10b981;color:#fff;}
+.adv-quiz-opt.incorrect .adv-opt-letter{background:#ef4444;border-color:#ef4444;color:#fff;}
+.adv-opt-text{flex:1;font-size:15px;color:#475569;line-height:1.4;}
+.adv-quiz-opt.selected .adv-opt-text{color:#1e293b;}
+.adv-quiz-explain{display:none;margin-top:14px;background:#eef6ff;border-left:4px solid #0057b8;border-radius:8px;padding:14px 16px;}
+.adv-quiz-explain.show{display:block;animation:aqSlide .3s ease;}
+.adv-explain-title{font-size:11px;font-weight:700;color:#0057b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.adv-explain-text{font-size:14px;color:#334155;line-height:1.6;}
+.adv-quiz-controls{display:flex;justify-content:center;gap:12px;margin-top:20px;}
+.adv-quiz-btn{padding:10px 24px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.adv-quiz-btn:disabled{opacity:.45;cursor:not-allowed;}
+.adv-quiz-btn-primary{background:linear-gradient(135deg,#0057b8,#0094d4);color:#fff;}
+.adv-quiz-btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,87,184,.35);}
+.adv-quiz-btn-secondary{background:transparent;border:2px solid #e2e8f0;color:#475569;}
+.adv-quiz-btn-secondary:hover:not(:disabled){border-color:#0057b8;color:#0057b8;}
+.adv-quiz-results{background:#fff;border:2px solid #0057b8;border-radius:14px;padding:36px;text-align:center;display:none;}
+.adv-quiz-results.show{display:block;animation:aqZoom .4s ease;}
+.adv-quiz-score-pct{font-size:60px;font-weight:800;background:linear-gradient(135deg,#0057b8,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.adv-quiz-score-label{font-size:20px;color:#475569;margin:8px 0 4px;}
+.adv-quiz-score-detail{font-size:15px;color:#94a3b8;margin-bottom:20px;}
+.adv-quiz-feedback{font-size:17px;color:#1e293b;background:#eef6ff;border-radius:10px;padding:16px 20px;margin-bottom:22px;}
+@keyframes aqSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes aqZoom{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+</style>
+
+<div style="max-width:1100px;margin:28px auto;padding:0 24px;">
+<div class="adv-quiz-section">
+  <div id="advQuizMount_quantumPhaseQuizData"></div>
+</div>
+</div>
+
+<script>
+(function(){
+
+class AdvQuiz {
+  constructor(data, mountId) {
+    this.data=data; this.mount=document.getElementById(mountId);
+    this.cur=0; this.score=0; this.answers=[]; this.answered=false;
+    this.render();
+  }
+  render() {
+    if(!this.mount)return;
+    const q=this.data.questions[this.cur];
+    const pct=(this.cur/this.data.questions.length)*100;
+    this.mount.innerHTML=`
+      <div class="adv-quiz-header">
+        <div class="adv-quiz-title">${this.data.topicName} Quiz</div>
+        <div class="adv-quiz-prog-label">Q${this.cur+1}&nbsp;/&nbsp;${this.data.questions.length}</div>
+      </div>
+      <div class="adv-quiz-bar"><div class="adv-quiz-bar-fill" style="width:${pct}%"></div></div>
+      <div class="adv-quiz-card">
+        <div class="adv-quiz-q">${q.question}</div>
+        <div class="adv-quiz-opts">
+          ${q.options.map((o,i)=>`
+            <div class="adv-quiz-opt" data-i="${i}">
+              <div class="adv-opt-letter">${'ABCD'[i]}</div>
+              <div class="adv-opt-text">${o}</div>
+            </div>`).join('')}
+        </div>
+        <div class="adv-quiz-explain" id="aqqExp">
+          <div class="adv-explain-title">Explanation</div>
+          <div class="adv-explain-text">${q.explanation}</div>
+        </div>
+      </div>
+      <div class="adv-quiz-controls">
+        <button class="adv-quiz-btn adv-quiz-btn-secondary" id="aqPrev" ${this.cur===0?'disabled':''}>&larr; Prev</button>
+        <button class="adv-quiz-btn adv-quiz-btn-primary" id="aqSubmit" disabled>Submit</button>
+        <button class="adv-quiz-btn adv-quiz-btn-secondary" id="aqNext" style="display:none">Next &rarr;</button>
+      </div>`;
+    this.restoreAnswer(); this.bind();
+  }
+  bind() {
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach(el=>el.addEventListener('click',()=>{if(!this.answered)this.select(el);}));
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.addEventListener('click',()=>this.submit());
+    const prv=this.mount.querySelector('#aqPrev'); if(prv)prv.addEventListener('click',()=>{this.cur--;this.answered=!!this.answers[this.cur];this.render();});
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt)nxt.addEventListener('click',()=>{
+      if(this.cur<this.data.questions.length-1){this.cur++;this.answered=!!this.answers[this.cur];this.render();}
+      else this.showResults();
+    });
+  }
+  select(el){
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.disabled=false;
+  }
+  submit(){
+    const sel=this.mount.querySelector('.adv-quiz-opt.selected'); if(!sel)return;
+    this.answered=true;
+    const i=parseInt(sel.dataset.i),q=this.data.questions[this.cur],ok=i===q.correct;
+    if(ok&&!this.answers[this.cur])this.score++;
+    this.answers[this.cur]={selected:i,correct:ok};
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach((o,idx)=>{
+      o.classList.add('disabled');
+      if(idx===q.correct)o.classList.add('correct');
+      else if(idx===i&&!ok)o.classList.add('incorrect');
+    });
+    const exp=this.mount.querySelector('#aqqExp'); if(exp)exp.classList.add('show');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.style.display='none';
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt){
+      nxt.style.display='inline-flex';
+      if(this.cur===this.data.questions.length-1)nxt.textContent='View Results';
+    }
+    if(ok&&typeof startFireworks==='function')startFireworks();
+  }
+  restoreAnswer(){
+    const prev=this.answers[this.cur]; if(!prev)return;
+    this.answered=true;
+    const q=this.data.questions[this.cur];
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach((o,idx)=>{
+      o.classList.add('disabled');
+      if(idx===q.correct)o.classList.add('correct');
+      if(idx===prev.selected){o.classList.add('selected');if(!prev.correct)o.classList.add('incorrect');}
+    });
+    const exp=this.mount.querySelector('#aqqExp'); if(exp)exp.classList.add('show');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.style.display='none';
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt)nxt.style.display='inline-flex';
+  }
+  showResults(){
+    const pct=Math.round((this.score/this.data.questions.length)*100);
+    const fb=pct>=90?'Outstanding! You have mastered this topic!':pct>=70?'Great job! Solid understanding of the concepts.':pct>=50?'Good effort! Review the material to strengthen your understanding.':'Keep learning! Re-read the theory and try again.';
+    this.mount.innerHTML=`
+      <div class="adv-quiz-results show">
+        <div class="adv-quiz-score-pct">${pct}%</div>
+        <div class="adv-quiz-score-label">Your Score</div>
+        <div class="adv-quiz-score-detail">${this.score} out of ${this.data.questions.length} correct</div>
+        <div class="adv-quiz-feedback">${fb}</div>
+        <div class="adv-quiz-controls">
+          <button class="adv-quiz-btn adv-quiz-btn-secondary" onclick="location.reload()">Try Again</button>
+        </div>
+      </div>`;
+  }
+}
+
+const quantumPhaseQuizData = {
+  topicName: "Quantum Phase",
+  questions: [
+    {
+      question: "What is the quantum phase of a state?",
+      options: ["The measurement probability", "The complex argument φ in the amplitude e^(iφ)", "The spin of the electron", "The energy level"],
+      correct: 1,
+      explanation: "Quantum phase is the angular argument φ in e^(iφ). It is not directly measurable but critically affects quantum interference."
+    },
+    {
+      question: "Which type of phase is physically unobservable?",
+      options: ["Relative phase", "Global phase", "Both are observable", "Neither exists"],
+      correct: 1,
+      explanation: "Global phase e^(iγ) cancels in all probability calculations (|e^(iγ)|=1) and is physically undetectable."
+    },
+    {
+      question: "Which gate introduces a π/2 phase shift to the |1⟩ component?",
+      options: ["Hadamard gate", "Pauli-X gate", "S gate (Phase gate)", "CNOT gate"],
+      correct: 2,
+      explanation: "The S gate applies |0⟩→|0⟩, |1⟩→i|1⟩ = e^(iπ/2)|1⟩ — a 90° relative phase shift."
+    },
+    {
+      question: "Phase on the Bloch sphere is rotation around which axis?",
+      options: ["X-axis", "Y-axis", "Z-axis", "All axes equally"],
+      correct: 2,
+      explanation: "Azimuthal angle φ on the Bloch sphere represents phase and corresponds to Z-axis rotation. Gates Rz, S, T, Z are all Z-rotations."
+    },
+    {
+      question: "Why is relative phase physically important?",
+      options: ["Decoherence", "Quantum interference", "Entanglement", "Tunnelling"],
+      correct: 1,
+      explanation: "Relative phase controls constructive and destructive quantum interference — the mechanism behind quantum algorithmic speedups."
+    },
+    {
+      question: "What does the T gate do?",
+      options: ["Flips |0⟩ and |1⟩", "Introduces a π/4 phase shift to |1⟩", "Creates superposition", "Applies π/2 rotation around X"],
+      correct: 1,
+      explanation: "T gate: |1⟩ → e^(iπ/4)|1⟩, a 45° phase shift. T gates are essential for universal quantum computation."
+    },
+    {
+      question: "What does Quantum Phase Estimation (QPE) estimate?",
+      options: ["Measurement probability", "Eigenvalue phase φ of a unitary U", "Entanglement entropy", "Decoherence time T2"],
+      correct: 1,
+      explanation: "QPE estimates φ where U|ψ⟩ = e^(2πiφ)|ψ⟩. It is central to Shor's algorithm and quantum chemistry."
+    },
+    {
+      question: "Why does global phase have no physical significance?",
+      options: ["It changes measurement probabilities", "It cancels in all observable expectation values", "It only affects entangled states", "It is too small to measure"],
+      correct: 1,
+      explanation: "For state e^(iγ)|ψ⟩, all probabilities = |amplitude|² are unchanged because |e^(iγ)|=1 cancels everywhere."
+    },
+  ]
+};
+// Wait for DOM to be ready
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', function(){ new AdvQuiz(quantumPhaseQuizData, 'advQuizMount_quantumPhaseQuizData'); });
+} else {
+  new AdvQuiz(quantumPhaseQuizData, 'advQuizMount_quantumPhaseQuizData');
+}
+})();
+</script>
+
+
+<!-- QT-ENHANCEMENTS-v1 -->
+<style>
+/* ── QT Enhancements ─────────────────────────────────────────────────── */
+.qt-enhance-wrap{max-width:1100px;margin:0 auto;padding:0 24px 48px;}
+/* Key Concepts */
+.qt-concepts{background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,40,120,.08);padding:28px 32px;margin-bottom:24px;}
+.qt-concepts-title{font-size:13px;font-weight:700;letter-spacing:.12em;color:#0057b8;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.qt-concepts-title::before{content:'';width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#0057b8,#00b4d8);display:inline-block;flex-shrink:0;}
+.qt-concepts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.qt-concept-card{background:linear-gradient(135deg,#f0f7ff,#e8f4ff);border:1.5px solid #c7deff;border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;}
+.qt-concept-card::before{content:'';position:absolute;top:-20px;right:-20px;width:70px;height:70px;border-radius:50%;background:rgba(0,87,184,.07);}
+.qt-concept-card h4{margin:0 0 7px;font-size:14px;color:#003380;font-weight:700;}
+.qt-concept-card p{margin:0;font-size:13px;color:#475569;line-height:1.6;}
+.qt-concept-card.green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;}
+.qt-concept-card.green h4{color:#166534;}
+.qt-concept-card.purple{background:linear-gradient(135deg,#faf5ff,#ede9fe);border-color:#c4b5fd;}
+.qt-concept-card.purple h4{color:#581c87;}
+.qt-concept-card.orange{background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fed7aa;}
+.qt-concept-card.orange h4{color:#9a3412;}
+/* Formula reference */
+.qt-formula-box{background:#0f172a;border-radius:14px;padding:24px 28px;margin-bottom:24px;color:#e2e8f0;}
+.qt-formula-box-title{font-size:12px;font-weight:700;letter-spacing:.15em;color:#38bdf8;text-transform:uppercase;margin-bottom:16px;}
+.qt-formula-row{display:flex;align-items:flex-start;gap:16px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.qt-formula-row:last-child{border-bottom:none;}
+.qt-formula-tag{background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.3);color:#38bdf8;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.qt-formula-math{font-family:'Courier New',monospace;font-size:15px;color:#f1f5f9;flex:1;}
+.qt-formula-desc{font-size:12px;color:#94a3b8;margin-top:3px;}
+/* Did You Know */
+.qt-dyk{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:14px;padding:22px 26px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px;color:#fff;}
+.qt-dyk-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.qt-dyk-title{font-size:11px;font-weight:700;letter-spacing:.14em;color:#a5b4fc;text-transform:uppercase;margin-bottom:6px;}
+.qt-dyk-text{font-size:14px;color:#e0e7ff;line-height:1.7;}
+/* Notebook */
+.qt-notebook{background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,40,120,.1);overflow:hidden;margin-bottom:24px;}
+.qt-nb-header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:16px 22px;display:flex;align-items:center;gap:10px;}
+.qt-nb-dots{display:flex;gap:6px;}
+.qt-nb-dot{width:12px;height:12px;border-radius:50%;}
+.qt-nb-dot.red{background:#ff5f57;}
+.qt-nb-dot.yellow{background:#febc2e;}
+.qt-nb-dot.green{background:#28c840;}
+.qt-nb-title{color:#94a3b8;font-size:13px;font-family:monospace;margin-left:8px;}
+.qt-nb-body{padding:20px 22px;}
+.qt-nb-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:#0057b8;text-transform:uppercase;margin-bottom:8px;}
+.qt-nb-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.qt-nb-tab{padding:5px 13px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;color:#64748b;background:#f8fafc;transition:all .18s;}
+.qt-nb-tab:hover,.qt-nb-tab.active{background:#0057b8;border-color:#0057b8;color:#fff;}
+.qt-nb-editor{position:relative;}
+.qt-nb-code{
+  width:100%;min-height:120px;background:#0f172a;color:#a5f3fc;
+  font-family:'Courier New',monospace;font-size:13px;line-height:1.7;
+  border:2px solid #1e293b;border-radius:10px;padding:14px;
+  resize:vertical;outline:none;box-sizing:border-box;
+  transition:border-color .2s;
+}
+.qt-nb-code:focus{border-color:#0057b8;}
+.qt-nb-actions{display:flex;gap:10px;margin-top:10px;}
+.qt-nb-run{background:linear-gradient(135deg,#0057b8,#0094d4);color:#fff;border:none;border-radius:8px;padding:9px 22px;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;}
+.qt-nb-run:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,87,184,.4);}
+.qt-nb-clear{background:transparent;border:2px solid #e2e8f0;border-radius:8px;padding:9px 16px;font-size:13px;color:#64748b;cursor:pointer;transition:all .2s;}
+.qt-nb-clear:hover{border-color:#ef4444;color:#ef4444;}
+.qt-nb-output{margin-top:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px 16px;min-height:56px;font-family:monospace;font-size:13px;color:#334155;white-space:pre-wrap;line-height:1.7;}
+.qt-nb-output.error{background:#fff1f2;border-color:#fca5a5;color:#991b1b;}
+.qt-nb-output.success{background:#f0fdf4;border-color:#86efac;color:#166534;}
+@media(max-width:600px){.qt-concepts-grid{grid-template-columns:1fr;}.qt-formula-row{flex-direction:column;gap:6px;}}
+</style>
+<div class="qt-enhance-wrap">
+
+  <!-- Key Concepts -->
+  <div class="qt-concepts">
+    <div class="qt-concepts-title">Key Concepts</div>
+    <div class="qt-concepts-grid">
+      <div class="qt-concept-card"><h4>🌀 Global vs Relative Phase</h4><p>Global phase e^(iγ) is unobservable. Relative phase between |0⟩ and |1⟩ determines interference and IS observable.</p></div>
+<div class="qt-concept-card green"><h4>🔄 Phase Gates</h4><p>S gate: +90° phase. T gate: +45° phase. Z gate: +180° phase. All are Z-axis rotations on the Bloch sphere.</p></div>
+<div class="qt-concept-card purple"><h4>🌊 Interference</h4><p>Relative phase controls constructive (+) and destructive (−) interference — the key mechanism behind all quantum speedups.</p></div>
+<div class="qt-concept-card orange"><h4>📐 QPE</h4><p>Quantum Phase Estimation reads the eigenphase of U|ψ⟩=e^(2πiφ)|ψ⟩. Core of Shor's and quantum chemistry algorithms.</p></div>
+
+    </div>
+  </div>
+
+  <!-- Formula Reference -->
+  <div class="qt-formula-box">
+    <div class="qt-formula-box-title">📐 Formula Reference</div>
+    <div class="qt-formula-row">
+  <span class="qt-formula-tag">Phase state</span>
+  <div><div class="qt-formula-math">|ψ⟩ = α|0⟩ + e^(iφ)β|1⟩</div><div class="qt-formula-desc">Relative phase φ on |1⟩</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">S gate</span>
+  <div><div class="qt-formula-math">S|1⟩ = i|1⟩ = e^(iπ/2)|1⟩</div><div class="qt-formula-desc">Quarter-turn phase kick</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">T gate</span>
+  <div><div class="qt-formula-math">T|1⟩ = e^(iπ/4)|1⟩</div><div class="qt-formula-desc">Eighth-turn phase kick</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">Z gate</span>
+  <div><div class="qt-formula-math">Z|1⟩ = −|1⟩ = e^(iπ)|1⟩</div><div class="qt-formula-desc">Half-turn phase kick</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">Interference</span>
+  <div><div class="qt-formula-math">|+⟩+e^(iπ)|+⟩ = 0</div><div class="qt-formula-desc">Destructive interference</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">QPE</span>
+  <div><div class="qt-formula-math">U|u⟩ = e^(2πiφ)|u⟩</div><div class="qt-formula-desc">Eigenphase equation</div></div>
+</div>
+
+  </div>
+
+  <!-- Did You Know -->
+  <div class="qt-dyk">
+    <div class="qt-dyk-icon">💡</div>
+    <div>
+      <div class="qt-dyk-title">Did You Know?</div>
+      <div class="qt-dyk-text">Quantum phase is invisible to a single measurement — it only shows up through interference. This is why quantum algorithms must carefully choreograph phase relationships before measuring.</div>
+    </div>
+  </div>
+
+  <!-- Quantum Notebook -->
+  <div class="qt-notebook">
+    <div class="qt-nb-header">
+      <div class="qt-nb-dots">
+        <div class="qt-nb-dot red"></div>
+        <div class="qt-nb-dot yellow"></div>
+        <div class="qt-nb-dot green"></div>
+      </div>
+      <div class="qt-nb-title">📓 quantum_phase.ipynb</div>
+    </div>
+    <div class="qt-nb-body">
+      <div class="qt-nb-label">Interactive Quantum Notebook</div>
+      <p style="font-size:13px;color:#64748b;margin:0 0 10px;">Run JavaScript code to explore quantum concepts. Select an example or write your own:</p>
+      <div class="qt-nb-tabs" id="qtnbTabs_quantum_phase">
+        <div class="qt-nb-tab active" onclick="qtnbSetTab(this,'quantum_phase',0)">Phase Kickback</div><div class="qt-nb-tab" onclick="qtnbSetTab(this,'quantum_phase',1)">Interference</div><div class="qt-nb-tab" onclick="qtnbSetTab(this,'quantum_phase',2)">Phase Encode</div>
+      </div>
+      <div class="qt-nb-editor">
+        <textarea class="qt-nb-code" id="qtnbCode_quantum_phase" spellcheck="false"></textarea>
+      </div>
+      <div class="qt-nb-actions">
+        <button class="qt-nb-run" onclick="qtnbRun('quantum_phase')">▶ Run Code</button>
+        <button class="qt-nb-clear" onclick="qtnbClear('quantum_phase')">✕ Clear</button>
+      </div>
+      <div class="qt-nb-output" id="qtnbOut_quantum_phase">// Output will appear here...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const _examples_quantum_phase = [
+`// Simulate relative phase accumulation
+const phi = Math.PI/4; // T gate phase (45°)
+const alpha = 1/Math.SQRT2, beta = 1/Math.SQRT2;
+// Apply T gate: |1⟩ component gets e^(iφ) phase
+const re_before = beta, im_before = 0;
+const re_after = beta*Math.cos(phi), im_after = beta*Math.sin(phi);
+console.log(\`Before T: β = \${re_before.toFixed(3)} + \${im_before}i\`);
+console.log(\`After T:  β = \${re_after.toFixed(3)} + \${im_after.toFixed(3)}i\`);
+console.log(\`Phase = \${(phi*180/Math.PI).toFixed(0)}° = π/4 (T gate)\`);
+console.log(\`Measurement probability unchanged: P(1) = \${(re_after**2+im_after**2).toFixed(3)}\`);`,
+`// Constructive vs destructive interference
+function interference(phi){
+  // |+⟩ + e^(iφ)|+⟩ amplitude at |0⟩
+  const amp = (1 + Math.cos(phi)) / 2;
+  return amp;
+}
+console.log('Phase → P(|0⟩) via interference:');
+[0, Math.PI/2, Math.PI, 3*Math.PI/2, 2*Math.PI].forEach(phi=>{
+  const p=interference(phi);
+  const label=phi===0?'φ=0 (constructive)':phi===Math.PI?'φ=π (destructive)':'φ='+phi.toFixed(2);
+  console.log(\`\${label}: P(0) = \${p.toFixed(3)}\`);
+});`,
+`// Encode information in phase
+const message = [1, 0, 1, 1, 0]; // binary message
+console.log('Encoding in quantum phase:');
+message.forEach((bit,i)=>{
+  const phi = bit * Math.PI; // 0→φ=0, 1→φ=π
+  console.log(\`Bit \${i}: \${bit} → phase φ=\${(phi/Math.PI).toFixed(0)}π (\${bit?'|−⟩':'|+⟩'})\`);
+});
+console.log('\\nPhase differences allow quantum interference to read the data!');`
+];
+  window.qtnbSetTab = window.qtnbSetTab || function(el,pg,idx){
+    el.closest('[id^="qtnbTabs_"]').querySelectorAll('.qt-nb-tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('qtnbCode_'+pg).value=window['_nbex_'+pg][idx];
+  };
+  window['_nbex_quantum_phase'] = _examples_quantum_phase;
+  window.qtnbRun = window.qtnbRun || function(pg){
+    const code=document.getElementById('qtnbCode_'+pg).value;
+    const out=document.getElementById('qtnbOut_'+pg);
+    const logs=[]; const origLog=console.log;
+    console.log=(...a)=>logs.push(a.map(x=>typeof x==='object'?JSON.stringify(x,null,2):String(x)).join(' '));
+    try{
+      new Function(code)();
+      out.textContent=logs.join('\n')||'(no output)';
+      out.className='qt-nb-output success';
+    }catch(e){
+      out.textContent='❌ Error: '+e.message;
+      out.className='qt-nb-output error';
+    }finally{console.log=origLog;}
+  };
+  window.qtnbClear = window.qtnbClear || function(pg){
+    document.getElementById('qtnbCode_'+pg).value='';
+    const out=document.getElementById('qtnbOut_'+pg);
+    out.textContent='// Output will appear here...';
+    out.className='qt-nb-output';
+  };
+  // Load first example by default
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){
+      document.getElementById('qtnbCode_quantum_phase').value=_examples_quantum_phase[0];
+    });
+  } else {
+    document.getElementById('qtnbCode_quantum_phase').value=_examples_quantum_phase[0];
+  }
+})();
+</script>
+
+</body>
+</html>

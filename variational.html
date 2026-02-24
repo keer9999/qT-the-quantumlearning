@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="stylesheet" href="global-ui.css">
+
+<meta charset="UTF-8">
+<title>Variational Method | The Quanta</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#f6f8fb;
+  color:#1f2d3d
+}
+
+header{
+  background:white;
+  padding:16px 28px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  display:flex;
+  align-items:center
+}
+
+header img{
+  width:42px;
+  margin-right:12px
+}
+
+main{padding:40px}
+
+.section{
+  background:white;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+  margin-bottom:30px
+}
+
+button{
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  background:#0057b8;
+  color:white;
+  cursor:pointer;
+  margin-bottom:12px
+}
+
+iframe{
+  width:100%;
+  height:720px;
+  border:1px solid #ccc;
+  border-radius:12px
+}
+</style>
+</head>
+
+<body>
+    <!-- Global Back Button -->
+<div class="global-back-btn" onclick="goBackGlobal()" title="Go Back"></div>
+  ←
+</div>
+
+
+<header>
+  <img src="jntu_logo.png">
+  <h2>The Variational Method</h2>
+</header>
+
+<main>
+
+<!-- DESCRIPTION FIRST -->
+<div class="section">
+  <h3>What is the Variational Method?</h3>
+
+  <p>
+    The <strong>variational method</strong> is an approximation
+    technique used to estimate the ground-state energy of a quantum
+    system when exact solutions are not available.
+  </p>
+
+  <p>
+    A trial wavefunction with adjustable parameters is chosen.
+    By minimizing the expectation value of the Hamiltonian,
+    the best approximation to the ground state is obtained.
+  </p>
+
+  <p>
+    🔹 <strong>Minimization</strong> → finds lowest energy (ground state)<br>
+    🔹 <strong>Maximization</strong> → shows non-optimal configurations
+  </p>
+
+  <p>
+    This principle underlies modern algorithms such as
+    <strong>VQE</strong> and <strong>QAOA</strong>.
+  </p>
+</div>
+
+<!-- SIMULATOR BELOW -->
+<div class="section">
+  <button onclick="toggleFullscreen()">Fullscreen / Normal</button>
+
+  <iframe id="simFrame" src="variationalMethod.html"></iframe>
+</div>
+
+</main>
+
+<script>
+function toggleFullscreen(){
+  const frame=document.getElementById("simFrame");
+  if(!document.fullscreenElement){
+    frame.requestFullscreen();
+  }else{
+    document.exitFullscreen();
+  }
+}
+</script>
+<script src="global-ui.js"></script>
+</body>
+</html>

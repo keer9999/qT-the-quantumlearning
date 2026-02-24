@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shor's Factoring Algorithm | Quantum Algorithms</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/quiz.css">
+
+    <style>
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-2xl) 0;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f3ff 100%);
+            border-radius: var(--radius-lg);
+        }
+
+        .algorithm-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .algorithm-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+            border-bottom: 3px solid var(--accent-primary);
+            padding-bottom: var(--spacing-sm);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--accent-light);
+        }
+
+        .step-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-primary);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: var(--spacing-sm);
+        }
+
+        .formula-box {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+            overflow-x: auto;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .formula-box .MathJax {
+            font-size: 1.3em !important;
+        }
+
+        .formula-box mjx-container {
+            font-size: 1.3em !important;
+        }
+
+        .key-concept {
+            background: #e6f3ff;
+            border: 1px solid #0057b8;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .key-concept-title {
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 16px;
+        }
+
+        .circuit-container {
+            text-align: center;
+            margin: var(--spacing-xl) 0;
+            padding: var(--spacing-lg);
+            background: #0a0a0a;
+            border-radius: var(--radius-lg);
+        }
+
+        .circuit-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .application-card {
+            background: var(--bg-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .application-card h4 {
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .back-btn:hover {
+            gap: var(--spacing-md);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2L2 7v10c0 5.5 3.8 10.7 10 12 6.2-1.3 10-6.5 10-12V7l-10-5zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                Quantum Algorithms
+            </div>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-btn">← Back to All Algorithms</a>
+
+        <div class="page-header">
+            <h1 class="algorithm-title">Shor's Factoring Algorithm</h1>
+            <p class="algorithm-subtitle">Breaking RSA Encryption with Quantum Computing</p>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">Overview</h2>
+            <p>
+                Shor's algorithm, discovered by Peter Shor in 1994, is a quantum algorithm for integer factorization.
+                It can factor large numbers exponentially faster than the best known classical algorithms, posing a
+                significant threat to widely-used RSA encryption.
+            </p>
+
+            <h3>The Problem</h3>
+            <p>
+                Given a large composite number \( N \), find its prime factors \( p \) and \( q \) such that \( N = p
+                \times q \).
+            </p>
+
+            <h3>Classical vs Quantum Comparison</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Classical (GNFS)</th>
+                        <th>Shor's Algorithm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Time Complexity</strong></td>
+                        <td>\( O(e^{1.9(\ln N)^{1/3}(\ln \ln N)^{2/3}}) \)</td>
+                        <td><strong>\( O((\log N)^3) \)</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speedup Type</strong></td>
+                        <td>-</td>
+                        <td><strong>Exponential</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Example (RSA-2048)</strong></td>
+                        <td>Billions of years</td>
+                        <td><strong>Hours (with sufficient qubits)</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Impact on RSA</strong></td>
+                        <td>Secure</td>
+                        <td><strong>Breaks RSA encryption</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Prerequisites Section -->
+        <section class="section">
+            <h2 class="section-title">Prerequisites</h2>
+            <p>Before studying Shor's algorithm, you should be familiar with:</p>
+
+            <div class="key-concept">
+                <div class="key-concept-title">📚 Recommended Background</div>
+                <ul>
+                    <li><strong>Number Theory:</strong> Modular arithmetic, greatest common divisor (GCD), prime
+                        factorization</li>
+                    <li><strong>Quantum Fourier Transform (QFT):</strong> Understanding how QFT extracts periodicity
+                    </li>
+                    <li><strong>Period Finding:</strong> Concept of finding repeating patterns in functions</li>
+                    <li><strong>Continued Fractions:</strong> Classical algorithm for finding rational approximations
+                    </li>
+                    <li><strong>Quantum Phase Estimation:</strong> Extracting eigenvalues from quantum states</li>
+                    <li><strong>Modular Exponentiation:</strong> Computing a^x mod N efficiently</li>
+                    <li><strong>RSA Cryptography:</strong> How public-key encryption uses factoring difficulty</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Quantum Circuit</h2>
+            <p>
+                Shor's algorithm uses two quantum registers: an input register and an output register. The key
+                quantum component is the Quantum Fourier Transform (QFT) used for period finding.
+            </p>
+
+            <div class="circuit-container">
+                <img src="assets/circuits/shor.svg" alt="Shor's Factoring Algorithm Circuit">
+            </div>
+
+            <div class="key-concept">
+                <div class="key-concept-title">💡 Circuit Components</div>
+                <ul>
+                    <li><strong>Blue Gates (H):</strong> Create superposition in input register</li>
+                    <li><strong>Purple Box (Mod. Exp.):</strong> Modular exponentiation \( a^x \mod N \)</li>
+                    <li><strong>Orange Box (QFT†):</strong> Inverse Quantum Fourier Transform for period finding</li>
+                    <li><strong>Green Symbols:</strong> Measurement of input register</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Step-by-Step Walkthrough</h2>
+
+            <div class="step-box">
+                <span class="step-number">1</span>
+                <strong>Classical Pre-Processing</strong>
+                <p>Choose random \( a < N \) and check if \( \gcd(a, N)> 1 \). If so, we found a factor!</p>
+                <p>Otherwise, proceed to find the period \( r \) of \( f(x) = a^x \mod N \).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2</span>
+                <strong>Initialize Quantum Registers</strong>
+                <p>Prepare two registers in superposition:</p>
+                <div class="formula-box">
+                    $$ |\psi_0\rangle = \frac{1}{\sqrt{Q}} \sum_{x=0}^{Q-1} |x\rangle |0\rangle $$
+                </div>
+                <p>where \( Q = 2^q \) and \( q \) is chosen such that \( N^2 \leq Q < 2N^2 \).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3</span>
+                <strong>Modular Exponentiation</strong>
+                <p>Compute \( f(x) = a^x \mod N \) in superposition:</p>
+                <div class="formula-box">
+                    $$ |\psi_1\rangle = \frac{1}{\sqrt{Q}} \sum_{x=0}^{Q-1} |x\rangle |a^x \mod N\rangle $$
+                </div>
+                <p>This is the quantum part that evaluates the function for all \( x \) simultaneously.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">4</span>
+                <strong>Measure Output Register</strong>
+                <p>Measuring the second register collapses the state to values with the same \( a^x \mod N \):</p>
+                <div class="formula-box">
+                    $$ |\psi_2\rangle = \frac{1}{\sqrt{k}} \sum_{j=0}^{k-1} |x_0 + jr\rangle $$
+                </div>
+                <p>where \( r \) is the period we're looking for.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">5</span>
+                <strong>Apply Quantum Fourier Transform</strong>
+                <p>Apply inverse QFT to extract the period:</p>
+                <div class="formula-box">
+                    $$ QFT^\dagger |\psi_2\rangle \approx |Q/r\rangle $$
+                </div>
+                <p>Measuring gives us multiples of \( Q/r \), from which we can deduce \( r \).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">6</span>
+                <strong>Classical Post-Processing</strong>
+                <p>Use continued fractions to find \( r \) from the measurement. Then compute factors:</p>
+                <div class="formula-box">
+                    $$ p = \gcd(a^{r/2} - 1, N), \quad q = \gcd(a^{r/2} + 1, N) $$
+                </div>
+                <p>If \( r \) is odd or \( a^{r/2} \equiv -1 \mod N \), repeat with different \( a \).</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Why It Works: Period Finding</h2>
+
+            <div class="key-concept">
+                <div class="key-concept-title">🔑 Key Insight</div>
+                <p>
+                    Factoring reduces to period finding: finding \( r \) such that \( a^r \equiv 1 \mod N \).
+                </p>
+                <p>
+                    If \( r \) is even, then \( a^r - 1 = (a^{r/2} - 1)(a^{r/2} + 1) \equiv 0 \mod N \).
+                </p>
+                <p>
+                    Since \( N \) divides the product but (hopefully) doesn't divide either factor individually,
+                    \( \gcd(a^{r/2} \pm 1, N) \) gives us the prime factors!
+                </p>
+            </div>
+
+            <h3>Example: Factoring 15</h3>
+            <p>Let \( N = 15 \) and \( a = 7 \):</p>
+            <ul>
+                <li>\( 7^1 \mod 15 = 7 \)</li>
+                <li>\( 7^2 \mod 15 = 4 \)</li>
+                <li>\( 7^3 \mod 15 = 13 \)</li>
+                <li>\( 7^4 \mod 15 = 1 \) → period \( r = 4 \)</li>
+            </ul>
+            <p>Compute: \( \gcd(7^2 - 1, 15) = \gcd(48, 15) = 3 \) and \( \gcd(7^2 + 1, 15) = \gcd(50, 15) = 5 \)</p>
+            <p>Success! Factors are 3 and 5.</p>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Applications & Impact</h2>
+
+            <h3>Cryptographic Impact</h3>
+            <div class="applications-grid">
+                <div class="application-card">
+                    <h4>RSA Encryption</h4>
+                    <p>Breaks RSA by efficiently factoring the public modulus N into primes p and q.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Digital Signatures</h4>
+                    <p>Compromises RSA-based digital signature schemes used for authentication.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Post-Quantum Crypto</h4>
+                    <p>Motivated development of quantum-resistant cryptographic algorithms.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Key Exchange</h4>
+                    <p>Threatens Diffie-Hellman and other discrete logarithm-based protocols.</p>
+                </div>
+            </div>
+
+            <h3>Broader Significance</h3>
+            <ul>
+                <li><strong>Quantum Fourier Transform:</strong> Introduced QFT, now fundamental to many quantum
+                    algorithms</li>
+                <li><strong>Practical Motivation:</strong> Provided strong incentive for building quantum computers</li>
+                <li><strong>Complexity Theory:</strong> Showed BQP ≠ BPP (quantum computers can solve harder problems)
+                </li>
+                <li><strong>Security Migration:</strong> Driving transition to post-quantum cryptography (NIST
+                    standards)</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Test Your Understanding</h2>
+            <p>Challenge yourself with this 10-question quiz about Shor's Factoring Algorithm!</p>
+            <div id="quizContainer"></div>
+        </section>
+    </div>
+
+    <script src="assets/js/quiz.js"></script>
+    <script>
+        const shorQuiz = {
+            algorithmName: "Shor's Factoring",
+            questions: [
+                {
+                    id: 1,
+                    question: "What is the primary problem that Shor's algorithm solves?",
+                    options: ["Searching an unsorted database", "Integer factorization", "Graph coloring", "Sorting numbers"],
+                    correct: 1,
+                    explanation: "Shor's algorithm is designed to factor large integers into their prime factors exponentially faster than classical algorithms, which has major implications for cryptography."
+                },
+                {
+                    id: 2,
+                    question: "What is the time complexity of Shor's algorithm?",
+                    options: ["O(N)", "O(√N)", "O((log N)³)", "O(2^N)"],
+                    correct: 2,
+                    explanation: "Shor's algorithm runs in polynomial time O((log N)³), which is exponentially faster than the best classical factoring algorithms."
+                },
+                {
+                    id: 3,
+                    question: "What cryptographic system is most threatened by Shor's algorithm?",
+                    options: ["AES symmetric encryption", "RSA public-key encryption", "SHA hash functions", "One-time pads"],
+                    correct: 1,
+                    explanation: "RSA encryption relies on the difficulty of factoring large numbers. Shor's algorithm can break RSA by efficiently factoring the public modulus N."
+                },
+                {
+                    id: 4,
+                    question: "What quantum component is crucial to Shor's algorithm?",
+                    options: ["Grover iteration", "Quantum Fourier Transform", "Hadamard gates only", "CNOT gates only"],
+                    correct: 1,
+                    explanation: "The Quantum Fourier Transform (QFT) is essential for extracting the period from the superposition state, which then allows us to compute the factors classically."
+                },
+                {
+                    id: 5,
+                    question: "Shor's algorithm reduces factoring to which simpler problem?",
+                    options: ["Searching", "Sorting", "Period finding", "Graph traversal"],
+                    correct: 2,
+                    explanation: "Shor's algorithm reduces integer factorization to the problem of finding the period of the function f(x) = a^x mod N, which quantum computers can solve efficiently."
+                },
+                {
+                    id: 6,
+                    question: "What does the modular exponentiation step compute?",
+                    options: ["a + x mod N", "a × x mod N", "a^x mod N", "x^a mod N"],
+                    correct: 2,
+                    explanation: "The quantum circuit computes a^x mod N for all x in superposition, which creates a periodic pattern that the QFT can analyze to find the period r."
+                },
+                {
+                    id: 7,
+                    question: "After finding the period r, how are the factors computed?",
+                    options: [
+                        "Directly from r",
+                        "Using gcd(a^(r/2) ± 1, N)",
+                        "By measuring the output register",
+                        "Through Grover's search"
+                    ],
+                    correct: 1,
+                    explanation: "Once we have the period r, we compute the factors using the greatest common divisor: p = gcd(a^(r/2) - 1, N) and q = gcd(a^(r/2) + 1, N)."
+                },
+                {
+                    id: 8,
+                    question: "What happens if the period r found is odd?",
+                    options: [
+                        "We've successfully factored N",
+                        "We need to try a different value of a",
+                        "The algorithm fails permanently",
+                        "We apply QFT again"
+                    ],
+                    correct: 1,
+                    explanation: "If r is odd, we cannot use the formula gcd(a^(r/2) ± 1, N) since r/2 won't be an integer. We must repeat the algorithm with a different value of a."
+                },
+                {
+                    id: 9,
+                    question: "Approximately how many qubits are needed to factor a 2048-bit RSA modulus?",
+                    options: ["~100 qubits", "~1,000 qubits", "~4,000 qubits", "~100,000 qubits"],
+                    correct: 2,
+                    explanation: "Factoring a 2048-bit number requires approximately 4,000-5,000 qubits plus additional qubits for error correction, which is beyond current quantum computer capabilities."
+                },
+                {
+                    id: 10,
+                    question: "What year was Shor's algorithm discovered?",
+                    options: ["1984", "1994", "2004", "2014"],
+                    correct: 1,
+                    explanation: "Peter Shor discovered his factoring algorithm in 1994, revolutionizing the field of quantum computing and cryptography."
+                }
+            ]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            new Quiz(shorQuiz, 'quizContainer');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,3485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="welcome.css">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+
+
+  <link rel="stylesheet" href="global-ui.css">
+  <link rel="stylesheet" href="landing.css">
+
+
+  <meta charset="UTF-8">
+  <title>THE qT – The Quantum Technology | Premium Quantum Learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- MathJax for LaTeX rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Arial, sans-serif
+    }
+
+    html {
+      overflow-x: hidden
+    }
+
+    body {
+      background: #f6f8fb;
+      color: #1f2d3d;
+      overflow-x: hidden;
+      width: 100%
+    }
+
+    header {
+      height: 72px;
+      background: white;
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .08)
+    }
+
+    .logo {
+      display: flex;
+      align-items: center
+    }
+
+    .logo img {
+      width: 80px;
+      margin-right: 10px
+    }
+
+    .logo span {
+      font-weight: 700;
+      color: #003366
+    }
+
+    .title {
+      flex: 1;
+      text-align: center
+    }
+
+    .title h1 {
+      font-size: 22px;
+      color: #003366
+    }
+
+    .title p {
+      font-size: 13px;
+      color: #0057b8
+    }
+
+    nav a {
+      margin-left: 16px;
+      text-decoration: none;
+      color: #003366;
+      font-weight: 500
+    }
+
+    .app {
+      display: flex;
+      height: calc(100vh - 72px)
+    }
+
+    .sidebar {
+      width: 300px;
+      background: white;
+      padding: 20px;
+      box-shadow: none;
+      /* ✅ remove extra strip */
+      border-right: 1px solid #e6eaf0;
+      /* ✅ add here */
+    }
+
+    .step {
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: .25s
+    }
+
+    .step:hover {
+      background: #eef3f9
+    }
+
+    .step.active {
+      background: #0057b8;
+      color: white
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px 30px 40px 30px;
+      margin-left: 0;
+
+      height: 100%;
+      overflow-y: auto;
+      /* ✅ middle scroll */
+      overflow-x: hidden;
+    }
+
+
+    .section {
+      display: none
+    }
+
+    .section.active {
+      display: block;
+      animation: fade .4s
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(15px)
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .lesson {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+      margin-bottom: 14px
+    }
+
+    .lesson-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #eef3f9;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #003366;
+      transition: .25s
+    }
+
+    .lesson-link:hover {
+      background: #dde8f6;
+      transform: translateX(4px)
+    }
+
+    /* ===== QUANTUM GATES STYLES ===== */
+    .gates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .gate-card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+    }
+
+    .gate-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 87, 184, 0.15);
+    }
+
+    .gate-header {
+      background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .gate-header h4 {
+      font-size: 18px;
+      color: #003366;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .gate-symbol {
+      background: #003366;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      font-family: monospace;
+    }
+
+    .gate-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .gate-badge.beginner {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .gate-badge.intermediate {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .gate-badge.advanced {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .gate-badge.essential {
+      background: #cfe2ff;
+      color: #084298;
+    }
+
+    .gate-body {
+      padding: 20px;
+    }
+
+    .gate-body p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .gate-expand-btn {
+      width: 100%;
+      padding: 10px;
+      background: #0057b8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .gate-expand-btn:hover {
+      background: #003d85;
+    }
+
+    .gate-details {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 2px solid #eef3f9;
+    }
+
+    .gate-tip {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #92400e;
+    }
+
+    .gate-matrix {
+      background: #f7fafc;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .gate-matrix strong {
+      color: #003366;
+      font-size: 14px;
+    }
+
+    .gate-uses {
+      background: #f0f9ff;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #0c4a6e;
+    }
+
+    .gate-uses strong {
+      color: #003366;
+    }
+
+    .gate-code {
+      background: #1e293b;
+      color: #10b981;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .gate-filter-btn {
+      padding: 10px 18px;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #555;
+    }
+
+    .gate-filter-btn:hover {
+      border-color: #0057b8;
+      color: #0057b8;
+    }
+
+    .gate-filter-btn.active {
+      background: #0057b8 !important;
+      color: white !important;
+      border-color: #0057b8;
+    }
+
+    footer {
+      background: #eef3f7;
+      padding: 16px;
+      text-align: center;
+      font-size: 14px
+    }
+
+    .fullscreen-btn {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: .25s;
+      background: #0057b8;
+      color: white;
+      border: none;
+    }
+
+    .fullscreen-btn:hover {
+      background: #004499;
+    }
+
+    .fullscreen-container {
+      margin-top: 20px;
+    }
+
+    #quantum3d {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .welcome-section {
+      background: #F7F7F7;
+    }
+
+    .welcome-container {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ========== PHYSICS HERO SECTION ========== */
+    .physics-hero-section {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      background: white;
+      padding: 40px;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+      margin-bottom: 24px;
+      min-height: 300px;
+    }
+
+    .physics-hero-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .physics-hero-left h2 {
+      font-size: 42px;
+      font-weight: 700;
+      color: #003366;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .physics-highlight {
+      color: #7c3aed;
+    }
+
+    .physics-hero-left p {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .physics-explore-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #0057b8 0%, #0047a0 100%);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      max-width: 320px;
+    }
+
+    .physics-explore-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .15);
+    }
+
+    .physics-hero-right {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      background: linear-gradient(135deg, rgba(0, 87, 184, 0.05) 0%, rgba(0, 212, 170, 0.05) 100%);
+      border-radius: 10px;
+    }
+
+    #physics-visualization {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      left: 0;
+    }
+
+    #physics-visualization canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* ========== PHYSICS JNTU SECTION ========== */
+    .physics-jntu-animation-wrapper {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+      margin-top: 24px;
+    }
+
+    .physics-jntu-section {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .physics-jntu-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 32px;
+      background: linear-gradient(135deg, rgba(0, 87, 184, 0.08) 0%, rgba(0, 212, 170, 0.08) 100%);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .physics-jntu-link:hover {
+      background: linear-gradient(135deg, rgba(0, 87, 184, 0.15) 0%, rgba(0, 212, 170, 0.15) 100%);
+      border-color: #0057b8;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .1);
+    }
+
+    .physics-jntu-logo {
+      width: 50px;
+      height: auto;
+    }
+
+    .physics-jntu-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: #003366;
+    }
+
+    /* ========== QUANTUM ANIMATION STRIP ========== */
+    .quantum-animation-strip {
+      flex: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+      background: linear-gradient(135deg, #0a1428 0%, #1a2f4a 50%, #0d3b66 100%);
+      animation: fadeInUp 0.8s ease-out;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .strip-animation {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Quantum Core */
+    .quantum-core {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, #00d4ff 0%, #0099cc 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.8),
+        0 0 40px rgba(0, 212, 255, 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.5);
+      animation: pulse-core 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-core {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.8),
+          0 0 40px rgba(0, 212, 255, 0.4),
+          inset 0 0 10px rgba(255, 255, 255, 0.5);
+      }
+
+      50% {
+        box-shadow: 0 0 30px rgba(0, 212, 255, 1),
+          0 0 60px rgba(0, 212, 255, 0.6),
+          inset 0 0 15px rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    /* Quantum Glow */
+    .quantum-glow {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: glow-expand 2.5s ease-in-out infinite;
+    }
+
+    @keyframes glow-expand {
+      0% {
+        width: 40px;
+        height: 40px;
+        opacity: 0.5;
+      }
+
+      50% {
+        width: 80px;
+        height: 80px;
+        opacity: 0.2;
+      }
+
+      100% {
+        width: 40px;
+        height: 40px;
+        opacity: 0.5;
+      }
+    }
+
+    /* Quantum Orbit */
+    .quantum-orbit {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 50%;
+      animation: rotate 8s linear infinite;
+    }
+
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Quantum Particles */
+    .quantum-particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+    }
+
+    .particle-1 {
+      background: #00d4ff;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: orbit-particle1 4s linear infinite;
+    }
+
+    .particle-2 {
+      background: #ff006e;
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%);
+      animation: orbit-particle2 4s linear infinite;
+    }
+
+    .particle-3 {
+      background: #9d4edd;
+      bottom: 0;
+      right: 50%;
+      transform: translateX(50%);
+      animation: orbit-particle3 4s linear infinite;
+    }
+
+    @keyframes orbit-particle1 {
+      0% {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      33% {
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
+      }
+
+      66% {
+        bottom: 0;
+        right: 50%;
+        transform: translateX(50%);
+      }
+
+      100% {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes orbit-particle2 {
+      0% {
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
+      }
+
+      33% {
+        bottom: 0;
+        right: 50%;
+        transform: translateX(50%);
+      }
+
+      66% {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      100% {
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
+      }
+    }
+
+    @keyframes orbit-particle3 {
+      0% {
+        bottom: 0;
+        right: 50%;
+        transform: translateX(50%);
+      }
+
+      33% {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      66% {
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
+      }
+
+      100% {
+        bottom: 0;
+        right: 50%;
+        transform: translateX(50%);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .physics-jntu-animation-wrapper {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .physics-jntu-section {
+        justify-content: center;
+      }
+
+      .quantum-animation-strip {
+        min-height: 180px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .physics-jntu-animation-wrapper {
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .physics-jntu-link {
+        padding: 16px 24px;
+      }
+
+      .physics-jntu-logo {
+        width: 40px;
+      }
+
+      .physics-jntu-text {
+        font-size: 14px;
+      }
+
+      .quantum-animation-strip {
+        min-height: 150px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .physics-jntu-animation-wrapper {
+        flex-direction: column;
+      }
+
+      .physics-jntu-link {
+        padding: 14px 20px;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .physics-jntu-logo {
+        width: 35px;
+      }
+
+      .physics-jntu-text {
+        font-size: 13px;
+      }
+
+      .quantum-animation-strip {
+        min-height: 140px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .physics-hero-section {
+        flex-direction: column;
+        padding: 30px 20px;
+        gap: 24px;
+        min-height: auto;
+      }
+
+      .physics-hero-left h2 {
+        font-size: 32px;
+      }
+
+      .physics-hero-left p {
+        font-size: 14px;
+      }
+
+      .physics-hero-right {
+        min-height: 250px;
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .hero-title {
+      animation: slideInLeft 1s ease-out;
+    }
+
+    .hero-text {
+      animation: slideInLeft 1s ease-out 0.5s both;
+    }
+
+    #quantum3d {
+      animation: slideInLeft 1s ease-out 1s both;
+    }
+
+    /* ================= VIDEO SECTION ================= */
+    .video-section {
+      margin-top: 60px;
+      padding: 50px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #f0f4ff, #e0ecff);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+
+      /* Scroll animation */
+      opacity: 0;
+      transform: translateY(80px);
+      transition: all 0.9s ease;
+    }
+
+    .video-section.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .video-heading {
+      font-size: 28px;
+      color: #003366;
+      margin-bottom: 30px;
+    }
+
+    .video-container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .video-container video {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    /* ================= KET / BRA SYMBOLS ================= */
+    .quantum-symbols {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .quantum-symbol {
+      position: absolute;
+      font-size: 20px;
+      color: rgba(0, 87, 184, 0.35);
+      animation: floatKet 10s linear infinite;
+    }
+
+    /* Random placements */
+    .quantum-symbol:nth-child(1) {
+      top: 15%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .quantum-symbol:nth-child(2) {
+      top: 30%;
+      left: 80%;
+      animation-delay: 2s;
+    }
+
+    .quantum-symbol:nth-child(3) {
+      top: 55%;
+      left: 25%;
+      animation-delay: 4s;
+    }
+
+    .quantum-symbol:nth-child(4) {
+      top: 70%;
+      left: 70%;
+      animation-delay: 6s;
+    }
+
+    .quantum-symbol:nth-child(5) {
+      top: 10%;
+      left: 50%;
+      animation-delay: 1s;
+    }
+
+    .quantum-symbol:nth-child(6) {
+      top: 45%;
+      left: 90%;
+      animation-delay: 3s;
+    }
+
+    .quantum-symbol:nth-child(7) {
+      top: 85%;
+      left: 35%;
+      animation-delay: 5s;
+    }
+
+    .quantum-symbol:nth-child(8) {
+      top: 60%;
+      left: 5%;
+      animation-delay: 7s;
+    }
+
+    @keyframes floatKet {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.2;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translateY(-40px) rotate(10deg);
+        opacity: 0.2;
+      }
+    }
+
+    /* ===== Push video to bottom of welcome page ===== */
+    .welcome-scroll-space {
+      height: 90vh;
+      /* adjust if you want more/less scroll */
+    }
+
+    /* Video animation */
+    .video-section {
+      opacity: 0;
+      transform: translateY(80px);
+      transition: all 0.8s ease;
+    }
+
+    .video-section.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== FORCE SCROLL SPACE FOR WELCOME PAGE ===== */
+    #welcome {
+      min-height: 180vh;
+    }
+
+    .sound-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.45);
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+      border-radius: 16px;
+      cursor: pointer;
+      z-index: 5;
+      transition: opacity 0.4s ease;
+    }
+
+    .sound-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ===== QT LEARNING PLATFORM BOX ===== */
+    .qT-learning-box {
+      margin-top: 60px;
+      padding: 40px;
+      background: linear-gradient(135deg, rgba(0, 87, 184, 0.08) 0%, rgba(0, 212, 170, 0.08) 100%);
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid rgba(0, 87, 184, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 87, 184, 0.1);
+      transition: all 0.4s ease;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .qT-learning-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 87, 184, 0.15);
+    }
+
+    .qT-learning-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0057b8;
+      margin: 0 0 16px 0;
+    }
+
+    .qT-learning-description {
+      font-size: 16px;
+      color: #334155;
+      line-height: 1.6;
+      margin: 0 0 28px 0;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .qT-learning-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #0057b8 0%, #00d4aa 100%);
+      color: white;
+      padding: 16px 40px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 17px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 87, 184, 0.3);
+    }
+
+    .qT-learning-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(0, 87, 184, 0.4);
+    }
+
+
+    /* ===== LANDING PAGE DONATION SECTION ===== */
+    .landing-donation-section {
+      margin-top: 60px;
+      padding: 50px 40px;
+      background: linear-gradient(135deg, rgba(255, 122, 89, 0.08) 0%, rgba(255, 59, 138, 0.08) 100%);
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 122, 89, 0.15);
+      box-shadow: 0 10px 30px rgba(255, 122, 89, 0.1);
+      transition: all 0.4s ease;
+    }
+
+    .landing-donation-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255, 122, 89, 0.15);
+    }
+
+    .donation-section-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #ff3b8a;
+      margin: 0 0 16px 0;
+    }
+
+    .donation-section-desc {
+      font-size: 17px;
+      color: #334155;
+      line-height: 1.7;
+      margin: 0 0 32px 0;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .donation-cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff7a59 0%, #ff3b8a 100%);
+      color: white;
+      padding: 18px 48px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(255, 59, 138, 0.3);
+    }
+
+    .donation-cta-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 59, 138, 0.4);
+    }
+
+    /* ========== DONATIONS STYLES ========== */
+    .donation-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 20px
+    }
+
+    .donation-card {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 8px 20px rgba(12, 20, 40, .06);
+      transition: transform .35s, box-shadow .35s;
+      overflow: hidden
+    }
+
+    .donation-card:hover {
+      transform: translateY(-10px) rotate(-0.3deg);
+      box-shadow: 0 22px 40px rgba(12, 20, 40, .12)
+    }
+
+    .donation-media img {
+      width: 96px;
+      height: 96px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: transparent
+    }
+
+    .donation-body h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #003366
+    }
+
+    .donation-body .muted {
+      color: #667085;
+      font-size: 14px;
+      margin-top: 6px
+    }
+
+    .donation-body blockquote {
+      margin: 10px 0;
+      color: #334155;
+      font-style: italic;
+      font-size: 13px
+    }
+
+    .donate-btn {
+      margin-top: 8px;
+      display: inline-block;
+      padding: 8px 14px;
+      background: linear-gradient(90deg, #ff7a59, #ff3b8a);
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s
+    }
+
+    .donation-card:hover .donate-btn {
+      transform: scale(1.06);
+      box-shadow: 0 8px 22px rgba(255, 59, 138, 0.18)
+    }
+
+    @media (max-width:900px) {
+      .donation-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* ADMIN SIDE BUTTON */
+    .donation-admin-btn {
+      position: fixed;
+      right: 25px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #0052cc 0%, #003d99 100%);
+      color: white;
+      font-weight: 700;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      z-index: 5000;
+      box-shadow: 0 16px 40px rgba(0, 52, 204, 0.3);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+
+    .donation-admin-btn:hover {
+      transform: translateY(-50%) scale(1.1) rotate(2deg);
+      box-shadow: 0 20px 50px rgba(0, 52, 204, 0.4);
+      background: linear-gradient(135deg, #003d99 0%, #001a4d 100%)
+    }
+
+    .donation-admin-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ========== ADMIN MODAL STYLES ========== */
+    .admin-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    .admin-modal.hidden {
+      display: none;
+    }
+
+    .admin-modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      max-width: 900px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-close:hover {
+      color: #333;
+
+      #donationList table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      #donationList th,
+      #donationList td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+
+      #donationList th {
+        background: #0057b8;
+        color: white;
+        font-weight: 600;
+      }
+
+      #donationList tr:hover {
+        background: #f5f5f5;
+      }
+  </style>
+
+  <style>
+    .qt-global-footer {
+      background: rgba(2,2,5,0.95);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 22px 40px;
+      text-align: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .qt-global-footer p {
+      font-size: 0.8rem;
+      color: #475569;
+      line-height: 1.8;
+      margin: 0;
+    }
+    .qt-global-footer .ft-brand  { color: #38bdf8; font-weight: 700; }
+    .qt-global-footer .ft-sep    { color: #334155; margin: 0 6px; }
+    .qt-global-footer .ft-ref    { color: #64748b; }
+  </style>
+</head>
+
+<body>
+
+  <!-- LANDING OVERLAY -->
+  <!-- LANDING OVERLAY -->
+  <div id="landing-overlay">
+    <div id="landing-canvas-container"></div>
+
+    <!-- LANDING NAV -->
+    <nav class="landing-nav">
+      <div class="landing-nav-logo">JNTUACEA</div>
+      <div class="landing-nav-links">
+        <a href="#hero">Home</a>
+        <a href="about.html">About</a>
+        <a href="team.html">Team</a>
+        <a href="qt-learning-platform.html">Courses</a>
+        <a href="about.html#donate" class="donations-nav-link">Donations</a>
+      </div>
+    </nav>
+
+    <!-- Theme Switcher Controls -->
+    <div class="theme-controls">
+      <button class="theme-arrow left-arrow" onclick="changeTheme(-1)">&#10094;</button>
+      <div class="theme-name-display" id="themeNameDisplay">Default Void</div>
+      <button class="theme-arrow right-arrow" onclick="changeTheme(1)">&#10095;</button>
+    </div>
+
+    <div class="landing-container">
+      <div class="landing-hero">
+        <div class="landing-split-left">
+          <div class="landing-text-box">
+            <div class="landing-college">
+              <span class="college-name">JNTUACEA</span>
+              <span class="dept-name">Department of ECE</span>
+            </div>
+
+            <p class="landing-presenting">Presenting</p>
+            <h1 class="landing-title">
+              The <br>
+              <span class="qt-highlight">Quantum Technology</span> <br>
+              (qT)
+            </h1>
+          </div>
+        </div>
+
+        <!-- Right Side: Visuals Area -->
+        <div class="landing-split-right">
+          <!-- Quantum Computer (Canvas) & Character will be positioned here/relative to this -->
+        </div>
+
+        <div id="quantum-gun-container" class="hidden">
+          <!-- 3D Canvas will be injected here -->
+          <div id="gun-hud-canvas"></div>
+          <div class="gun-muzzle-flash"></div>
+        </div>
+        <div id="quantum-projectiles-container"></div>
+
+        <!-- Free Fire 3D Character (Hidden by default) -->
+        <div class="freefire-char-container">
+          <canvas id="freefire-char-canvas"></canvas>
+        </div>
+        <div class="arrow-down"></div>
+      </div>
+    </div>
+
+    <!-- Why Quantum? Video Section (After Scroll) -->
+    <div class="landing-section-wrapper video-scroll-section" id="why-quantum-section">
+      <h2 class="landing-section-title">Why Quantum?</h2>
+      <div class="landing-video-container glow-effect">
+        <video id="landingVideo" controls loop playsinline>
+          <source src="videoplayback.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+    <!-- qT Learning Platform Box -->
+    <div class="qT-learning-box">
+      <h3 class="qT-learning-title">Explore More with qT Learning Platform</h3>
+      <p class="qT-learning-description">
+        Access comprehensive quantum technology courses, interactive simulations, and expert-led tutorials on our
+        dedicated learning platform.
+      </p>
+      <button class="qT-learning-btn" onclick="window.open('qt-learning-platform.html', '_blank')">
+        Click for qT Learning Platform →
+      </button>
+    </div>
+
+
+
+    <!-- DONATIONS SECTION - Moved to about.html -->
+
+
+    <!-- CREDITS FOOTER -->
+    <div class="landing-footer">
+      <div class="credits">Created by <span class="credits-highlight">VS Keerthan</span> & Team</div>
+      <div class="social-links">
+        <a href="#" class="social-link"><span>📧 Email</span></a>
+        <a href="#" class="social-link"><span>🔗 LinkedIn</span></a>
+        <a href="#" class="social-link"><span>🐙 GitHub</span></a>
+      </div>
+      <p class="copyright">© 2024 JNTUACEA Department of ECE. All Rights Reserved.</p>
+    </div>
+
+  </div>
+  </div>
+  <!-- END LANDING OVERLAY -->
+  <!-- END LANDING OVERLAY -->
+
+
+  <header>
+    <div class="logo">
+      <a href="https://www.jntuacea.ac.in/" target="_blank"
+        style="display:flex;align-items:center;text-decoration:none;color:inherit;">
+        <img src="jntu_logo.png">
+        <span>JNTUACEA</span>
+      </a>
+    </div>
+    <div class="title">
+      <h1>THE qT – The Quantum Technology</h1>
+      <p>Department of Electronics & Communication Engineering | JNTUACEA</p>
+    </div>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="#">Instructors</a>
+      <a href="#">Team</a>
+      <a href="#">News</a>
+    </nav>
+  </header>
+
+  <div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar">
+      <div class="step active" onclick="openSec('welcome',this)">Welcome</div>
+      <div class="step" onclick="openSec('physics',this)">Physics Foundations</div>
+      <div class="step" onclick="openSec('qubits',this)">Qubits & Math</div>
+      <div class="step" onclick="openSec('basics',this)">Quantum Basics</div>
+      <div class="step" onclick="openSec('gates',this)">Quantum Gates</div>
+      <div class="step" onclick="openSec('algorithms',this)">Algorithms</div>
+      <div class="step" onclick="openSec('crypto',this)">Quantum Cryptography</div>
+      <div class="step" onclick="openSec('advanced',this)">Advanced</div>
+      <div class="fullscreen-container">
+        <button class="fullscreen-btn" onclick="toggleFullscreen()"
+          style="display: flex; align-items: center; gap: 6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+          </svg>
+          Full Screen
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= CONTENT ================= -->
+    <div class="content">
+
+      <!-- WELCOME -->
+      <!-- ================= WELCOME SECTION ================= -->
+      <!-- ================= WELCOME SECTION ================= -->
+      <!-- ================= WELCOME SECTION ================= -->
+      <div class="section welcome-section" id="welcome">
+
+        <!-- TOP CONTENT -->
+        <div class="welcome-container">
+
+          <div class="welcome-left">
+            <h1 class="hero-title">
+              Welcome to the <br>
+              <span class="highlight">Quantum World</span>
+            </h1>
+
+            <p class="hero-text">
+              Visualize how quantum computers work —
+              qubits flowing, evolving, and interacting beyond classical limits.
+            </p>
+          </div>
+
+          <div class="welcome-right">
+            <img id="quantum3d" src="quantum-computer-3d.png" alt="3D Quantum Computer">
+          </div>
+
+        </div>
+
+        <!-- SCROLL GAP -->
+        <div class="welcome-scroll-space"></div>
+
+        <!-- VIDEO SECTION -->
+        <div class="video-section" id="quantum-video-section">
+
+          <h2 class="video-heading">
+            About Quantum Technology – Michio Kaku
+          </h2>
+
+          <div class="video-container">
+
+            <video id="quantumVideo" muted playsinline>
+              <source src="videoplayback.mp4" type="video/mp4">
+            </video>
+
+            <!-- Sound overlay -->
+            <div class="sound-overlay" id="soundOverlay">
+              🔊 Tap to enable sound
+            </div>
+
+          </div>
+
+
+          <!-- Ket / Bra Symbols -->
+          <div class="quantum-symbols">
+            <span class="quantum-symbol">⟨ψ|</span>
+            <span class="quantum-symbol">|ψ⟩</span>
+            <span class="quantum-symbol">⟨ψ|</span>
+            <span class="quantum-symbol">|ψ⟩</span>
+          </div>
+
+        </div>
+
+        <!-- qT Learning Platform Box -->
+        <div class="qT-learning-box">
+          <h3 class="qT-learning-title">Explore More with qT Learning Platform</h3>
+          <p class="qT-learning-description">
+            Access comprehensive quantum technology courses, interactive simulations, and expert-led tutorials on our
+            dedicated learning platform.
+          </p>
+          <button class="qT-learning-btn" onclick="window.location.href='#'">
+            Click for qT Learning Platform →
+          </button>
+        </div>
+
+      </div>
+      <!-- ✅ CLOSE WELCOME SECTION -->
+
+      <!-- PHYSICS FOUNDATIONS -->
+      <div class="section" id="physics">
+        <div class="physics-hero-section">
+          <div class="physics-hero-left">
+            <h2>Physics <br><span class="physics-highlight">Foundations</span></h2>
+            <p>Master the fundamental principles of quantum mechanics that power next-generation quantum technologies
+            </p>
+            <button class="physics-explore-btn" onclick="window.location.href='physics/physics-foundations.html'">
+              <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </svg>
+                Explore Foundations →
+              </span>
+            </button>
+          </div>
+          <div class="physics-hero-right">
+            <div id="physics-visualization"></div>
+          </div>
+        </div>
+
+        <!-- JNTU Logo Section with Quantum Animation Strip -->
+        <div class="physics-jntu-animation-wrapper">
+          <div class="physics-jntu-section">
+            <a href="https://www.jntuacea.ac.in/" target="_blank" class="physics-jntu-link">
+              <img src="jntu_logo.png" alt="JNTU Logo" class="physics-jntu-logo">
+              <span class="physics-jntu-text">JNTU Anantapur</span>
+            </a>
+          </div>
+
+          <!-- Quantum Animation Strip on the Right -->
+          <div class="quantum-animation-strip">
+            <div class="strip-animation">
+              <div class="quantum-orbit">
+                <div class="quantum-particle particle-1"></div>
+                <div class="quantum-particle particle-2"></div>
+                <div class="quantum-particle particle-3"></div>
+              </div>
+              <div class="quantum-core"></div>
+              <div class="quantum-glow"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUBITS & MATH -->
+      <div class="section" id="qubits">
+        <h2>Qubits & Mathematics</h2>
+
+        <div class="lesson">
+          <h3>The Variational Method</h3>
+          <p>
+            Variational techniques connect quantum mechanics,
+            optimization, and near-term quantum computing.
+          </p>
+
+          <a href="variational.html" class="lesson-link">
+            Open Variational Simulator →
+          </a>
+        </div>
+      </div>
+
+      <!-- QUANTUM BASICS -->
+      <div class="section" id="basics">
+        <h2>Quantum Basics</h2>
+
+        <!-- 1. Superposition -->
+        <div class="lesson">
+          <h3>Superposition</h3>
+          <p>
+            Learn how a qubit can exist in multiple states at the same time.
+          </p>
+          <a href="superposition.html" class="lesson-link">
+            Open Superposition Module →
+          </a>
+        </div>
+
+        <!-- 2. Measurement & Collapse -->
+        <div class="lesson">
+          <h3>Measurement Collapse</h3>
+          <p>
+            Understand how a quantum state collapses into a classical result
+            when measured.
+          </p>
+          <a href="measurement.html" class="lesson-link">
+            Open Measurement Module →
+          </a>
+        </div>
+
+
+        <!-- 3. Probability & Shots -->
+        <div class="lesson">
+          <h3>Probability & Shots</h3>
+          <p>
+            Learn why quantum results make sense only after many measurements.
+          </p>
+          <a href="probability.html" class="lesson-link">Open Probability & Shots →</a>
+
+
+        </div>
+
+        <!-- Bloch Sphere Representation -->
+        <div class="lesson">
+          <h3>Bloch Sphere Representation</h3>
+          <p>
+            Visualize a single qubit as a vector on a 3D sphere and understand
+            how gates, noise, and measurement affect quantum states.
+          </p>
+
+          <a href="bloch3d.html" class="lesson-link">
+            Open 3D Bloch Sphere Simulator →
+          </a>
+        </div>
+
+
+        <!-- 5. Qubit vs Classical Bit -->
+        <div class="lesson">
+          <h3>Qubit vs Classical Bit</h3>
+          <p>
+            Compare how quantum information differs from classical information.
+          </p>
+          <a href="classical-vs-quantum.html" class="lesson-link">
+            Open Comparison Module →
+          </a>
+        </div>
+
+        <!-- 6. Phase (Visual Understanding) -->
+        <div class="lesson">
+          <h3>Quantum Phase</h3>
+          <p>
+            Understand quantum phase, Bloch sphere rotation, Hamiltonians,
+            and Quantum Phase Estimation.
+          </p>
+
+          <a href="quantum-phase.html" class="lesson-link">
+            Open Quantum Phase Module →
+          </a>
+        </div>
+
+
+        <!-- 7. Single-Qubit Gates -->
+        <div class="lesson">
+          <h3>Single-Qubit Gates</h3>
+          <p>
+            Understand quantum gates as rotations on the Bloch sphere. Advanced interactive simulator with real-time
+            visualization.
+          </p>
+          <a href="single-qubit-gates/gates_advanced.html" class="lesson-link">
+            <span style="display: inline-flex; align-items: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                <path d="M12 15l-3-3a22 22 0 0 1 2-12 13.6 13.6 0 0 1 3.79 3.79A12.63 12.63 0 0 1 15 12z" />
+              </svg>
+              The Gate Composer →
+            </span>
+          </a>
+
+
+
+        </div>
+
+        <!-- 8. Noise & Reality -->
+        <!-- Noise & Imperfections -->
+        <div class="lesson">
+          <h3>Noise & Imperfections</h3>
+          <p>
+            Learn why quantum computers are noisy, how errors occur,
+            and what scientists do to reduce them.
+          </p>
+
+          <a href="noise-imperfections/noise.html" class="lesson-link">
+            Open Noise & Imperfections Module →
+          </a>
+        </div>
+
+
+        <!-- GATES -->
+        <div class="section" id="gates">
+          <h2 style="margin-bottom: 40px; display: flex; align-items: center; gap: 12px;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2" />
+            </svg>
+            Quantum Gates Library
+          </h2>
+
+          <!-- Search and Filter Section -->
+          <div
+            style="background: white; padding: 24px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 32px;">
+            <input type="text" id="gatesSearchInput" placeholder="Search for gates... (e.g., Hadamard, CNOT, Pauli)"
+              style="width: 100%; padding: 14px 20px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; outline: none; transition: border-color 0.3s;"
+              onkeyup="searchGates(this.value)">
+
+            <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
+              <button class="gate-filter-btn active" data-category="all" onclick="filterGates('all', this)">All
+                Gates</button>
+              <button class="gate-filter-btn" data-category="basic" onclick="filterGates('basic', this)">Basic
+                Gates</button>
+              <button class="gate-filter-btn" data-category="phase" onclick="filterGates('phase', this)">Phase
+                Gates</button>
+              <button class="gate-filter-btn" data-category="rotation" onclick="filterGates('rotation', this)">Rotation
+                Gates</button>
+              <button class="gate-filter-btn" data-category="multi"
+                onclick="filterGates('multi', this)">Multi-Qubit</button>
+              <button class="gate-filter-btn" data-category="advanced"
+                onclick="filterGates('advanced', this)">Advanced</button>
+            </div>
+          </div>
+
+          <!-- Basic Gates -->
+          <div class="gates-category" data-category="basic">
+            <h3
+              style="font-size: 26px; color: #003366; margin-bottom: 24px; border-left: 4px solid #0057b8; padding-left: 16px;">
+              Basic Single-Qubit Gates</h3>
+
+            <div class="gates-grid">
+              <!-- Hadamard Gate -->
+              <div class="gate-card" data-search="hadamard h superposition essential">
+                <div class="gate-header">
+                  <h4>Hadamard Gate <span class="gate-badge essential">ESSENTIAL</span></h4>
+                  <div class="gate-symbol">H</div>
+                </div>
+                <div class="gate-body">
+                  <p>The Hadamard gate creates superposition. It's one of the most important gates in quantum computing,
+                    transforming definite states into equal superpositions.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> This is THE gate for superposition! Apply it
+                      to |0⟩ and you get (|0⟩ + |1⟩)/√2 - the qubit is now in BOTH states at once!</div>
+                    <div class="gate-matrix">
+                      <strong>Matrix:</strong><br>
+                      <pre style="font-family: monospace; font-size: 13px; line-height: 1.6;">     1   ┌       ┐
+─────  │  1  1 │
+  √2   │  1 -1 │
+       └       ┘</pre>
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Creating superposition states<br>
+                      • Quantum Fourier Transform<br>
+                      • Beginning of most quantum algorithms
+                    </div>
+                    <div class="gate-code">QASM: h q[0];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pauli-X Gate -->
+              <div class="gate-card" data-search="pauli x not flip beginner">
+                <div class="gate-header">
+                  <h4>Pauli-X (NOT) <span class="gate-badge beginner">BEGINNER</span></h4>
+                  <div class="gate-symbol">X</div>
+                </div>
+                <div class="gate-body">
+                  <p>The quantum NOT gate flips |0⟩ to |1⟩ and vice versa. It's the quantum equivalent of the classical
+                    NOT gate.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> Just like flipping a coin from heads to
+                      tails! If you have |0⟩, it becomes |1⟩, and if you have |1⟩, it becomes |0⟩.</div>
+                    <div class="gate-matrix">
+                      <strong>Matrix:</strong><br>
+                      <pre style="font-family: monospace; font-size: 13px; line-height: 1.6;">┌     ┐
+│ 0 1 │
+│ 1 0 │
+└     ┘</pre>
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Bit flipping operations<br>
+                      • Quantum arithmetic circuits<br>
+                      • Error correction algorithms
+                    </div>
+                    <div class="gate-code">QASM: x q[0];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pauli-Y Gate -->
+              <div class="gate-card" data-search="pauli y intermediate">
+                <div class="gate-header">
+                  <h4>Pauli-Y Gate <span class="gate-badge intermediate">INTERMEDIATE</span></h4>
+                  <div class="gate-symbol">Y</div>
+                </div>
+                <div class="gate-body">
+                  <p>The Y gate flips the qubit and adds a phase factor. It's like combining X and Z gates with an extra
+                    imaginary component.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> This gate rotates the qubit around the
+                      Y-axis on the Bloch sphere. It's more complex than X or Z because it involves imaginary numbers.
+                    </div>
+                    <div class="gate-matrix">
+                      <strong>Matrix:</strong><br>
+                      <pre style="font-family: monospace; font-size: 13px; line-height: 1.6;">┌      ┐
+│ 0 -i │
+│ i  0 │
+└      ┘</pre>
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Y-axis rotation operations<br>
+                      • Quantum algorithm implementations<br>
+                      • Creating specific superpositions
+                    </div>
+                    <div class="gate-code">QASM: y q[0];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pauli-Z Gate -->
+              <div class="gate-card" data-search="pauli z phase beginner">
+                <div class="gate-header">
+                  <h4>Pauli-Z Gate <span class="gate-badge beginner">BEGINNER</span></h4>
+                  <div class="gate-symbol">Z</div>
+                </div>
+                <div class="gate-body">
+                  <p>The Z gate leaves |0⟩ unchanged but flips the sign of |1⟩. It creates a phase flip without changing
+                    probabilities.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> The Z gate is sneaky! It doesn't change
+                      whether you have 0 or 1, but it flips the "phase" of |1⟩. This matters in superposition!</div>
+                    <div class="gate-matrix">
+                      <strong>Matrix:</strong><br>
+                      <pre style="font-family: monospace; font-size: 13px; line-height: 1.6;">┌      ┐
+│ 1  0 │
+│ 0 -1 │
+└      ┘</pre>
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Phase flip operations<br>
+                      • Grover's search algorithm<br>
+                      • Oracle implementations
+                    </div>
+                    <div class="gate-code">QASM: z q[0];</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase Gates -->
+          <div class="gates-category" data-category="phase" style="margin-top: 48px;">
+            <h3
+              style="font-size: 26px; color: #003366; margin-bottom: 24px; border-left: 4px solid #0057b8; padding-left: 16px;">
+              Phase Gates</h3>
+
+            <div class="gates-grid">
+              <!-- S Gate -->
+              <div class="gate-card" data-search="s phase 90 intermediate">
+                <div class="gate-header">
+                  <h4>S Gate (Phase-90) <span class="gate-badge intermediate">INTERMEDIATE</span></h4>
+                  <div class="gate-symbol">S</div>
+                </div>
+                <div class="gate-body">
+                  <p>The S gate is a 90° rotation around the Z-axis. It applies a phase of i to the |1⟩ state.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> S = P(π/2). Apply it twice and you get the Z
+                      gate!</div>
+                    <div class="gate-matrix">
+                      <strong>Matrix:</strong><br>
+                      <pre style="font-family: monospace; font-size: 13px; line-height: 1.6;">┌     ┐
+│ 1 0 │
+│ 0 i │
+└     ┘</pre>
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Building complex gates<br>
+                      • Phase corrections<br>
+                      • Quantum error correction
+                    </div>
+                    <div class="gate-code">QASM: s q[0];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- T Gate -->
+              <div class="gate-card" data-search="t pi8 phase intermediate">
+                <div class="gate-header">
+                  <h4>T Gate (π/8) <span class="gate-badge intermediate">INTERMEDIATE</span></h4>
+                  <div class="gate-symbol">T</div>
+                </div>
+                <div class="gate-body">
+                  <p>The T gate is a 45° rotation around the Z-axis. It's crucial for universal quantum computing when
+                    combined with Hadamard and CNOT.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> T = P(π/4). Apply it twice to get the S
+                      gate! It's called the "π/8 gate" because of the phase it adds.</div>
+                    <div class="gate-matrix">
+                      <strong>Matrix:</strong><br>
+                      <pre style="font-family: monospace; font-size: 13px; line-height: 1.6;">┌         ┐
+│ 1    0  │
+│ 0  e^iπ/4│
+└         ┘</pre>
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Universal gate set (H, T, CNOT)<br>
+                      • Fault-tolerant quantum computing<br>
+                      • Precision phase control
+                    </div>
+                    <div class="gate-code">QASM: t q[0];</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-Qubit Gates -->
+          <div class="gates-category" data-category="multi" style="margin-top: 48px;">
+            <h3
+              style="font-size: 26px; color: #003366; margin-bottom: 24px; border-left: 4px solid #0057b8; padding-left: 16px;">
+              Multi-Qubit Gates</h3>
+
+            <div class="gates-grid">
+              <!-- CNOT Gate -->
+              <div class="gate-card" data-search="cnot cx controlled not entanglement essential">
+                <div class="gate-header">
+                  <h4>CNOT Gate (CX) <span class="gate-badge essential">ESSENTIAL</span></h4>
+                  <div class="gate-symbol">CNOT</div>
+                </div>
+                <div class="gate-body">
+                  <p>The Controlled-NOT gate is the fundamental 2-qubit gate. It flips the target qubit if and only if
+                    the control qubit is |1⟩.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> This gate creates ENTANGLEMENT! It's like
+                      saying "if the first qubit is 1, flip the second one." This is how qubits become connected.</div>
+                    <div class="gate-matrix">
+                      <strong>Matrix (4x4):</strong><br>
+                      <pre style="font-family: monospace; font-size: 13px; line-height: 1.6;">┌         ┐
+│ 1 0 0 0 │
+│ 0 1 0 0 │
+│ 0 0 0 1 │
+│ 0 0 1 0 │
+└         ┘</pre>
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Creating entanglement<br>
+                      • Bell state preparation<br>
+                      • Quantum teleportation<br>
+                      • Error correction codes
+                    </div>
+                    <div class="gate-code">QASM: cx q[0], q[1];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SWAP Gate -->
+              <div class="gate-card" data-search="swap exchange intermediate">
+                <div class="gate-header">
+                  <h4>SWAP Gate <span class="gate-badge intermediate">INTERMEDIATE</span></h4>
+                  <div class="gate-symbol">SWAP</div>
+                </div>
+                <div class="gate-body">
+                  <p>The SWAP gate exchanges the states of two qubits. What was in qubit 1 goes to qubit 2, and vice
+                    versa.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> Imagine two boxes: SWAP simply exchanges
+                      their contents. Qubit A becomes B, and B becomes A!</div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Qubit routing in circuits<br>
+                      • Overcoming connectivity constraints<br>
+                      • Data movement in algorithms
+                    </div>
+                    <div class="gate-code">QASM: swap q[0], q[1];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Toffoli Gate -->
+              <div class="gate-card" data-search="toffoli ccx ccnot advanced">
+                <div class="gate-header">
+                  <h4>Toffoli Gate (CCX) <span class="gate-badge advanced">ADVANCED</span></h4>
+                  <div class="gate-symbol">CCX</div>
+                </div>
+                <div class="gate-body">
+                  <p>The Toffoli gate has two control qubits and one target. It flips the target only when BOTH controls
+                    are |1⟩.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> Think of it as a quantum AND gate! The
+                      target flips only if control1 AND control2 are both 1. It's reversible, unlike classical AND.
+                    </div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Quantum arithmetic<br>
+                      • Reversible classical computing<br>
+                      • Grover's algorithm oracles
+                    </div>
+                    <div class="gate-code">QASM: ccx q[0], q[1], q[2];</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rotation Gates -->
+          <div class="gates-category" data-category="rotation" style="margin-top: 48px;">
+            <h3
+              style="font-size: 26px; color: #003366; margin-bottom: 24px; border-left: 4px solid #0057b8; padding-left: 16px;">
+              Rotation Gates</h3>
+
+            <div class="gates-grid">
+              <!-- RX Gate -->
+              <div class="gate-card" data-search="rx rotation x intermediate">
+                <div class="gate-header">
+                  <h4>RX Gate <span class="gate-badge intermediate">INTERMEDIATE</span></h4>
+                  <div class="gate-symbol">RX(θ)</div>
+                </div>
+                <div class="gate-body">
+                  <p>Rotates a qubit around the X-axis of the Bloch sphere by angle θ. Essential for creating arbitrary
+                    single-qubit states.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> Imagine the Bloch sphere as a globe. RX
+                      spins the qubit around the X-axis. The angle θ controls how far you spin.</div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • State preparation<br>
+                      • Variational quantum algorithms<br>
+                      • Quantum machine learning
+                    </div>
+                    <div class="gate-code">QASM: rx(theta) q[0];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RY Gate -->
+              <div class="gate-card" data-search="ry rotation y intermediate">
+                <div class="gate-header">
+                  <h4>RY Gate <span class="gate-badge intermediate">INTERMEDIATE</span></h4>
+                  <div class="gate-symbol">RY(θ)</div>
+                </div>
+                <div class="gate-body">
+                  <p>Rotates a qubit around the Y-axis of the Bloch sphere by angle θ. Commonly used in quantum machine
+                    learning.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> RY is great for smoothly transitioning
+                      between |0⟩ and |1⟩ without adding complex phases like RX does.</div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Quantum neural networks<br>
+                      • Amplitude encoding<br>
+                      • Variational circuits
+                    </div>
+                    <div class="gate-code">QASM: ry(theta) q[0];</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RZ Gate -->
+              <div class="gate-card" data-search="rz rotation z phase intermediate">
+                <div class="gate-header">
+                  <h4>RZ Gate <span class="gate-badge intermediate">INTERMEDIATE</span></h4>
+                  <div class="gate-symbol">RZ(φ)</div>
+                </div>
+                <div class="gate-body">
+                  <p>Rotates a qubit around the Z-axis of the Bloch sphere by angle φ. Creates phase shifts without
+                    changing amplitudes.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> RZ only changes the phase, not the
+                      probabilities. It's like adjusting a clock hand without changing the time zone.</div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Phase encoding<br>
+                      • Quantum phase estimation<br>
+                      • Virtual Z rotations
+                    </div>
+                    <div class="gate-code">QASM: rz(phi) q[0];</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced Gates -->
+          <div class="gates-category" data-category="advanced" style="margin-top: 48px;">
+            <h3
+              style="font-size: 26px; color: #003366; margin-bottom: 24px; border-left: 4px solid #0057b8; padding-left: 16px;">
+              Advanced Gates</h3>
+
+            <div class="gates-grid">
+              <!-- QFT Gate -->
+              <div class="gate-card" data-search="qft quantum fourier transform advanced">
+                <div class="gate-header">
+                  <h4>Quantum Fourier Transform <span class="gate-badge advanced">ADVANCED</span></h4>
+                  <div class="gate-symbol">QFT</div>
+                </div>
+                <div class="gate-body">
+                  <p>The quantum version of the discrete Fourier transform. Essential for many quantum algorithms
+                    including Shor's algorithm.</p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> QFT transforms your quantum state into its
+                      "frequency" representation. It's exponentially faster than classical FFT!</div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Shor's factoring algorithm<br>
+                      • Phase estimation<br>
+                      • Quantum period finding
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Measurement -->
+              <div class="gate-card" data-search="measurement collapse essential">
+                <div class="gate-header">
+                  <h4>Measurement <span class="gate-badge essential">ESSENTIAL</span></h4>
+                  <div class="gate-symbol">M</div>
+                </div>
+                <div class="gate-body">
+                  <p>Measurement collapses the quantum state to a classical bit. It's irreversible and probabilistic.
+                  </p>
+                  <button class="gate-expand-btn" onclick="toggleGateDetails(this)">Learn More ▼</button>
+                  <div class="gate-details" style="display: none;">
+                    <div class="gate-tip">💡 <strong>Beginner Tip:</strong> This is where quantum becomes classical!
+                      When you measure, the superposition collapses to either 0 or 1. You can only measure once!</div>
+                    <div class="gate-uses">
+                      <strong>When to use:</strong><br>
+                      • Extracting classical results<br>
+                      • Mid-circuit measurements<br>
+                      • Quantum error correction
+                    </div>
+                    <div class="gate-code">QASM: measure q[0] -> c[0];</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quantum Composer Link -->
+          <div class="lesson"
+            style="margin-top: 60px; background: linear-gradient(135deg, rgba(0,87,184,0.1), rgba(0,212,170,0.1));">
+            <h3 style="color: #0057b8; display: flex; align-items: center; gap: 10px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+                <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+                <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+                <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+                <path
+                  d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+              </svg>
+              Build Your Own Circuits
+            </h3>
+            <p>Now that you've learned about quantum gates, build and simulate your own quantum circuits:</p>
+            <a href="quantum-composer/jntu-composer.html" class="lesson-link">→ Open JNTU Quantum Composer</a>
+          </div>
+        </div>
+
+        <!-- ALGORITHMS -->
+        <div class="section" id="algorithms">
+          <h2>Quantum Algorithms</h2>
+          <div class="lesson">
+            <h3 style="display: flex; align-items: center; gap: 10px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                <path d="M12 15l-3-3a22 22 0 0 1 2-12 13.6 13.6 0 0 1 3.79 3.79A12.63 12.63 0 0 1 15 12z" />
+              </svg>
+              Explore Groundbreaking Algorithms
+            </h3>
+            <p>
+              Discover the quantum algorithms that demonstrate quantum advantage with comprehensive explanations,
+              professional circuit diagrams, and interactive quizzes.
+            </p>
+            <a href="quantum-algorithms/index.html" target="_blank" class="lesson-link"
+              style="display: inline-flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              Open Quantum Algorithms Library →
+            </a>
+          </div>
+
+          <div class="lesson">
+            <h3 style="display: flex; align-items: center; gap: 10px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+              Available Algorithms
+            </h3>
+            <p><strong style="display: inline-flex; align-items: center; gap: 6px;"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg> Deutsch-Jozsa Algorithm:</strong> Determine if a function is constant or balanced with a
+              single query (vs exponential classical queries)</p>
+            <p><strong style="display: inline-flex; align-items: center; gap: 6px;"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg> Grover's Search:</strong> Search unsorted databases with quadratic speedup O(√N)</p>
+            <p><strong style="display: inline-flex; align-items: center; gap: 6px;"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+                </svg> Shor's Factoring:</strong> Factor large integers in polynomial time, threatening RSA
+              encryption</p>
+            <p><strong style="display: inline-flex; align-items: center; gap: 6px;"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg> Simon's Algorithm:</strong> Find hidden periodicity with exponential speedup</p>
+            <p><strong style="display: inline-flex; align-items: center; gap: 6px;"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                  <circle cx="12" cy="12" r="3" />
+                  <path
+                    d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2" />
+                </svg> VQE:</strong> Variational Quantum Eigensolver for quantum chemistry in the NISQ era</p>
+            <p><strong style="display: inline-flex; align-items: center; gap: 6px;"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg> BB84 Protocol:</strong> Quantum key distribution with hardware-realistic simulator</p>
+            <a href="quantum-algorithms/bb84.html" target="_blank" class="lesson-link"
+              style="display: inline-flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="10 8 16 12 10 16 10 8" />
+              </svg>
+              Try BB84 Hardware Simulator →
+            </a>
+          </div>
+        </div>
+
+        <!-- CRYPTOGRAPHY -->
+        <div class="section" id="crypto">
+          <h2>Quantum Cryptography</h2>
+          <div class="lesson">
+            <h3 style="display: flex; align-items: center; gap: 10px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2"
+                style="flex-shrink: 0;">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              BB84 Quantum Key Distribution
+            </h3>
+            <p>
+              <strong>BB84 Protocol</strong> is the first and most famous quantum key distribution (QKD) protocol,
+              invented by Charles Bennett and Gilles Brassard in 1984. It allows two parties (Alice and Bob)
+              to securely share encryption keys that are guaranteed to be secure by the laws of quantum mechanics.
+            </p>
+            <p>
+              <strong>Why It Matters:</strong> Unlike classical encryption methods (like RSA) that can be broken
+              by powerful computers or quantum computers using Shor's algorithm, BB84 provides information-theoretic
+              security. Any eavesdropping attempt is automatically detected!
+            </p>
+            <p>
+              <strong>How It Works:</strong> Alice sends Bob photons with random polarizations (↑, →, ↗, ↖).
+              Bob measures them with randomly chosen polarizing filters. After transmission, they publicly
+              compare which filters they used (not the results!) and keep only the bits where they used
+              matching filters. If an eavesdropper (Eve) intercepts the photons, the error rate increases,
+              revealing her presence.
+            </p>
+            <p>
+              <strong>Real-World Applications:</strong>
+            </p>
+            <ul style="margin-left: 20px; line-height: 1.8; list-style: none;">
+              <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2"
+                  style="flex-shrink: 0;">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+                Banking & Financial Institutions
+              </li>
+              <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2"
+                  style="flex-shrink: 0;">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                Government Secure Communications
+              </li>
+              <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2"
+                  style="flex-shrink: 0;">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
+                Healthcare Data Protection
+              </li>
+              <li style="display: flex; align-items: center; gap: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0057b8" stroke-width="2"
+                  style="flex-shrink: 0;">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                Future Quantum Internet Infrastructure
+              </li>
+            </ul>
+            <a href="quantum-algorithms/bb84.html" target="_blank" class="lesson-link"
+              style="display: inline-flex; align-items: center; gap: 8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polygon points="10 8 16 12 10 16 10 8" />
+              </svg>
+              Launch Interactive BB84 Simulator (Hardware View) →
+            </a>
+          </div>
+
+          <div class="lesson">
+            <h3 style="display: flex; align-items: center; gap: 10px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2"
+                style="flex-shrink: 0;">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2" />
+              </svg>
+              Other QKD Protocols
+            </h3>
+            <p>
+              <strong>E91 Protocol:</strong> Uses quantum entanglement instead of individual photons.
+              Security is guaranteed by Bell's inequality violations.
+            </p>
+            <p>
+              <strong>B92 Protocol:</strong> A simplified version of BB84 using only two non-orthogonal states.
+            </p>
+            <p>
+              All quantum cryptography protocols share one key advantage: security guaranteed by quantum physics,
+              not computational complexity!
+            </p>
+          </div>
+        </div>
+
+        <!-- ADVANCED -->
+        <div class="section" id="advanced">
+          <h2>Advanced Topics</h2>
+          <div class="lesson">
+            <p>Noise, errors, Bell inequality and NISQ-era challenges.</p>
+          </div>
+        </div>
+
+        <!-- ========== DONATIONS SECTION ========== -->
+
+
+      </div>
+
+    </div>
+
+    <!-- ADMIN MODAL -->
+    <div class="admin-modal hidden" id="adminModal">
+      <div class="admin-modal-content">
+        <button class="modal-close"
+          onclick="document.getElementById('adminModal').classList.add('hidden')">&times;</button>
+        <h2>Donations Admin Panel</h2>
+        <p style="color:#666;margin-top:10px;">All donation records with donor details, amounts, and timestamps</p>
+        <div id="donationList" style="margin-top: 20px;"></div>
+      </div>
+    </div>
+
+    <footer class="qt-global-footer">
+    <p>
+      &copy; 2025 <span class="ft-brand">qT &ndash; Quantum Technology</span>
+      <span class="ft-sep">&bull;</span>
+      JNTUACEA, ECE Department
+      <span class="ft-sep">&bull;</span>
+      Community Service Project
+    </p>
+    <p class="ft-ref">
+      Developed under the guidance of Dr. V. Sumalatha
+      <span class="ft-sep">&bull;</span>
+      Reference: IBM Quantum Learning &amp; QuVis
+    </p>
+  </footer>
+
+    <script>
+      function goBackGlobal() {
+        window.history.back();
+      }
+
+      // Three.js Visualization for Physics with Free Fire Character
+      function initPhysicsVisualization() {
+        const container = document.getElementById('physics-visualization');
+        if (!container || container.children.length > 0) return; // Already initialized
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf5f7fb);
+        scene.fog = new THREE.Fog(0xf5f7fb, 8, 15);
+
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 1.6, 5);
+        camera.lookAt(0, 1, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // Enhanced Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        mainLight.position.set(3, 5, 4);
+        mainLight.castShadow = true;
+        scene.add(mainLight);
+
+        const fillLight = new THREE.PointLight(0x0057b8, 0.5, 10);
+        fillLight.position.set(-3, 2, 2);
+        scene.add(fillLight);
+
+        const accentLight = new THREE.PointLight(0xff6432, 0.6, 10);
+        accentLight.position.set(3, 1, -2);
+        scene.add(accentLight);
+
+        // ========== CREATE FREE FIRE CHARACTER ==========
+        const character = new THREE.Group();
+
+        // === LEGS ===
+        const legGeometry = new THREE.CapsuleGeometry(0.12, 0.65, 12, 24);
+        const legMaterial = new THREE.MeshPhongMaterial({
+          color: 0x2a2a2a,
+          shininess: 30
+        });
+
+        const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
+        leftLeg.position.set(-0.15, 0.4, 0);
+        leftLeg.castShadow = true;
+        character.add(leftLeg);
+
+        const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
+        rightLeg.position.set(0.15, 0.4, 0);
+        rightLeg.castShadow = true;
+        character.add(rightLeg);
+
+        // Knee guards
+        const kneeGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+        const kneeMaterial = new THREE.MeshPhongMaterial({
+          color: 0x444444,
+          shininess: 50,
+          metalness: 0.3
+        });
+
+        const leftKnee = new THREE.Mesh(kneeGeometry, kneeMaterial);
+        leftKnee.position.set(-0.15, 0.55, 0.05);
+        leftKnee.scale.set(1, 0.6, 0.8);
+        character.add(leftKnee);
+
+        const rightKnee = new THREE.Mesh(kneeGeometry, kneeMaterial);
+        rightKnee.position.set(0.15, 0.55, 0.05);
+        rightKnee.scale.set(1, 0.6, 0.8);
+        character.add(rightKnee);
+
+        // === BOOTS ===
+        const bootGeometry = new THREE.BoxGeometry(0.18, 0.15, 0.28);
+        const bootMaterial = new THREE.MeshPhongMaterial({
+          color: 0x1a1a1a,
+          shininess: 60
+        });
+
+        const leftBoot = new THREE.Mesh(bootGeometry, bootMaterial);
+        leftBoot.position.set(-0.15, 0.08, 0.02);
+        character.add(leftBoot);
+
+        const rightBoot = new THREE.Mesh(bootGeometry, bootMaterial);
+        rightBoot.position.set(0.15, 0.08, 0.02);
+        character.add(rightBoot);
+
+        // === TORSO (Body) ===
+        const torsoGeometry = new THREE.CapsuleGeometry(0.25, 0.6, 16, 32);
+        const torsoMaterial = new THREE.MeshPhongMaterial({
+          color: 0xff6432,
+          shininess: 40
+        });
+
+        const torso = new THREE.Mesh(torsoGeometry, torsoMaterial);
+        torso.position.set(0, 1.1, 0);
+        torso.castShadow = true;
+        character.add(torso);
+
+        // Tactical Vest
+        const vestGeometry = new THREE.BoxGeometry(0.48, 0.5, 0.22);
+        const vestMaterial = new THREE.MeshPhongMaterial({
+          color: 0x2a2a2a,
+          shininess: 20
+        });
+
+        const vest = new THREE.Mesh(vestGeometry, vestMaterial);
+        vest.position.set(0, 1.1, 0.14);
+        vest.scale.set(1, 1, 0.8);
+        character.add(vest);
+
+        // Vest pouches
+        for (let i = 0; i < 3; i++) {
+          const pouch = new THREE.Mesh(
+            new THREE.BoxGeometry(0.12, 0.12, 0.08),
+            new THREE.MeshPhongMaterial({ color: 0x1a1a1a })
+          );
+          pouch.position.set((i - 1) * 0.15, 0.95, 0.28);
+          character.add(pouch);
+        }
+
+        // === ARMS ===
+        const armGeometry = new THREE.CapsuleGeometry(0.08, 0.5, 10, 20);
+        const armMaterial = new THREE.MeshPhongMaterial({
+          color: 0xff8844,
+          shininess: 35
+        });
+
+        // Left Arm
+        const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+        leftArm.position.set(-0.35, 1.2, 0);
+        leftArm.rotation.z = 0.3;
+        leftArm.castShadow = true;
+        character.add(leftArm);
+
+        // Right Arm
+        const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+        rightArm.position.set(0.35, 1.2, 0);
+        rightArm.rotation.z = -0.3;
+        rightArm.castShadow = true;
+        character.add(rightArm);
+
+        // Shoulder Pads
+        const shoulderGeometry = new THREE.SphereGeometry(0.13, 16, 16);
+        const shoulderMaterial = new THREE.MeshPhongMaterial({
+          color: 0x333333,
+          shininess: 50
+        });
+
+        const leftShoulder = new THREE.Mesh(shoulderGeometry, shoulderMaterial);
+        leftShoulder.position.set(-0.35, 1.4, 0);
+        leftShoulder.scale.set(1.2, 0.8, 1);
+        character.add(leftShoulder);
+
+        const rightShoulder = new THREE.Mesh(shoulderGeometry, shoulderMaterial);
+        rightShoulder.position.set(0.35, 1.4, 0);
+        rightShoulder.scale.set(1.2, 0.8, 1);
+        character.add(rightShoulder);
+
+        // === HANDS ===
+        const handGeometry = new THREE.SphereGeometry(0.09, 12, 12);
+        const handMaterial = new THREE.MeshPhongMaterial({
+          color: 0xffdbac,
+          shininess: 15
+        });
+
+        const leftHand = new THREE.Mesh(handGeometry, handMaterial);
+        leftHand.position.set(-0.45, 0.85, 0.1);
+        character.add(leftHand);
+
+        const rightHand = new THREE.Mesh(handGeometry, handMaterial);
+        rightHand.position.set(0.55, 0.85, 0.1);
+        character.add(rightHand);
+
+        // === NECK ===
+        const neckGeometry = new THREE.CylinderGeometry(0.08, 0.09, 0.15, 16);
+        const neckMaterial = new THREE.MeshPhongMaterial({
+          color: 0xffdbac,
+          shininess: 20
+        });
+
+        const neck = new THREE.Mesh(neckGeometry, neckMaterial);
+        neck.position.set(0, 1.5, 0);
+        character.add(neck);
+
+        // === HEAD ===
+        const headGeometry = new THREE.SphereGeometry(0.22, 32, 32);
+        const headMaterial = new THREE.MeshPhongMaterial({
+          color: 0xffdbac,
+          shininess: 25
+        });
+
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.set(0, 1.75, 0);
+        head.castShadow = true;
+        character.add(head);
+
+        // === HELMET (Free Fire Style) ===
+        const helmetGeometry = new THREE.SphereGeometry(0.24, 24, 24, 0, Math.PI * 2, 0, Math.PI * 0.7);
+        const helmetMaterial = new THREE.MeshPhongMaterial({
+          color: 0xff3333,
+          shininess: 80,
+          emissive: 0xff0000,
+          emissiveIntensity: 0.1,
+          metalness: 0.5
+        });
+
+        const helmet = new THREE.Mesh(helmetGeometry, helmetMaterial);
+        helmet.position.set(0, 1.78, 0);
+        helmet.castShadow = true;
+        character.add(helmet);
+
+        // Helmet visor
+        const visorGeometry = new THREE.SphereGeometry(0.23, 24, 24, 0, Math.PI * 2, Math.PI * 0.35, Math.PI * 0.25);
+        const visorMaterial = new THREE.MeshPhongMaterial({
+          color: 0x111111,
+          transparent: true,
+          opacity: 0.7,
+          shininess: 100
+        });
+
+        const visor = new THREE.Mesh(visorGeometry, visorMaterial);
+        visor.position.set(0, 1.75, 0.05);
+        character.add(visor);
+
+        // Helmet details (stripes)
+        const stripeGeometry = new THREE.BoxGeometry(0.48, 0.03, 0.25);
+        const stripeMaterial = new THREE.MeshPhongMaterial({
+          color: 0xffaa00,
+          emissive: 0xffaa00,
+          emissiveIntensity: 0.3
+        });
+
+        const stripe = new THREE.Mesh(stripeGeometry, stripeMaterial);
+        stripe.position.set(0, 1.85, 0.08);
+        stripe.rotation.x = -0.3;
+        character.add(stripe);
+
+        // === WEAPON (Quantum Rifle) ===
+        const weaponGroup = new THREE.Group();
+
+        // Main body of weapon
+        const weaponBody = new THREE.Mesh(
+          new THREE.BoxGeometry(0.1, 0.1, 0.7),
+          new THREE.MeshPhongMaterial({
+            color: 0x222222,
+            shininess: 90,
+            metalness: 0.8
+          })
+        );
+        weaponGroup.add(weaponBody);
+
+        // Weapon handle
+        const handle = new THREE.Mesh(
+          new THREE.BoxGeometry(0.08, 0.2, 0.1),
+          new THREE.MeshPhongMaterial({ color: 0x333333 })
+        );
+        handle.position.set(0, -0.1, -0.1);
+        handle.rotation.x = 0.3;
+        weaponGroup.add(handle);
+
+        // Quantum energy core on weapon
+        const weaponCore = new THREE.Mesh(
+          new THREE.SphereGeometry(0.08, 16, 16),
+          new THREE.MeshPhongMaterial({
+            color: 0x00ffff,
+            emissive: 0x00ffff,
+            emissiveIntensity: 0.8,
+            transparent: true,
+            opacity: 0.9
+          })
+        );
+        weaponCore.position.set(0, 0, 0.25);
+        weaponGroup.add(weaponCore);
+
+        // Weapon barrel
+        const barrel = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.03, 0.03, 0.3, 12),
+          new THREE.MeshPhongMaterial({
+            color: 0x111111,
+            shininess: 100
+          })
+        );
+        barrel.rotation.x = Math.PI / 2;
+        barrel.position.set(0, 0.05, 0.5);
+        weaponGroup.add(barrel);
+
+        weaponGroup.position.set(0.5, 1.0, 0.2);
+        weaponGroup.rotation.set(0, 0, -0.3);
+        character.add(weaponGroup);
+
+        // === BACKPACK ===
+        const backpack = new THREE.Mesh(
+          new THREE.BoxGeometry(0.35, 0.4, 0.18),
+          new THREE.MeshPhongMaterial({
+            color: 0x1a4d2e,
+            shininess: 20
+          })
+        );
+        backpack.position.set(0, 1.2, -0.2);
+        character.add(backpack);
+
+        // === ENERGY AURA (Quantum Effect) ===
+        const auraGeometry = new THREE.SphereGeometry(0.9, 32, 32);
+        const auraMaterial = new THREE.MeshBasicMaterial({
+          color: 0x0057b8,
+          transparent: true,
+          opacity: 0.05,
+          wireframe: true
+        });
+
+        const aura = new THREE.Mesh(auraGeometry, auraMaterial);
+        aura.position.set(0, 1.2, 0);
+        character.add(aura);
+
+        // Position character in scene
+        character.position.set(0, 0, 0);
+        scene.add(character);
+
+        // ========== QUANTUM SPHERES (orbiting around character) ==========
+        const geometry = new THREE.SphereGeometry(0.15, 32, 32);
+        const materials = [
+          new THREE.MeshPhongMaterial({
+            color: 0x0057b8,
+            emissive: 0x0057b8,
+            emissiveIntensity: 0.5,
+            transparent: true,
+            opacity: 0.9
+          }),
+          new THREE.MeshPhongMaterial({
+            color: 0x00d4aa,
+            emissive: 0x00d4aa,
+            emissiveIntensity: 0.5,
+            transparent: true,
+            opacity: 0.9
+          }),
+          new THREE.MeshPhongMaterial({
+            color: 0xff6b6b,
+            emissive: 0xff6b6b,
+            emissiveIntensity: 0.5,
+            transparent: true,
+            opacity: 0.9
+          })
+        ];
+
+        const spheres = [];
+        for (let i = 0; i < 3; i++) {
+          const sphere = new THREE.Mesh(geometry, materials[i]);
+          sphere.castShadow = true;
+          scene.add(sphere);
+          spheres.push({
+            mesh: sphere,
+            angle: (Math.PI * 2 / 3) * i,
+            radius: 2,
+            height: 1.5 + (i * 0.3),
+            speed: 0.015 + (i * 0.005)
+          });
+        }
+
+        // ========== ANIMATION LOOP ==========
+        let time = 0;
+        let animationId;
+
+        function animate() {
+          animationId = requestAnimationFrame(animate);
+          time += 0.01;
+
+          // Rotate character slightly
+          character.rotation.y = Math.sin(time * 0.3) * 0.1;
+
+          // Animate aura
+          aura.rotation.y += 0.01;
+          aura.scale.setScalar(1 + Math.sin(time * 2) * 0.05);
+
+          // Pulse weapon core
+          weaponCore.material.emissiveIntensity = 0.6 + Math.sin(time * 5) * 0.2;
+          weaponCore.scale.setScalar(1 + Math.sin(time * 5) * 0.1);
+
+          // Orbit quantum spheres around character
+          spheres.forEach((obj, i) => {
+            obj.angle += obj.speed;
+            obj.mesh.position.x = Math.cos(obj.angle) * obj.radius;
+            obj.mesh.position.z = Math.sin(obj.angle) * obj.radius;
+            obj.mesh.position.y = obj.height + Math.sin(time * 2 + i) * 0.3;
+            obj.mesh.rotation.x += 0.02;
+            obj.mesh.rotation.y += 0.03;
+
+            // Pulsing effect
+            const scale = 1 + Math.sin(time * 3 + i) * 0.1;
+            obj.mesh.scale.setScalar(scale);
+          });
+
+          // Animate lights
+          fillLight.intensity = 0.4 + Math.sin(time * 2) * 0.1;
+          accentLight.intensity = 0.5 + Math.cos(time * 2.5) * 0.1;
+
+          // Slight camera movement
+          camera.position.y = 1.6 + Math.sin(time * 0.5) * 0.05;
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        const handleResize = () => {
+          if (!container.parentElement) return;
+          const width = container.clientWidth;
+          const height = container.clientHeight;
+          camera.aspect = width / height;
+          camera.updateProjectionMatrix();
+          renderer.setSize(width, height);
+        };
+        window.addEventListener('resize', handleResize);
+      }
+    </script>
+    <script src="welcome.js"></script>
+
+    <script src="global-ui.js"></script>
+
+    <script>
+      // Admin Button Click Handler
+      function handleAdminButtonClick() {
+        const password = prompt('Enter admin password:');
+        if (!password) return;
+
+        // Check password (you can change this to any password you want)
+        if (password !== 'admin123') {
+          alert('❌ Incorrect password!');
+          return;
+        }
+
+        // Get donations from localStorage
+        const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+        const container = document.getElementById('donationList');
+
+        if (donations.length === 0) {
+          container.innerHTML = '<p style="color:#999;">No donation records found.</p>';
+        } else {
+          let html = '<table><thead><tr><th>ID</th><th>Organization</th><th>Donor Name</th><th>Email</th><th>Amount (₹)</th><th>Date & Time</th></tr></thead><tbody>';
+
+          donations.forEach(d => {
+            const date = new Date(d.ts).toLocaleString('en-IN');
+            html += `<tr>
+        <td><strong>${d.id || 'N/A'}</strong></td>
+        <td>${d.orgName || 'N/A'}</td>
+        <td>${d.name || 'Anonymous'}</td>
+        <td>${d.email || 'N/A'}</td>
+        <td><strong>₹${(d.amount || 0).toFixed(2)}</strong></td>
+        <td>${date}</td>
+      </tr>`;
+          });
+
+          html += '</tbody></table>';
+          container.innerHTML = html;
+        }
+
+        // Show modal
+        document.getElementById('adminModal').classList.remove('hidden');
+      }
+
+      // Full screen function
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      // Open section function
+      function openSec(id, el) {
+        console.log('🚀 openSec called with id:', id);
+        const section = document.getElementById(id);
+        console.log('Section element:', section);
+
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        if (section) {
+          section.classList.add('active');
+          console.log('✅ Active class added to:', id);
+        } else {
+          console.error('❌ Section not found:', id);
+        }
+
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        if (el) el.classList.add('active');
+
+        /* ===============================
+           ADMIN SIDE BUTTON VISIBILITY
+           =============================== */
+        const adminBtn = document.getElementById('donationAdminSideBtn');
+        if (adminBtn) {
+          if (id === 'donations') {
+            adminBtn.classList.remove('hidden');   // ✅ SHOW only in Donations
+          } else {
+            adminBtn.classList.add('hidden');      // ❌ HIDE everywhere else
+          }
+        }
+
+        // Initialize physics visualization when physics section is opened
+        if (id === 'physics') {
+          setTimeout(initPhysicsVisualization, 100);
+        }
+      }
+
+      // Quantum Gates Functions
+      function toggleGateDetails(button) {
+        const details = button.nextElementSibling;
+        if (details.style.display === 'none' || !details.style.display) {
+          details.style.display = 'block';
+          button.textContent = 'Show Less ▲';
+        } else {
+          details.style.display = 'none';
+          button.textContent = 'Learn More ▼';
+        }
+      }
+
+      function searchGates(query) {
+        const cards = document.querySelectorAll('.gate-card');
+        const searchTerm = query.toLowerCase();
+
+        cards.forEach(card => {
+          const searchData = card.getAttribute('data-search') || ' ';
+          if (searchData.includes(searchTerm) || searchTerm === '') {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      function filterGates(category, button) {
+        const categories = document.querySelectorAll('.gates-category');
+        const buttons = document.querySelectorAll('.gate-filter-btn');
+
+        // Update active button
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Filter categories
+        if (category === 'all') {
+          categories.forEach(cat => cat.style.display = 'block');
+        } else {
+          categories.forEach(cat => {
+            if (cat.getAttribute('data-category') === category) {
+              cat.style.display = 'block';
+            } else {
+              cat.style.display = 'none';
+            }
+          });
+        }
+      }
+
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const videoSection = document.getElementById("quantum-video-section");
+        const video = document.getElementById("quantumVideo");
+
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                videoSection.classList.add("in-view");
+                video.play().catch(() => { });
+              } else {
+                video.pause();
+              }
+            });
+          },
+          { threshold: 0.5 }
+        );
+
+        observer.observe(videoSection);
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const video = document.getElementById("quantumVideo");
+        const videoSection = document.getElementById("quantum-video-section");
+        const scrollContainer = document.querySelector(".content");
+
+        let userInteracted = false;
+
+        // Detect first scroll (this enables sound autoplay)
+        scrollContainer.addEventListener("scroll", () => {
+          userInteracted = true;
+        }, { once: true });
+
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                videoSection.classList.add("in-view");
+
+                if (userInteracted) {
+                  video.muted = false;   // 🔊 SOUND ON
+                  video.play().catch(() => { });
+                }
+              } else {
+                video.pause();
+              }
+            });
+          },
+          {
+            root: scrollContainer,
+            threshold: 0.5
+          }
+        );
+
+        observer.observe(videoSection);
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const video = document.getElementById("quantumVideo");
+        const videoSection = document.getElementById("quantum-video-section");
+        const overlay = document.getElementById("soundOverlay");
+        const scrollContainer = document.querySelector(".content");
+
+        let soundEnabled = false;
+
+        // Scroll observer
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                videoSection.classList.add("in-view");
+
+                video.play().catch(() => { });
+              } else {
+                video.pause();
+              }
+            });
+          },
+          {
+            root: scrollContainer,
+            threshold: 0.5
+          }
+        );
+
+        observer.observe(videoSection);
+
+        // Enable sound on user tap
+        overlay.addEventListener("click", () => {
+          video.muted = false;
+          video.volume = 1;
+          soundEnabled = true;
+          overlay.classList.add("hidden");
+          video.play();
+        });
+      });
+    </script>
+
+
+
+    <style>
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    </style>
+
+    <!-- Donation modal + admin list -->
+    <div id="donationModal" class="modal hidden">
+      <div class="modal-card">
+        <button class="modal-close" aria-label="Close">✕</button>
+        <h3 id="modalOrgName">Donate</h3>
+        <p id="modalOrgDesc" class="muted"></p>
+
+        <div class="preset-amounts">
+          <button class="amt">₹100</button>
+          <button class="amt">₹500</button>
+          <button class="amt">₹1000</button>
+          <button class="amt">Other</button>
+        </div>
+
+        <div class="form-row">
+          <label>Your Name</label>
+          <input id="donorName" placeholder="Full name">
+        </div>
+        <div class="form-row">
+          <label>Your Email</label>
+          <input id="donorEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-row">
+          <label>Amount (INR)</label>
+          <input id="donationAmount" type="number" min="1" value="500">
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button id="confirmDonate" class="donate-btn">Pay & Get Receipt</button>
+          <button id="cancelDonate" class="fullscreen-btn" style="background:#e2e8f0;color:#0b1724">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="adminModal" class="modal hidden">
+      <div class="modal-card large">
+        <button class="modal-close" aria-label="Close">✕</button>
+        <h3>Donations — Admin</h3>
+        <div style="margin:8px 0 12px 0">
+          <button id="downloadCsv" class="donate-btn">Download CSV</button>
+          <button id="clearDonations" class="fullscreen-btn" style="background:#ff6666">Clear All</button>
+        </div>
+        <div id="donationList" style="max-height:380px;overflow:auto"></div>
+      </div>
+    </div>
+
+    <style>
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(2, 6, 23, 0.5);
+        z-index: 9999
+      }
+
+      .modal.hidden {
+        display: none
+      }
+
+      .modal-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 20px 50px rgba(2, 6, 23, 0.25);
+        width: 420px;
+        max-width: 92%
+      }
+
+      .modal-card.large {
+        width: 820px
+      }
+
+      .modal-close {
+        position: absolute;
+        right: 22px;
+        top: 18px;
+        border: 0;
+        background: transparent;
+        font-size: 18px;
+        cursor: pointer
+      }
+
+      .preset-amounts {
+        display: flex;
+        gap: 8px;
+        margin: 8px 0
+      }
+
+      .preset-amounts .amt {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #e6eef8;
+        background: #f8fbff;
+        cursor: pointer
+      }
+
+      .form-row {
+        display: flex;
+        flex-direction: column;
+        margin-top: 8px
+      }
+
+      .form-row input {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #e6eef8
+      }
+
+      #donationList table {
+        width: 100%;
+        border-collapse: collapse
+      }
+
+      #donationList th,
+      #donationList td {
+        padding: 8px;
+        border-bottom: 1px solid #eef2f7;
+        text-align: left
+      }
+    </style>
+
+    <!-- jsPDF for receipts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.donation-card');
+        const modal = document.getElementById('donationModal');
+        const adminModal = document.getElementById('adminModal');
+        const modalOrgName = document.getElementById('modalOrgName');
+        const modalOrgDesc = document.getElementById('modalOrgDesc');
+        const donationAmount = document.getElementById('donationAmount');
+        const donorName = document.getElementById('donorName');
+        const donorEmail = document.getElementById('donorEmail');
+        const confirmDonate = document.getElementById('confirmDonate');
+        const cancelDonate = document.getElementById('cancelDonate');
+
+        let currentOrg = null;
+
+        function openModalFor(card) {
+          currentOrg = { id: card.dataset.org, url: card.dataset.url, name: card.querySelector('h3').innerText };
+          modalOrgName.innerText = `Donate — ${currentOrg.name}`;
+          modalOrgDesc.innerText = card.querySelector('.muted')?.innerText || '';
+          donationAmount.value = 500;
+          donorName.value = '';
+          donorEmail.value = '';
+          modal.classList.remove('hidden');
+        }
+
+        cards.forEach(c => c.addEventListener('click', () => openModalFor(c)));
+
+        document.querySelectorAll('.preset-amounts .amt').forEach(b => {
+          b.addEventListener('click', (e) => {
+            const v = e.target.innerText.replace('₹', '').trim();
+            if (v === 'Other') return donationAmount.focus();
+            donationAmount.value = parseInt(v, 10);
+          });
+        });
+
+        document.querySelectorAll('.modal-close').forEach(b => b.addEventListener('click', () => {
+          b.closest('.modal').classList.add('hidden');
+        }));
+
+        cancelDonate.addEventListener('click', () => modal.classList.add('hidden'));
+
+        confirmDonate.addEventListener('click', async () => {
+          const amt = parseFloat(donationAmount.value);
+          if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
+          const donation = { id: 'don_' + Date.now(), orgId: currentOrg.id, orgName: currentOrg.name, amount: amt, name: donorName.value || 'Anonymous', email: donorEmail.value || '', ts: new Date().toISOString() };
+          // store
+          const list = JSON.parse(localStorage.getItem('donations') || '[]');
+          list.push(donation);
+          localStorage.setItem('donations', JSON.stringify(list));
+
+          // generate PDF receipt
+          try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Donation Receipt', 20, 24);
+            doc.setFontSize(11);
+            doc.text(`Receipt ID: ${donation.id}`, 20, 36);
+            doc.text(`Organisation: ${donation.orgName}`, 20, 44);
+            doc.text(`Donor: ${donation.name}`, 20, 52);
+            doc.text(`Email: ${donation.email}`, 20, 60);
+            doc.text(`Amount (INR): ₹${donation.amount.toFixed(2)}`, 20, 68);
+            doc.text(`Date: ${new Date(donation.ts).toLocaleString()}`, 20, 76);
+            doc.save(`receipt_${donation.id}.pdf`);
+          } catch (err) {
+            console.error('PDF error', err);
+            alert('Donation recorded — could not generate PDF in this browser.');
+          }
+
+          modal.classList.add('hidden');
+          alert('Thank you — donation recorded locally.');
+        });
+
+        function renderAdminList() {
+          const list = JSON.parse(localStorage.getItem('donations') || '[]');
+          const container = document.getElementById('donationList');
+          if (list.length === 0) { container.innerHTML = '<p>No donations yet.</p>'; return; }
+          let html = '<table><thead><tr><th>ID</th><th>Org</th><th>Donor</th><th>Email</th><th>Amount</th><th>Date</th><th>Receipt</th></tr></thead><tbody>';
+          list.forEach(d => {
+            html += `<tr><td>${d.id}</td><td>${d.orgName}</td><td>${d.name}</td><td>${d.email}</td><td>₹${d.amount.toFixed(2)}</td><td>${new Date(d.ts).toLocaleString()}</td><td><button data-id="${d.id}" class="download-receipt">PDF</button></td></tr>`;
+          });
+          html += '</tbody></table>';
+          container.innerHTML = html;
+          container.querySelectorAll('.download-receipt').forEach(b => b.addEventListener('click', (e) => {
+            const id = e.target.dataset.id;
+            const d = list.find(x => x.id === id);
+            if (!d) return alert('Not found');
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Donation Receipt', 20, 24);
+            doc.setFontSize(11);
+            doc.text(`Receipt ID: ${d.id}`, 20, 36);
+            doc.text(`Organisation: ${d.orgName}`, 20, 44);
+            doc.text(`Donor: ${d.name}`, 20, 52);
+            doc.text(`Email: ${d.email}`, 20, 60);
+            doc.text(`Amount (INR): ₹${d.amount.toFixed(2)}`, 20, 68);
+            doc.text(`Date: ${new Date(d.ts).toLocaleString()}`, 20, 76);
+            doc.save(`receipt_${d.id}.pdf`);
+          }));
+        }
+
+        document.getElementById('downloadCsv').addEventListener('click', () => {
+          const list = JSON.parse(localStorage.getItem('donations') || '[]');
+          if (list.length === 0) return alert('No donations to export');
+          const rows = [['id', 'org', 'name', 'email', 'amount', 'timestamp']];
+          list.forEach(d => rows.push([d.id, d.orgName, d.name, d.email, d.amount, d.ts]));
+          const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = 'donations_export.csv'; a.click(); URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('clearDonations').addEventListener('click', () => {
+          if (confirm('Clear all donation records? This cannot be undone in this demo.')) {
+            localStorage.removeItem('donations'); renderAdminList();
+          }
+        });
+        const adminSideBtn = document.getElementById('donationAdminSideBtn');
+
+        if (adminSideBtn) {
+          adminSideBtn.addEventListener('click', () => {
+            const code = prompt('Enter admin code');
+            if (!code) return;
+            if (code !== 'admin123') {
+              alert('Incorrect admin code');
+              return;
+            }
+            renderAdminList();
+            document.getElementById('adminModal').classList.remove('hidden');
+          });
+        }
+      });
+    </script>
+    <!-- ADMIN SIDE BUTTON (HIDDEN BY DEFAULT) -->
+    <button id="donationAdminSideBtn" class="donation-admin-btn hidden">
+      Admin
+    </button>
+
+
+
+    <!-- Scroll to Top Button -->
+    <div id="scrollToTopBtn" class="scroll-to-top" title="Scroll to Top">
+      <div class="arrow-up"></div>
+    </div>
+
+    <!-- Video Scroll Auto-play Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('landingVideo');
+        const scrollSections = document.querySelectorAll('.video-scroll-section');
+
+        // Set video properties if video exists
+        if (video) {
+          video.muted = false;
+          video.volume = 0.7; // Set to 70% volume for better experience
+        }
+
+        // Intersection Observer for scroll-triggered animation and auto-play
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.2 // Trigger when 20% of the section is visible
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // Add animation class to the specific section in view
+              entry.target.classList.add('in-view');
+
+              // Special handling for video section auto-play
+              if (entry.target.id === 'why-quantum-section' && video) {
+                setTimeout(() => {
+                  video.play().catch(err => {
+                    console.log('Auto-play with sound prevented, trying muted:', err);
+                    video.muted = true;
+                    video.play().catch(e => console.log('Muted auto-play also failed:', e));
+                  });
+                }, 500);
+              }
+            } else {
+              // Pause video when video section is scrolled out of view
+              if (entry.target.id === 'why-quantum-section' && video) {
+                video.pause();
+              }
+            }
+          });
+        }, observerOptions);
+
+        // Start observing all scroll sections
+        scrollSections.forEach(section => {
+          observer.observe(section);
+        });
+
+        // Optional: Unmute on user interaction if it was muted
+        if (video) {
+          video.addEventListener('click', () => {
+            if (video.muted) {
+              video.muted = false;
+              video.volume = 0.7;
+            }
+          });
+        }
+
+        // Scroll to Top Logic
+        const overlay = document.getElementById('landing-overlay');
+        const scrollBtn = document.getElementById('scrollToTopBtn');
+        const staggerCards = document.querySelectorAll('.stagger-card');
+
+        // Show/Hide Scroll Button logic
+        if (overlay && scrollBtn) {
+          overlay.addEventListener('scroll', () => {
+            if (overlay.scrollTop > 500) {
+              scrollBtn.classList.add('visible');
+            } else {
+              scrollBtn.classList.remove('visible');
+            }
+          });
+
+          scrollBtn.addEventListener('click', () => {
+            overlay.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
+          });
+        }
+
+        // Observer for Staggered Animation
+        const staggerObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+              staggerObserver.unobserve(entry.target); // Animates once
+            }
+          });
+        }, { threshold: 0.1 });
+
+        staggerCards.forEach(card => {
+          staggerObserver.observe(card);
+        });
+      });
+    </script>
+
+    <script src="landing.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variational Quantum Eigensolver (VQE) | Quantum Algorithms</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/quiz.css">
+
+    <style>
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-2xl) 0;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f3ff 100%);
+            border-radius: var(--radius-lg);
+        }
+
+        .algorithm-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .algorithm-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+            border-bottom: 3px solid var(--accent-primary);
+            padding-bottom: var(--spacing-sm);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--accent-light);
+        }
+
+        .step-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-primary);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: var(--spacing-sm);
+        }
+
+        .formula-box {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+            overflow-x: auto;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .formula-box .MathJax {
+            font-size: 1.3em !important;
+        }
+
+        .formula-box mjx-container {
+            font-size: 1.3em !important;
+        }
+
+        .key-concept {
+            background: #e6f3ff;
+            border: 1px solid #0057b8;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .key-concept-title {
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 16px;
+        }
+
+        .circuit-container {
+            text-align: center;
+            margin: var(--spacing-xl) 0;
+            padding: var(--spacing-lg);
+            background: #0a0a0a;
+            border-radius: var(--radius-lg);
+        }
+
+        .circuit-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .application-card {
+            background: var(--bg-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .application-card h4 {
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .back-btn:hover {
+            gap: var(--spacing-md);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2L2 7v10c0 5.5 3.8 10.7 10 12 6.2-1.3 10-6.5 10-12V7l-10-5zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                Quantum Algorithms
+            </div>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-btn">← Back to All Algorithms</a>
+
+        <div class="page-header">
+            <h1 class="algorithm-title">Variational Quantum Eigensolver (VQE)</h1>
+            <p class="algorithm-subtitle">Hybrid Quantum-Classical Algorithm for NISQ Devices</p>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">Overview</h2>
+            <p>
+                The Variational Quantum Eigensolver (VQE) is a hybrid quantum-classical algorithm designed to find the
+                ground
+                state energy of quantum systems. Unlike algorithms requiring fault-tolerant quantum computers, VQE is
+                tailored
+                for near-term Noisy Intermediate-Scale Quantum (NISQ) devices.
+            </p>
+
+            <h3>The Problem</h3>
+            <p>
+                Given a Hamiltonian \( H \) (representing a quantum system), find the minimum eigenvalue \( E_0 \)
+                (ground state energy):
+            </p>
+            <div class="formula-box">
+                $$ E_0 = \min_{\psi} \langle \psi | H | \psi \rangle $$
+            </div>
+            <p>where \( |\psi\rangle \) is a quantum state.</p>
+
+            <h3>Classical vs VQE Comparison</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Classical Methods</th>
+                        <th>VQE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Scaling</strong></td>
+                        <td>Exponential with system size</td>
+                        <td><strong>Polynomial (for many systems)</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hardware Requirement</strong></td>
+                        <td>Classical computers</td>
+                        <td><strong>NISQ quantum devices</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Noise Tolerance</strong></td>
+                        <td>N/A</td>
+                        <td><strong>Inherently resilient</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Applications</strong></td>
+                        <td>Small molecules only</td>
+                        <td><strong>Drug discovery, materials</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Prerequisites Section -->
+        <section class="section">
+            <h2 class="section-title">Prerequisites</h2>
+            <p>Before studying VQE, you should be familiar with:</p>
+
+            <div class="key-concept">
+                <div class="key-concept-title">📚 Recommended Background</div>
+                <ul>
+                    <li><strong>Quantum Mechanics:</strong> Hamiltonians, eigenvalues, and ground state energy</li>
+                    <li><strong>Variational Principle:</strong> Energy expectation values are bounded by ground state
+                    </li>
+                    <li><strong>Expectation Values:</strong> Computing ⟨ψ|H|ψ⟩ for quantum operators</li>
+                    <li><strong>Pauli Operators:</strong> Decomposing Hamiltonians into measurable terms (I, X, Y, Z)
+                    </li>
+                    <li><strong>Classical Optimization:</strong> Gradient descent, COBYLA, and parameter optimization
+                    </li>
+                    <li><strong>Parametrized Circuits:</strong> Quantum circuits with trainable parameters</li>
+                    <li><strong>NISQ Devices:</strong> Understanding noisy quantum hardware limitations</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Quantum Circuit</h2>
+            <p>
+                VQE uses a parametrized quantum circuit (ansatz) whose parameters are optimized classically to minimize
+                the energy expectation value. The circuit creates a trial state \( |\psi(\theta)\rangle \).
+            </p>
+
+            <div class="circuit-container">
+                <img src="assets/circuits/vqe.svg" alt="VQE Circuit">
+            </div>
+
+            <div class="key-concept">
+                <div class="key-concept-title">💡 Circuit Components</div>
+                <ul>
+                    <li><strong>Blue Gates (Init):</strong> Initialize qubits to starting state</li>
+                    <li><strong>Orange Box (Ansatz):</strong> Parametrized circuit U(θ) with trainable parameters</li>
+                    <li><strong>Green Symbols:</strong> Measure to compute expectation value ⟨H⟩</li>
+                    <li><strong>Purple Box (Optimizer):</strong> Classical optimization updates parameters θ</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Step-by-Step Walkthrough</h2>
+
+            <div class="step-box">
+                <span class="step-number">1</span>
+                <strong>Choose Ansatz</strong>
+                <p>Select a parametrized quantum circuit \( U(\theta) \) that can represent the ground state:</p>
+                <div class="formula-box">
+                    $$ |\psi(\theta)\rangle = U(\theta) |0\rangle $$
+                </div>
+                <p>Common choices: Hardware Efficient Ansatz, UCCSD, or problem-specific ansätze.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2</span>
+                <strong>Initialize Parameters</strong>
+                <p>Start with initial guess \( \theta_0 \) (random or heuristic-based).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3</span>
+                <strong>Prepare Quantum State</strong>
+                <p>Run the quantum circuit with current parameters to prepare:</p>
+                <div class="formula-box">
+                    $$ |\psi(\theta_k)\rangle = U(\theta_k) |0^n\rangle $$
+                </div>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">4</span>
+                <strong>Measure Energy Expectation</strong>
+                <p>Measure the expectation value of the Hamiltonian:</p>
+                <div class="formula-box">
+                    $$ E(\theta_k) = \langle\psi(\theta_k) | H | \psi(\theta_k)\rangle $$
+                </div>
+                <p>This requires multiple measurements since \( H = \sum_i h_i P_i \) (sum of Pauli operators).</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">5</span>
+                <strong>Classical Optimization</strong>
+                <p>Use a classical optimizer to update parameters:</p>
+                <div class="formula-box">
+                    $$ \theta_{k+1} = \theta_k - \alpha \nabla_\theta E(\theta_k) $$
+                </div>
+                <p>Common optimizers: gradient descent, COBYLA, SPSA, Adam.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">6</span>
+                <strong>Iterate Until Convergence</strong>
+                <p>Repeat steps 3-5 until the energy converges:</p>
+                <div class="formula-box">
+                    $$ |E(\theta_{k+1}) - E(\theta_k)| < \epsilon $$ </div>
+                        <p>The final \( E(\theta^*) \) approximates the ground state energy \( E_0 \).</p>
+                </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Why VQE Works: Variational Principle</h2>
+
+            <div class="key-concept">
+                <div class="key-concept-title">🔑 Variational Principle</div>
+                <p>
+                    For any quantum state \( |\psi\rangle \), the energy expectation value is bounded below by the
+                    ground state energy:
+                </p>
+                <div class="formula-box">
+                    $$ \langle\psi | H | \psi\rangle \geq E_0 $$
+                </div>
+                <p>
+                    By minimizing \( \langle\psi(\theta) | H | \psi(\theta)\rangle \), we approach \( E_0 \) from above.
+                    The ansatz must be expressive enough to represent (or approximate) the true ground state.
+                </p>
+            </div>
+
+            <h3>Hamiltonian Decomposition</h3>
+            <p>The Hamiltonian is decomposed into measurable Pauli operators:</p>
+            <div class="formula-box">
+                $$ H = \sum_{i=1}^{m} h_i P_i $$
+            </div>
+            <p>where \( P_i \) are tensor products of Pauli matrices (I, X, Y, Z) and \( h_i \) are coefficients.</p>
+            <p>Each \( P_i \) can be measured separately, and the total energy is:</p>
+            <div class="formula-box">
+                $$ E(\theta) = \sum_{i=1}^{m} h_i \langle\psi(\theta) | P_i | \psi(\theta)\rangle $$
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Applications & Significance</h2>
+
+            <h3>Real-World Applications</h3>
+            <div class="applications-grid">
+                <div class="application-card">
+                    <h4>Drug Discovery</h4>
+                    <p>Simulating molecular systems to discover new pharmaceuticals and optimize drug candidates.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Materials Science</h4>
+                    <p>Designing new materials with desired properties (superconductors, catalysts, batteries).</p>
+                </div>
+                <div class="application-card">
+                    <h4>Quantum Chemistry</h4>
+                    <p>Computing molecular ground states, reaction pathways, and chemical properties.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Condensed Matter</h4>
+                    <p>Studying many-body quantum systems, phase transitions, and emergent phenomena.</p>
+                </div>
+            </div>
+
+            <h3>Why VQE is Important</h3>
+            <ul>
+                <li><strong>NISQ-Compatible:</strong> Works on today's noisy quantum hardware without error correction
+                </li>
+                <li><strong>Hybrid Approach:</strong> Leverages strengths of both quantum and classical computing</li>
+                <li><strong>Practical Impact:</strong> One of the most promising near-term quantum applications</li>
+                <li><strong>Scalable:</strong> Shallow circuits reduce error accumulation from decoherence</li>
+                <li><strong>Flexible:</strong> Ansatz can be tailored to specific problems and hardware</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Test Your Understanding</h2>
+            <p>Challenge yourself with this 10-question quiz about the Variational Quantum Eigensolver!</p>
+            <div id="quizContainer"></div>
+        </section>
+    </div>
+
+    <script src="assets/js/quiz.js"></script>
+    <script>
+        const vqeQuiz = {
+            algorithmName: "VQE (Variational Quantum Eigensolver)",
+            questions: [
+                {
+                    id: 1,
+                    question: "What problem does VQE solve?",
+                    options: [
+                        "Integer factorization",
+                        "Finding the ground state energy of quantum systems",
+                        "Searching unsorted databases",
+                        "Solving linear equations"
+                    ],
+                    correct: 1,
+                    explanation: "VQE is designed to find the minimum eigenvalue (ground state energy) of a Hamiltonian, which represents a quantum system."
+                },
+                {
+                    id: 2,
+                    question: "What does 'NISQ' stand for in the context of VQE?",
+                    options: [
+                        "Noise-Integrated Secure Quantum",
+                        "Noisy Intermediate-Scale Quantum",
+                        "Near-Infinite State Quantum",
+                        "Networked Intelligent System Quantum"
+                    ],
+                    correct: 1,
+                    explanation: "NISQ stands for Noisy Intermediate-Scale Quantum, referring to current quantum computers with~50-1000 qubits that have error rates too high for fault-tolerant quantum computing."
+                },
+                {
+                    id: 3,
+                    question: "What is an 'ansatz' in VQE?",
+                    options: [
+                        "The final energy value",
+                        "A parametrized quantum circuit",
+                        "A classical optimizer",
+                        "A measurement operator"
+                    ],
+                    correct: 1,
+                    explanation: "An ansatz is a parametrized quantum circuit U(θ) that prepares trial quantum states. The parameters are optimized to minimize the energy."
+                },
+                {
+                    id: 4,
+                    question: "What principle guarantees that VQE converges from above?",
+                    options: [
+                        "Heisenberg uncertainty principle",
+                        "Variational principle",
+                        "Conservation of energy",
+                        "Superposition principle"
+                    ],
+                    correct: 1,
+                    explanation: "The variational principle states that ⟨ψ|H|ψ⟩ ≥ E₀ for any state |ψ⟩, ensuring that VQE's energy estimates are always upper bounds on the true ground state energy."
+                },
+                {
+                    id: 5,
+                    question: "Which part of VQE runs on classical computers?",
+                    options: [
+                        "State preparation",
+                        "Measurement",
+                        "Parameter optimization",
+                        "Superposition creation"
+                    ],
+                    correct: 2,
+                    explanation: "VQE is a hybrid algorithm where the quantum computer prepares states and measures energies, while a classical optimizer updates the parameters θ to minimize the energy."
+                },
+                {
+                    id: 6,
+                    question: "How is the Hamiltonian typically represented for measurement in VQE?",
+                    options: [
+                        "As a single matrix",
+                        "As a sum of Pauli operators",
+                        "As a probability distribution",
+                        "As a Fourier series"
+                    ],
+                    correct: 1,
+                    explanation: "The Hamiltonian is decomposed as H = Σᵢ hᵢPᵢ where Pᵢ are tensor products of Pauli matrices (I, X, Y, Z), which can be measured on quantum hardware."
+                },
+                {
+                    id: 7,
+                    question: "What is a key advantage of VQE over classical methods?",
+                    options: [
+                        "It always finds the exact answer",
+                        "It requires fewer qubits",
+                        "It can handle larger quantum systems",
+                        "It works on classical computers"
+                    ],
+                    correct: 2,
+                    explanation: "VQE can simulate larger quantum systems than classical methods because it avoids the exponential memory requirements needed to store the full quantum state classically."
+                },
+                {
+                    id: 8,
+                    question: "Why is VQE suitable for NISQ devices?",
+                    options: [
+                        "It requires millions of qubits",
+                        "It uses only short, shallow circuits",
+                        "It needs perfect qubits",
+                        "It doesn't use quantum gates"
+                    ],
+                    correct: 1,
+                    explanation: "VQE uses shallow circuits (few layers of gates), which reduces the accumulation of errors from noise and decoherence, making it practical for current noisy quantum hardware."
+                },
+                {
+                    id: 9,
+                    question: "Which field is VQE most commonly applied to?",
+                    options: [
+                        "Machine learning",
+                        "Cryptography",
+                        "Quantum chemistry and materials science",
+                        "Database search"
+                    ],
+                    correct: 2,
+                    explanation: "VQE is primarily used in quantum chemistry and materials science for computing molecular ground states, reaction energies, and designing new materials."
+                },
+                {
+                    id: 10,
+                    question: "What does the objective function E(θ) represent in VQE?",
+                    options: [
+                        "The number of qubits needed",
+                        "The expectation value of the Hamiltonian",
+                        "The circuit depth",
+                        "The measurement error"
+                    ],
+                    correct: 1,
+                    explanation: "E(θ) = ⟨ψ(θ)|H|ψ(θ)⟩ is the expectation value of the Hamiltonian for the parametrized state, which VQE minimizes to approximate the ground state energy."
+                }
+            ]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            new Quiz(vqeQuiz, 'quizContainer');
+        });
+    </script>
+</body>
+
+</html>

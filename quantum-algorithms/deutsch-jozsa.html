@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsch-Jozsa Algorithm | Quantum Algorithms</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/quiz.css">
+
+    <style>
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-2xl) 0;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f3ff 100%);
+            border-radius: var(--radius-lg);
+        }
+
+        .algorithm-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .algorithm-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+            border-bottom: 3px solid var(--accent-primary);
+            padding-bottom: var(--spacing-sm);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--accent-light);
+        }
+
+        .step-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent-primary);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+            border-radius: var(--radius-md);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: var(--spacing-sm);
+        }
+
+        .formula-box {
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+            overflow-x: auto;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        /* Make MathJax formulas larger and more visible */
+        .formula-box .MathJax {
+            font-size: 1.3em !important;
+        }
+
+        .formula-box mjx-container {
+            font-size: 1.3em !important;
+        }
+
+        .key-concept {
+            background: #e6f3ff;
+            border: 1px solid #0057b8;
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .key-concept-title {
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+            font-size: 16px;
+        }
+
+        .circuit-container {
+            text-align: center;
+            margin: var(--spacing-xl) 0;
+            padding: var(--spacing-lg);
+            background: #0a0a0a;
+            border-radius: var(--radius-lg);
+        }
+
+        .circuit-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .application-card {
+            background: var(--bg-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .application-card h4 {
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .back-btn:hover {
+            gap: var(--spacing-md);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2L2 7v10c0 5.5 3.8 10.7 10 12 6.2-1.3 10-6.5 10-12V7l-10-5zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                Quantum Algorithms
+            </div>
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <a href="index.html" class="back-btn">← Back to All Algorithms</a>
+
+        <div class="page-header">
+            <h1 class="algorithm-title">Deutsch-Jozsa Algorithm</h1>
+            <p class="algorithm-subtitle">The First Demonstration of Quantum Advantage</p>
+        </div>
+
+        <!-- Overview Section -->
+        <section class="section">
+            <h2 class="section-title">Overview</h2>
+            <p>
+                The Deutsch-Jozsa algorithm, proposed by David Deutsch and Richard Jozsa in 1992, was one of the
+                first quantum algorithms to demonstrate an exponential speedup over classical algorithms. While the
+                problem it solves is somewhat artificial, it provided crucial early evidence that quantum computers
+                could outperform classical computers for certain tasks.
+            </p>
+
+            <h3>The Problem</h3>
+            <p>
+                Given a function \( f: \{0,1\}^n \to \{0,1\} \) that is guaranteed to be either:
+            </p>
+            <ul>
+                <li><strong>Constant:</strong> \( f(x) \) returns the same value (0 or 1) for all inputs</li>
+                <li><strong>Balanced:</strong> \( f(x) \) returns 0 for exactly half of the inputs and 1 for the other
+                    half</li>
+            </ul>
+            <p>
+                <strong>Goal:</strong> Determine whether \( f \) is constant or balanced.
+            </p>
+
+            <h3>Classical vs Quantum Approach</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Classical Algorithm</th>
+                        <th>Quantum Algorithm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Queries Required</strong></td>
+                        <td>\( 2^{n-1} + 1 \) (worst case)</td>
+                        <td><strong>1 query</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Time Complexity</strong></td>
+                        <td>\( O(2^n) \)</td>
+                        <td><strong>\( O(n) \)</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Strategy</strong></td>
+                        <td>Evaluate function multiple times until pattern emerges</td>
+                        <td>Evaluate all inputs simultaneously via superposition</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speedup</strong></td>
+                        <td>-</td>
+                        <td><strong>Exponential</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Prerequisites Section -->
+        <section class="section">
+            <h2 class="section-title">Prerequisites</h2>
+            <p>Before studying the Deutsch-Jozsa algorithm, you should be familiar with:</p>
+
+            <div class="key-concept">
+                <div class="key-concept-title">📚 Recommended Background</div>
+                <ul>
+                    <li><strong>Quantum Gates:</strong> Understanding of Hadamard (H) gates and their role in creating
+                        superposition</li>
+                    <li><strong>Superposition:</strong> How qubits can exist in multiple states simultaneously</li>
+                    <li><strong>Oracle Concept:</strong> Black-box quantum operations that encode classical functions
+                    </li>
+                    <li><strong>Measurement:</strong> How quantum states collapse upon measurement</li>
+                    <li><strong>Basic Linear Algebra:</strong> Vector spaces and inner products</li>
+                    <li><strong>Computational Complexity:</strong> Big-O notation and algorithm analysis</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Quantum Circuit Section -->
+        <section class="section">
+            <h2 class="section-title">Quantum Circuit</h2>
+            <p>
+                The Deutsch-Jozsa algorithm uses a quantum circuit with \( n+1 \) qubits. The first \( n \) qubits
+                encode the input, and the last qubit is an ancilla that enables phase kickback.
+            </p>
+
+            <div class="circuit-container">
+                <img src="assets/circuits/deutsch-jozsa.svg" alt="Deutsch-Jozsa Quantum Circuit">
+            </div>
+
+            <div class="key-concept">
+                <div class="key-concept-title">💡 Circuit Components</div>
+                <ul>
+                    <li><strong>Blue Gates (H):</strong> Hadamard gates create and process superposition</li>
+                    <li><strong>Purple Box (U<sub>f</sub>):</strong> Oracle function that encodes \( f \)</li>
+                    <li><strong>Green Symbols:</strong> Measurement operations on the first \( n \) qubits</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Step-by-Step Walkthrough -->
+        <section class="section">
+            <h2 class="section-title">Step-by-Step Walkthrough</h2>
+
+            <div class="step-box">
+                <span class="step-number">1</span>
+                <strong>Initialize Qubits</strong>
+                <p>Start with \( n \) qubits in state \( |0\rangle \) and one ancilla qubit in state \( |1\rangle \):
+                </p>
+                <div class="formula-box">
+                    $$ |\psi_0\rangle = |0\rangle^{\otimes n} |1\rangle $$
+                </div>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">2</span>
+                <strong>Apply Hadamard Gates</strong>
+                <p>Apply Hadamard gate to all qubits to create superposition:</p>
+                <div class="formula-box">
+                    $$ |\psi_1\rangle = \frac{1}{\sqrt{2^{n+1}}} \sum_{x=0}^{2^n-1} |x\rangle (|0\rangle - |1\rangle) $$
+                </div>
+                <p>This creates an equal superposition of all possible \( 2^n \) input values.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">3</span>
+                <strong>Apply Oracle Function</strong>
+                <p>Apply the oracle \( U_f \) which performs the transformation:</p>
+                <div class="formula-box">
+                    $$ U_f |x\rangle |y\rangle = |x\rangle |y \oplus f(x)\rangle $$
+                </div>
+                <p>After applying to our superposition state:</p>
+                <div class="formula-box">
+                    $$ |\psi_2\rangle = \frac{1}{\sqrt{2^{n+1}}} \sum_{x=0}^{2^n-1} (-1)^{f(x)} |x\rangle (|0\rangle -
+                    |1\rangle) $$
+                </div>
+                <p>The phase \( (-1)^{f(x)} \) encodes the function value as a quantum phase.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">4</span>
+                <strong>Second Hadamard Transform</strong>
+                <p>Apply Hadamard gates to the first \( n \) qubits again:</p>
+                <div class="formula-box">
+                    $$ |\psi_3\rangle = \frac{1}{2^n} \sum_{x=0}^{2^n-1} \sum_{y=0}^{2^n-1} (-1)^{f(x) + x \cdot y}
+                    |y\rangle $$
+                </div>
+                <p>where \( x \cdot y \) is the bitwise inner product.</p>
+            </div>
+
+            <div class="step-box">
+                <span class="step-number">5</span>
+                <strong>Measure and Interpret</strong>
+                <p>Measure the first \( n \) qubits:</p>
+                <ul>
+                    <li><strong>If result is \( |0\rangle^{\otimes n} \):</strong> Function is <span
+                            style="color: var(--success); font-weight: bold;">constant</span></li>
+                    <li><strong>If result is anything else:</strong> Function is <span
+                            style="color: var(--accent-primary); font-weight: bold;">balanced</span></li>
+                </ul>
+                <p>This works because constructive interference occurs at \( |0\rangle^{\otimes n} \) only when \( f \)
+                    is constant.</p>
+            </div>
+        </section>
+
+        <!-- Mathematical Foundation -->
+        <section class="section">
+            <h2 class="section-title">Mathematical Foundation</h2>
+
+            <h3>Why It Works</h3>
+            <p>
+                The algorithm exploits quantum interference. When \( f \) is constant, all paths interfere
+                constructively at \( |0\rangle^{\otimes n} \). When \( f \) is balanced, interference is
+                destructive at \( |0\rangle^{\otimes n} \) and constructive at other states.
+            </p>
+
+            <div class="key-concept">
+                <div class="key-concept-title">🔑 Key Insight: Phase Kickback</div>
+                <p>
+                    The ancilla qubit in state \( \frac{1}{\sqrt{2}}(|0\rangle - |1\rangle) \) allows the function
+                    value \( f(x) \) to be encoded as a phase rather than in the computational basis. This is crucial
+                    because phases can interfere, while classical bit values cannot.
+                </p>
+            </div>
+
+            <h3>Example: 2-Qubit Case</h3>
+            <p>For \( n=2 \), there are 4 possible inputs: 00, 01, 10, 11.</p>
+
+            <h4>Constant Function (all 0s)</h4>
+            <div class="formula-box">
+                $$ |\psi_3\rangle = |00\rangle $$
+            </div>
+            <p>Measurement always yields 00 → <strong>Constant</strong></p>
+
+            <h4>Balanced Function (half 0s, half 1s)</h4>
+            <div class="formula-box">
+                $$ |\psi_3\rangle = \frac{1}{2}(|01\rangle + |10\rangle + |11\rangle - |00\rangle) $$
+            </div>
+            <p>Measurement never yields 00 → <strong>Balanced</strong></p>
+        </section>
+
+        <!-- Applications and Significance -->
+        <section class="section">
+            <h2 class="section-title">Applications & Significance</h2>
+
+            <h3>Historical Importance</h3>
+            <p>
+                The Deutsch-Jozsa algorithm was groundbreaking because:
+            </p>
+            <ul>
+                <li>First clear example of quantum speedup (exponential advantage)</li>
+                <li>Demonstrated the power of quantum superposition and interference</li>
+                <li>Inspired development of more practical quantum algorithms</li>
+                <li>Established the oracle model for quantum algorithm analysis</li>
+            </ul>
+
+            <h3>Practical Applications</h3>
+            <div class="applications-grid">
+                <div class="application-card">
+                    <h4>Algorithm Testing</h4>
+                    <p>Educational tool for understanding quantum computing principles and testing quantum hardware.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Theoretical Foundation</h4>
+                    <p>Basis for more complex algorithms like Simon's and Shor's algorithms.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Quantum Benchmarking</h4>
+                    <p>Used to benchmark quantum computers and verify quantum advantage.</p>
+                </div>
+                <div class="application-card">
+                    <h4>Complexity Theory</h4>
+                    <p>Helps establish separation between classical and quantum complexity classes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section class="section">
+            <h2 class="section-title">Test Your Understanding</h2>
+            <p>Challenge yourself with this 10-question quiz about the Deutsch-Jozsa algorithm!</p>
+            <div id="quizContainer"></div>
+        </section>
+    </div>
+
+    <script src="assets/js/quiz.js"></script>
+    <script>
+        // Quiz data for Deutsch-Jozsa Algorithm
+        const deutschJozsaQuiz = {
+            algorithmName: "Deutsch-Jozsa",
+            questions: [
+                {
+                    id: 1,
+                    question: "What is the primary purpose of the Deutsch-Jozsa algorithm?",
+                    options: [
+                        "Determine if a function is constant or balanced",
+                        "Factor large numbers efficiently",
+                        "Search an unsorted database",
+                        "Find the period of a function"
+                    ],
+                    correct: 0,
+                    explanation: "The Deutsch-Jozsa algorithm determines whether a given function is constant (always returns the same value) or balanced (returns 0 for half the inputs and 1 for the other half) using just one query."
+                },
+                {
+                    id: 2,
+                    question: "How many queries does the Deutsch-Jozsa algorithm require in the worst case?",
+                    options: [
+                        "2^n queries",
+                        "n queries",
+                        "1 query",
+                        "log(n) queries"
+                    ],
+                    correct: 2,
+                    explanation: "The quantum Deutsch-Jozsa algorithm requires only a single query to the oracle function, demonstrating exponential speedup over the classical approach which requires up to 2^(n-1) + 1 queries."
+                },
+                {
+                    id: 3,
+                    question: "What is the role of the Hadamard gates in the Deutsch-Jozsa circuit?",
+                    options: [
+                        "To measure the qubits",
+                        "To create and process quantum superposition",
+                        "To implement the oracle function",
+                        "To entangle the qubits"
+                    ],
+                    correct: 1,
+                    explanation: "Hadamard gates are applied before and after the oracle to create a superposition of all input states and then to transform the phase information into measurable probability amplitudes through quantum interference."
+                },
+                {
+                    id: 4,
+                    question: "What does measuring |00...0⟩ indicate about the function?",
+                    options: [
+                        "The function is balanced",
+                        "The function is constant",
+                        "The algorithm failed",
+                        "More measurements are needed"
+                    ],
+                    correct: 1,
+                    explanation: "When we measure the all-zero state |00...0⟩, it means constructive interference occurred at this state, which only happens when the function is constant. Any other measurement result indicates the function is balanced."
+                },
+                {
+                    id: 5,
+                    question: "What quantum principle enables the Deutsch-Jozsa algorithm's speedup?",
+                    options: [
+                        "Quantum entanglement only",
+                        "Quantum tunneling",
+                        "Quantum superposition and interference",
+                        "Quantum teleportation"
+                    ],
+                    correct: 2,
+                    explanation: "The algorithm exploits quantum superposition (evaluating all inputs simultaneously) and quantum interference (combining amplitudes) to distinguish constant from balanced functions in a single query."
+                },
+                {
+                    id: 6,
+                    question: "What is the purpose of the ancilla qubit initialized to |1⟩?",
+                    options: [
+                        "To store the final result",
+                        "To enable phase kickback mechanism",
+                        "To increase the number of qubits",
+                        "To prevent errors"
+                    ],
+                    correct: 1,
+                    explanation: "The ancilla qubit, when put into the state (|0⟩-|1⟩)/√2 via Hadamard gate, enables phase kickback. This allows the function value f(x) to be encoded as a phase factor rather than in the computational basis, which is essential for quantum interference."
+                },
+                {
+                    id: 7,
+                    question: "What is the classical worst-case query complexity for this problem?",
+                    options: [
+                        "n queries",
+                        "2n queries",
+                        "2^(n-1) + 1 queries",
+                        "n^2 queries"
+                    ],
+                    correct: 2,
+                    explanation: "Classically, in the worst case, you might need to check 2^(n-1) + 1 function values. For example, you could check half the inputs and find them all the same, but you'd need one more query to confirm whether it's constant or balanced."
+                },
+                {
+                    id: 8,
+                    question: "What happens after the second Hadamard transform if the function is balanced?",
+                    options: [
+                        "Only |00...0⟩ has non-zero amplitude",
+                        "|00...0⟩ has zero amplitude, other states have non-zero amplitude",
+                        "All states have equal amplitude",
+                        "The qubits collapse to a random state"
+                    ],
+                    correct: 1,
+                    explanation: "For a balanced function, destructive interference occurs at |00...0⟩, giving it zero amplitude, while constructive interference occurs at other states. This is why we never measure |00...0⟩ for balanced functions."
+                },
+                {
+                    id: 9,
+                    question: "Which statement about the Deutsch-Jozsa algorithm is TRUE?",
+                    options: [
+                        "It has immediate practical applications in cryptography",
+                        "It solves a problem faster than any classical algorithm",
+                        "It requires quantum error correction to work",
+                        "It can factor large numbers efficiently"
+                    ],
+                    correct: 1,
+                    explanation: "The Deutsch-Jozsa algorithm demonstrates exponential speedup over the best classical deterministic algorithm for the constant-vs-balanced problem. While the problem itself is somewhat artificial, the algorithm proved that quantum speedup is possible."
+                },
+                {
+                    id: 10,
+                    question: "What inspired the development of later quantum algorithms?",
+                    options: [
+                        "The use of ancilla qubits",
+                        "The oracle model and phase kickback technique",
+                        "The measurement strategy",
+                        "The initialization procedure"
+                    ],
+                    correct: 1,
+                    explanation: "The oracle model and the phase kickback technique pioneered by the Deutsch-Jozsa algorithm became fundamental concepts that inspired more sophisticated algorithms like Simon's algorithm and Shor's factoring algorithm."
+                }
+            ]
+        };
+
+        // Initialize quiz when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            new Quiz(deutschJozsaQuiz, 'quizContainer');
+        });
+    </script>
+</body>
+
+</html>

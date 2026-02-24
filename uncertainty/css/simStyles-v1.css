@@ -1,0 +1,718 @@
+/*************************/
+/* simulation stylesheet */
+/*************************/
+
+html, body
+{
+    width: 100%;
+	max-width: 100% !important;
+	min-width: 800px;
+	min-width: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #FFFFFF;
+	touch-action: manipulation;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#simContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 51vw;
+  overflow: hidden !important;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+datalist {
+  display: inline;
+}
+
+/*****************/
+/*   BUTTONS     */
+/*****************/
+.bRectangleContainer {
+position: absolute; 
+width: 10vw; 
+height: 2vw; 
+border: 0.2vw solid #00539b; 
+-ms-transform: translate(-50%, -50%); 
+transform: translate(-50%, -50%);
+cursor: pointer;
+}
+
+.buttonClass {
+  background-color: #eee;
+  color: rgb(8, 80, 196);
+  padding: 0%;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0%;
+  position: absolute; 
+  height: 2vw; 
+  font-size: 1.2vw;
+  box-shadow: 0.04vw 0.04vw 0.08vw 0.08vw rgb(175,175,175, 0.5);	
+}
+
+/* adds clickable area to elements with .bigger class */
+.biggerRectangleButton:after {
+  cursor: pointer;
+  content:"";
+  height: 200%;
+  width: 150%;
+  position: absolute;
+  top: -60%;
+  left: -30%;
+  background: rgba(255,0,0,0);
+}
+
+.biggerHelpButton:after {
+  cursor: pointer;
+  content:"";
+  height: 180%;
+  width: 180%;
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  background: rgba(255,0,0,0);
+}
+
+.helpContainer {
+  z-index: 2;	
+  position: absolute; 
+  width: 2vw; 
+  height: 2vw; 
+  border: 0.2vw solid #00539b; 
+  cursor: pointer;
+  -ms-transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);	
+}	
+
+.buttonHelpClass {
+  border-radius: 50%;
+  width: 2vw;  
+  border: none;
+  background-color: rgb(8, 80, 196);
+  color: white;
+  font-size: 1.6vw;
+}  
+  
+.buttonHelpDefaultClass {
+  color: rgb(8, 80, 196) !important;
+  box-shadow: 0.0vw 0.0vw 0.0vw 0.0vw rgb(175,175,175, 0.5); /* no shadow on default button */
+}
+  
+.buttonNarrowClass {
+  width: 10vw; 
+  font-weight: 600;
+}  
+
+.buttonWideClass {
+  width: 15vw; 
+  font-weight: 600;
+}  
+
+.buttonLeftRightClass{
+  border-radius: 50%;
+  width: 2vw; 
+  height: 2vw;  
+  border: none;
+  background-color: white;
+  color: rgb(8, 80, 196);
+  font-size: 1.4vw;	
+  padding-bottom: 0.2vw;
+  font-weight: 700;
+  box-shadow: 0.05vw 0.05vw 0.05vw 0.05vw rgb(175,175,175, 0.5);	
+}
+
+.buttonClass:hover{
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+}
+
+.buttonHelpClass:hover{
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+}
+
+.buttonLeftRightClass:hover{
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+}
+
+.buttonCloseClass {
+  border: none; 
+  background-color: inherit; 
+  color: black;
+  padding: 0%;
+  border-color: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0%;
+  position: absolute; 
+  font-size: 2vw;
+  height: 2.5vw; 
+  width: 2.5vw;
+  z-index: 2
+}
+
+.buttonCloseClass:hover{
+  cursor: pointer;
+  background-color: rgb(175,175,175, 0.3)
+}
+
+
+.buttonToggleClass {
+  background-color: rgb(8, 80, 196);
+  color: white;
+  padding: 0%;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0%;
+  position: absolute; 
+  height: 2vw; 
+  width: 2vw;
+  font-size: 1.2vw;
+  box-shadow: 0.04vw 0.04vw 0.08vw 0.08vw rgb(175,175,175, 0.5);	
+}
+
+.buttonToggleClass:hover{
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+}
+
+.togglePanel5:after {	
+  cursor: pointer;
+  content:"Instrumental imperfections";
+  height: 150%;
+  width: 1400%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  background: rgba(255,0,0,0);
+  border: none;
+  color: #000099;
+  font-size: 1.5vw;
+  text-align: left;
+  font-weight: 700;
+  padding-left: 120%;
+  padding-top: 24%;
+}
+
+.togglePanel6:after {	
+  cursor: pointer;
+  content:"Statistical uncertainty";
+  height: 150%;
+  width: 1400%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  background: rgba(255,0,0,0);
+  border: none;
+  color: #000099;
+  font-size: 1.5vw;
+  text-align: left;
+  font-weight: 700;
+  padding-left: 120%;
+  padding-top: 24%;
+}
+
+.togglePanelNoText:after {	
+  cursor: pointer;
+  content:"";
+  height: 150%;
+  width: 1400%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  background: rgba(255,0,0,0);
+  border: none;
+  color: #000099;
+  font-size: 1.5vw;
+  text-align: left;
+  font-weight: 700;
+  padding-left: 120%;
+}
+
+
+.buttonStepClass {
+  background-color: rgb(8, 80, 196);
+  color: white;
+  padding: 0%;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0%;
+  position: absolute; 
+  height: 2vw; 
+  width: 2vw;
+  font-size: 1.2vw;
+  box-shadow: 0.04vw 0.04vw 0.08vw 0.08vw rgb(175,175,175, 0.5);	
+}
+
+.buttonStepClass:hover{
+  transform:scale(1.3,1.3);
+  -webkit-transform:scale(1.3,1.3);
+  -moz-transform:scale(1.3,1.3);
+}
+
+.buttonStepActive{
+  transform:scale(1.3,1.3);
+  -webkit-transform:scale(1.3,1.3);
+  -moz-transform:scale(1.3,1.3);
+}
+
+.biggerStepButton:after {
+  cursor: pointer;
+  content:"";
+  height: 180%;
+  width: 180%;
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  background: rgba(255,0,0,0);
+  border: none;
+}
+
+/*****************/
+/* RADIO BUTTONS */
+/*****************/
+/* The container */
+.container {
+  position: absolute;
+  padding-left: 3.9vw; /* spacing between button and text label */
+  padding-top: 0.8vw; /* moves text down */
+  cursor: pointer;
+  font-size: 1.2vw;
+  height: 3.4vw;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmarkRadio {
+  position: absolute;
+  top: 0.55vw; /* moves radio button down so that centred in box */
+  left: 1.2vw;
+  height: 2vw;
+  width: 2vw;
+  border-radius: 50%;
+  background-color: #eee;
+  padding: 0%;
+  border: 0.13vw solid rgb(8, 80, 196);
+}
+
+/* On mouse-over, add a shadow */
+.container:hover input ~ .checkmarkRadio {
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+  color: white;
+}
+
+/* When the radio button is selected, add a background */
+.container input:checked ~ .checkmarkRadio {
+  background-color: rgb(8, 80, 196);
+  border-color: rgb(8, 80, 196);
+}
+
+/* Create the indicator */
+.checkmarkRadio:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+ .container input:checked ~ .checkmarkRadio:after {
+  display: block; 
+}
+
+/****************/
+/* CHECKBOX     */
+/****************/
+.containerCheckmark {
+  position: absolute;
+  padding-left: 3.8vw; /* spacing between button and text label */
+  padding-top: 0.9vw; /* moves text down */
+  cursor: pointer;
+  font-size: 1.2vw;
+  height: 3.4vw;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkmark */
+.containerCheckmark input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0.65vw; /* moves checkbox down so that centred in box */
+  left: 1.3vw;
+  height: 1.8vw;
+  width: 1.8vw;
+  border-radius: 0%;
+  background-color: #eee;
+  padding: 0%;
+  border: 0.13vw solid rgb(8, 80, 196);
+}
+  
+/* On mouse-over, add a shadow */
+.containerCheckmark:hover input ~ .checkmark {
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+}
+
+/* When the checkbox is checked, add a blue background */
+.containerCheckmark input:checked ~ .checkmark {
+  background-color: rgb(8, 80, 196);
+  border-color: rgb(8, 80, 196);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.containerCheckmark input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.containerCheckmark .checkmark:after {
+  left: 0.4vw;
+  top: 0.06vw;
+  width: 0.45vw;
+  height: 0.9vw;
+  border: solid white;
+  border-width: 0 0.28vw 0.28vw 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/**************/
+/* CHARTS */
+/**************/
+
+.chartContainer{
+position: absolute; 
+border: none; 
+width: 80%; 
+height: 65%;	
+} 
+
+/**************/
+/* SLIDER *****/
+/**************/
+.slider {
+  cursor: pointer;
+  position: absolute;
+  width: 70%;
+  height: 17.5%;
+  border: none;  
+  }
+
+.slider_wrap {
+  position: absolute; 
+  width: 81.8%; 
+  height: 76.4%; 
+  border: none;	
+}	
+
+.slider_bar {
+  position: absolute; 
+  width: 98.9%; 
+  height: 4.8%; 
+  background-color: #575E62; 
+}	
+
+.handle {
+  position: absolute; 
+  width: 11.3%; 
+  height: 1400%; 
+  transform-origin: 25% 50%; 
+  transform: scaleX(-1);
+}	
+
+
+/**************/
+/* PANEL TEXT */
+/**************/
+
+.leftJustify {
+   text-align: left !important;	
+}
+
+.rightJustify {
+   text-align: right !important;	
+}
+
+.blueText  {
+color: #000099	!important;
+}	
+
+#headerTitle{
+  position: absolute;	
+  margin: 0;
+  color: white;
+  font-size: 2.2vw;
+  text-align: center;
+  font-weight: 700;
+  font-stretch: semi-expanded;
+  -ms-transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
+  top: 50%; 
+  left: 50%;
+}
+
+#logo{
+  position: absolute; 
+  height: 2.0vw; 
+  -ms-transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%); 
+}	
+
+.headerText{
+  margin: 0;
+  color: #000099;
+  font-size: 1.5vw;
+  text-align: center;
+  font-weight: 700;
+  position: absolute; 
+  -ms-transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
+  top: 50%; 
+  left: 50%;
+}
+
+.panelTitle{
+  width: 80%; 	
+  margin: 0;
+  color: #000099;
+  font-size: 1.5vw;
+  text-align: center;
+  font-weight: 700;
+  position: absolute; 
+  -ms-transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
+}
+
+.panelText{
+  width: 100%; 	
+  margin: 0;
+  color: black;
+  font-size:  1.2vw;
+  text-align: center;
+  font-weight: 400;
+  position: absolute; 
+  -ms-transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
+}
+
+.panelTextLeft{
+  width: 100%; 	
+  margin: 0;
+  color: black;
+  font-size:  1.2vw;
+  text-align: left;
+  font-weight: 400;
+  position: absolute; 
+  -ms-transform: translate(0%, -50%); 
+  transform: translate(0%, -50%);
+}
+
+.radioButtonText{
+  width: 100%; 	
+  margin: 0;
+  color: black;
+  font-size:  1.2vw;
+  text-align: left;
+  font-weight: 400;
+  position: absolute; 
+}
+
+.helpText{
+  color: black;
+  font-size:  1.2vw;
+  text-align: left;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.helpTextDiv{
+  margin: 0; 
+  width: 86%;
+  height: 80%;
+  position: absolute; 	
+}	
+.challengesText{
+  width: 88%;	
+  margin: 0;
+  color: black;
+  font-size:  1.2vw;
+  line-height: 1.6;
+  text-align: left;
+  font-weight: 400;
+  position: absolute; 
+}
+
+.stepButtonText{
+  margin: 0;
+  color: white;
+  font-size:  1.5vw;
+  text-align: center;
+  font-weight: 400;
+  position: absolute; 
+  -ms-transform: translate(70%, 10%); 
+  transform: translate(70%, 10%);
+}
+
+.toggleButtonText{
+  margin: 0;
+  color: white;
+  font-size:  0.8vw;
+  text-align: center;
+  font-weight: 400;
+  position: absolute; 
+  padding-top: 0.4vw;  
+}
+	
+.greenTicksClass{
+   position: absolute; 
+   width: 1.7vw; 
+   height: 1.7vw; 
+}	
+
+/**************/
+/* PANELS     */
+/**************/
+
+.headerPanel{
+ z-index: 2; 
+ position: absolute; 	
+ background-color: rgb(39, 68, 110);
+ color: white;
+ padding: 0;
+ margin: 0;
+ border: none;
+ box-shadow: 0.12vw 0.25vw 0.35vw #888888;
+ width: 97vw; 
+ height: 4vw; 
+}
+
+.simTab{
+ position: absolute; 	
+ color: #000099;
+ border: none;
+ height: 75%; 
+ width: 15.5%; 
+ bottom: 0%; 
+ left: 1.5%;
+ cursor: pointer;
+ border-radius: 4% 4% 0% 0%;
+}
+
+.simTab:hover{
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+}
+
+.challengesTab{
+ position: absolute; 	
+ color: #000099;
+ padding: 0;
+ margin: 0;
+ border: none;
+ height: 75%; 
+ width: 15.5%; 
+ bottom: 0%; 
+ left: 17.5%;
+ cursor: pointer;
+ border-radius: 4% 4% 0% 0%;
+}
+
+.challengesTab:hover{
+  box-shadow: 0vw 0vw 0vw 0.5vw rgb(175,175,175, 0.3);	
+}
+
+.selectedTab{
+ background-color: Ivory;
+ box-shadow: 0vw 0vw 0.2vw 0.3vw white inset;		
+}
+
+.unselectedTab{
+ background-color: #dcdcdc;
+ box-shadow: none;		
+}
+
+	
+.cardPanel{
+  position: absolute; 
+  background-color: #ffecb3;
+  border-radius:0.5%; 
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-shadow: 0.12vw 0.25vw 0.35vw #888888;
+}
+
+.challengesPanel{
+  position: absolute; 
+  background-color: #ffecb3;
+  border-radius:0.5%; 
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-shadow: 0.12vw 0.25vw 0.35vw #888888;
+}
+
+.helpPanel{
+  position: absolute; 
+  background-color: #FFFFF7;
+  border-radius:0.5%; 
+  padding: 0;
+  margin: 0;
+  border: none;
+  box-shadow: 0.12vw 0.25vw 0.35vw #888888;
+}
+
+.stepControlsPanel{
+  position: absolute; 
+  background-color: transparent;
+  border-radius:0; 
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+.stepLine{
+  position: absolute; 
+  background-color: #B3E5FC;
+  height: 0.3vw;
+  padding: 0;
+  margin: 0;
+  border: none;   
+}

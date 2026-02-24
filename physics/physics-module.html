@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Physics Module Viewer</title>
+  <link rel="stylesheet" href="physics-module.css">
+</head>
+<body>
+  <header class="pm-header">
+    <div class="pm-left" style="display:flex;align-items:center;gap:12px">
+      <a href="../physics/physics-foundations.html">← Back to Physics Foundations</a>
+      <a href="https://www.jntuacea.ac.in/" target="_blank" title="JNTU Anantapur"><img src="../jntu_logo.png" alt="JNTU" style="height:36px"></a>
+    </div>
+    <div class="pm-center">Physics Module Viewer</div>
+    <div class="pm-right" id="topicTitle">—</div>
+  </header>
+
+  <div class="pm-container">
+    <nav class="pm-modules" id="moduleList">Loading modules…</nav>
+
+    <main class="pm-content">
+      <div id="moduleView">
+        <h2 id="moduleTitle">Select a module</h2>
+        <div id="moduleBody" class="module-body">Choose a module on the left to view text, video, and interactive demo.</div>
+
+        <div class="video-wrapper">
+          <div id="videoEmbed">No video selected</div>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+            <input id="videoUrlInput" placeholder="Paste YouTube watch or embed URL to save for this module" style="flex:1;padding:8px;border:1px solid #e2effc;border-radius:6px" />
+            <button id="saveVideoBtn" onclick="saveModuleVideo()" style="padding:8px 12px;border-radius:6px;background:#00b896;color:white;border:none;cursor:pointer">Save</button>
+          </div>
+          <div style="font-size:12px;color:#666;margin-top:6px">Tip: paste a YouTube watch URL (https://youtube.com/watch?v=XXXX) or an embed URL (https://youtube.com/embed/XXXX). Saved per module in your browser.</div>
+        </div>
+
+        <div id="demoWrappers">
+          <div id="waveDemo" style="margin-top:12px">
+            <h4>Wave / Interference Demo</h4>
+            <canvas id="waveCanvas" width="640" height="200"></canvas>
+            <div class="controls">
+              <label>Frequency: <input id="freq" type="range" min="1" max="20" value="5"></label>
+              <label>Width: <input id="width" type="range" min="0.5" max="4" step="0.1" value="1.2"></label>
+              <label>Animate: <input id="animate" type="checkbox" checked></label>
+              <label>Show particle hits: <input id="showHits" type="checkbox"></label>
+            </div>
+          </div>
+
+          <div id="blochDemo" style="margin-top:18px;display:none">
+            <h4>Bloch Sphere (3D WebGL)</h4>
+            <canvas id="bloch3dCanvas" width="360" height="360" style="border:1px solid #eef6ff;border-radius:8px"></canvas>
+            <div class="controls">
+              <label>Theta: <input id="theta" type="range" min="0" max="180" value="60"></label>
+              <label>Phi: <input id="phi" type="range" min="0" max="360" value="30"></label>
+            </div>
+            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+              <button onclick="applyGate('X')" style="padding:6px 10px">Apply X</button>
+              <button onclick="applyGate('Y')" style="padding:6px 10px">Apply Y</button>
+              <button onclick="applyGate('Z')" style="padding:6px 10px">Apply Z</button>
+              <button onclick="applyGate('H')" style="padding:6px 10px">Apply H</button>
+              <button onclick="resetBloch()" style="padding:6px 10px;background:#f0f0f0">Reset</button>
+            </div>
+          </div>
+
+          <div id="measureDemo" style="margin-top:18px;display:none">
+            <h4>Measurement Simulation</h4>
+            <canvas id="measureCanvas" width="480" height="160" style="border:1px solid #eef6ff;border-radius:6px"></canvas>
+            <div class="controls">
+              <label>Shots: <input id="shots" type="number" min="10" max="10000" value="200"></label>
+              <button onclick="runMeasurement()">Run</button>
+              <button onclick="clearMeasurement()" style="background:#f0f0f0;color:#333">Reset</button>
+            </div>
+            <div style="font-size:13px;color:#444;margin-top:8px">Result: <span id="measureResult">—</span></div>
+          </div>
+        </div>
+
+        <div class="interactive">
+          <h3>Interactive demo</h3>
+          <canvas id="waveCanvas" width="640" height="200"></canvas>
+          <div class="controls">
+            <label>Frequency: <input id="freq" type="range" min="1" max="20" value="5"></label>
+            <label>Width: <input id="width" type="range" min="0.5" max="4" step="0.1" value="1.2"></label>
+            <label>Animate: <input id="animate" type="checkbox" checked></label>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <aside class="pm-chat">
+      <div class="chat-header">
+        <div class="tabs">
+          <button id="tabNotes" class="active" onclick="switchTab('notes')">Notes</button>
+          <button id="tabAI" onclick="switchTab('ai')">AI Assistant</button>
+        </div>
+        <div id="pmTopicLabel">—</div>
+      </div>
+
+      <div id="chatMessages" class="chat-messages"></div>
+
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Ask about this module or request examples" onkeydown="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button onclick="exportData()" style="flex:1;padding:8px;border-radius:6px;background:#0057b8;color:white">Export sessions</button>
+        <button onclick="promptImport()" style="flex:1;padding:8px;border-radius:6px;background:#f0f0f0">Import sessions</button>
+      </div>
+    </aside>
+  </div>
+
+  <script src="physics-bloch3d.js"></script>
+  <script src="physics-module.js"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Quantum Composer - Professional Edition</title>
+    <link rel="stylesheet" href="advanced-composer.css">
+    <link rel="stylesheet" href="../global-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+</head>
+<body>
+    <div class="advanced-container">
+        <!-- Header -->
+        <div class="advanced-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>Advanced Quantum Composer</h1>
+                    <p>Professional Quantum Circuit Design - IBM Qiskit Style</p>
+                </div>
+                <button class="back-btn" onclick="window.history.back()">← Back to Gates</button>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="advanced-layout">
+            <!-- Left Panel: Code Generation -->
+            <div class="panel code-panel">
+                <div class="panel-header">
+                    <h3>Qiskit Code</h3>
+                    <button class="panel-btn" onclick="copyCode()">Copy</button>
+                    <button class="panel-btn" onclick="downloadCode()">Download</button>
+                </div>
+                <div class="panel-content">
+                    <pre id="codeOutput">from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+from qiskit_aer import AerSimulator
+from qiskit.visualization import plot_histogram
+import matplotlib.pyplot as plt
+
+# Initialize quantum and classical registers
+num_qubits = 4
+qr = QuantumRegister(num_qubits, 'q')
+cr = ClassicalRegister(num_qubits, 'c')
+
+# Create quantum circuit
+qc = QuantumCircuit(qr, cr)
+
+# Add your gates here
+
+# Measurement
+qc.measure(qr, cr)
+
+# Execute on simulator
+simulator = AerSimulator()
+job = simulator.run(qc, shots=1024)
+result = job.result()
+counts = result.get_counts(qc)
+
+# Plot results
+print(counts)
+plot_histogram(counts).show()</pre>
+                </div>
+            </div>
+
+            <!-- Middle Panel: Circuit Design -->
+            <div class="panel circuit-panel">
+                <div class="panel-header">
+                    <h3>Quantum Circuit Designer</h3>
+                    <div class="header-controls">
+                        <input type="number" id="qubitCount" min="1" max="10" value="4" class="qubit-input" onchange="updateCircuitQubits()">
+                        <span>Qubits</span>
+                        <button class="control-btn" onclick="resetCircuit()">Clear</button>
+                        <button class="control-btn" onclick="runSimulation()">Run</button>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div class="circuit-canvas" id="circuitCanvas">
+                        <div class="qubit-rows" id="qubitRows"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Gates & Visualizations -->
+            <div class="panel right-panel">
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="switchTab('gates')">Gates</button>
+                    <button class="tab-btn" onclick="switchTab('bloch')">Bloch 3D</button>
+                    <button class="tab-btn" onclick="switchTab('statevec')">State Vector</button>
+                    <button class="tab-btn" onclick="switchTab('measurements')">Measurements</button>
+                </div>
+
+                <!-- Gates Tab -->
+                <div id="gates" class="tab-content active">
+                    <div class="gate-section">
+                        <h4>Single-Qubit Gates</h4>
+                        <div class="gate-grid">
+                            <button class="gate-btn" draggable="true" data-gate="X" data-type="single">X</button>
+                            <button class="gate-btn" draggable="true" data-gate="Y" data-type="single">Y</button>
+                            <button class="gate-btn" draggable="true" data-gate="Z" data-type="single">Z</button>
+                            <button class="gate-btn" draggable="true" data-gate="H" data-type="single">H</button>
+                            <button class="gate-btn" draggable="true" data-gate="S" data-type="single">S</button>
+                            <button class="gate-btn" draggable="true" data-gate="T" data-type="single">T</button>
+                            <button class="gate-btn" draggable="true" data-gate="RX" data-type="single">RX(θ)</button>
+                            <button class="gate-btn" draggable="true" data-gate="RY" data-type="single">RY(θ)</button>
+                            <button class="gate-btn" draggable="true" data-gate="RZ" data-type="single">RZ(θ)</button>
+                        </div>
+                    </div>
+
+                    <div class="gate-section">
+                        <h4>Two-Qubit Gates</h4>
+                        <div class="gate-grid">
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="CNOT" data-type="two">CNOT</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="SWAP" data-type="two">SWAP</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="CZ" data-type="two">CZ</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="iSWAP" data-type="two">iSWAP</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="XX" data-type="two">XX(θ)</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="YY" data-type="two">YY(θ)</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="ZZ" data-type="two">ZZ(θ)</button>
+                        </div>
+                    </div>
+
+                    <div class="gate-section">
+                        <h4>Three-Qubit Gates</h4>
+                        <div class="gate-grid">
+                            <button class="gate-btn three-qubit" draggable="true" data-gate="Toffoli" data-type="three">Toffoli</button>
+                            <button class="gate-btn three-qubit" draggable="true" data-gate="Fredkin" data-type="three">Fredkin</button>
+                        </div>
+                    </div>
+
+                    <div class="gate-section">
+                        <h4>Measurement</h4>
+                        <div class="gate-grid">
+                            <button class="gate-btn measure" draggable="true" data-gate="MEASURE" data-type="measure">Measure</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloch 3D Tab -->
+                <div id="bloch" class="tab-content">
+                    <div class="bloch-container" id="blochContainer"></div>
+                </div>
+
+                <!-- State Vector Tab -->
+                <div id="statevec" class="tab-content">
+                    <div class="state-vector" id="stateVector">
+                        <p>Run simulation to see state vector</p>
+                    </div>
+                </div>
+
+                <!-- Measurements Tab -->
+                <div id="measurements" class="tab-content">
+                    <div class="measurements" id="measurementsDisplay">
+                        <p>Run simulation to see measurement results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-label">Circuit Depth:</span>
+                <span class="status-value" id="depth">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Gate Count:</span>
+                <span class="status-value" id="gateCount">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Estimated Exec Time:</span>
+                <span class="status-value" id="execTime">0 μs</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Optimization:</span>
+                <select id="optimization" class="status-select">
+                    <option value="none">None</option>
+                    <option value="light">Light</option>
+                    <option value="medium">Medium</option>
+                    <option value="heavy">Heavy</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script src="advanced-composer.js"></script>
+</body>
+</html>

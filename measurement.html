@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="stylesheet" href="global-ui.css">
+
+<meta charset="UTF-8">
+<title>Measurement Collapse | The Quanta</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#f4f7fc;
+  color:#1f2d3d;
+}
+
+header{
+  background:white;
+  padding:16px 28px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  display:flex;
+  align-items:center;
+}
+
+header img{
+  width:42px;
+  margin-right:12px;
+}
+
+main{
+  padding:30px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.section{
+  background:white;
+  padding:28px;
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);
+  margin-bottom:30px;
+}
+
+h2,h3{
+  color:#003366;
+}
+
+p{
+  font-size:16px;
+  line-height:1.7;
+}
+
+ul{
+  margin-left:20px;
+}
+
+/* ---------- CLIP ART STYLES ---------- */
+
+/* Quantum wave */
+.wave{
+  font-size:44px;
+  letter-spacing:10px;
+  animation:waveAnim 2s infinite;
+}
+
+@keyframes waveAnim{
+  0%{opacity:.5}
+  50%{opacity:1}
+  100%{opacity:.5}
+}
+
+/* Circuit */
+#circuit{
+  position:relative;
+  height:230px;
+  margin-top:20px;
+}
+
+/* Wires */
+.qwire{
+  position:absolute;
+  top:100px;
+  left:5%;
+  width:90%;
+  height:4px;
+  background:#003366;
+}
+
+.cwire{
+  position:absolute;
+  top:160px;
+  left:55%;
+  width:35%;
+  height:6px;
+  background:#666;
+}
+
+/* State packet */
+#state{
+  position:absolute;
+  top:70px;
+  left:5%;
+  font-size:36px;
+  transition:left 1.6s linear, opacity .6s;
+}
+
+/* Measurement gate */
+#measureGate{
+  position:absolute;
+  top:60px;
+  left:48%;
+  width:90px;
+  height:90px;
+  border-radius:16px;
+  background:#0057b8;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  cursor:pointer;
+  box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
+
+/* Output */
+#output{
+  position:absolute;
+  top:150px;
+  left:55%;
+  font-size:34px;
+  font-weight:700;
+}
+
+/* Buttons */
+button{
+  padding:10px 18px;
+  margin:10px 10px 0 0;
+  background:#0057b8;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* Stats */
+.stats{
+  display:flex;
+  gap:40px;
+  margin-top:12px;
+  font-weight:600;
+}
+
+/* Feedback */
+.feedback-img{
+  width:90px;
+  margin-top:10px;
+}
+
+/* Fireworks */
+#fireworks{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  display:none;
+}
+
+/* ── Advanced Quiz ──────────────────────────────────────────────── */
+.adv-quiz-section{margin:28px 0;}
+.adv-quiz-wrap{margin-top:0;}
+.adv-quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.adv-quiz-title{font-size:15px;font-weight:700;color:#003366;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:7px;}
+.adv-quiz-title::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:#0057b8;box-shadow:0 0 8px #0057b8;}
+.adv-quiz-prog-label{font-size:13px;color:#64748b;font-weight:500;}
+.adv-quiz-bar{height:5px;background:#e2e8f0;border-radius:4px;margin-bottom:18px;overflow:hidden;}
+.adv-quiz-bar-fill{height:100%;background:linear-gradient(90deg,#0057b8,#00b4d8);border-radius:4px;transition:width .35s ease;}
+.adv-quiz-card{background:#fff;border:2px solid #e2e8f0;border-radius:14px;padding:26px 28px;box-shadow:0 4px 16px rgba(0,70,150,.07);}
+.adv-quiz-q{font-size:17px;font-weight:600;color:#1e293b;line-height:1.55;margin-bottom:20px;}
+.adv-quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.adv-quiz-opt{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:14px;}
+.adv-quiz-opt:hover{border-color:#0057b8;background:rgba(0,87,184,.05);}
+.adv-quiz-opt.selected{border-color:#0057b8;background:rgba(0,87,184,.12);}
+.adv-quiz-opt.correct{border-color:#10b981;background:rgba(16,185,129,.12);}
+.adv-quiz-opt.incorrect{border-color:#ef4444;background:rgba(239,68,68,.12);}
+.adv-quiz-opt.disabled{cursor:not-allowed;}
+.adv-opt-letter{width:32px;height:32px;border-radius:50%;border:2px solid #cbd5e1;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#64748b;flex-shrink:0;transition:all .22s;}
+.adv-quiz-opt.selected .adv-opt-letter{background:#0057b8;border-color:#0057b8;color:#fff;}
+.adv-quiz-opt.correct .adv-opt-letter{background:#10b981;border-color:#10b981;color:#fff;}
+.adv-quiz-opt.incorrect .adv-opt-letter{background:#ef4444;border-color:#ef4444;color:#fff;}
+.adv-opt-text{flex:1;font-size:15px;color:#475569;line-height:1.4;}
+.adv-quiz-opt.selected .adv-opt-text{color:#1e293b;}
+.adv-quiz-explain{display:none;margin-top:14px;background:#eef6ff;border-left:4px solid #0057b8;border-radius:8px;padding:14px 16px;}
+.adv-quiz-explain.show{display:block;animation:aqSlide .3s ease;}
+.adv-explain-title{font-size:11px;font-weight:700;color:#0057b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.adv-explain-text{font-size:14px;color:#334155;line-height:1.6;}
+.adv-quiz-controls{display:flex;justify-content:center;gap:12px;margin-top:20px;}
+.adv-quiz-btn{padding:10px 24px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.adv-quiz-btn:disabled{opacity:.45;cursor:not-allowed;}
+.adv-quiz-btn-primary{background:linear-gradient(135deg,#0057b8,#0094d4);color:#fff;}
+.adv-quiz-btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,87,184,.35);}
+.adv-quiz-btn-secondary{background:transparent;border:2px solid #e2e8f0;color:#475569;}
+.adv-quiz-btn-secondary:hover:not(:disabled){border-color:#0057b8;color:#0057b8;}
+.adv-quiz-results{background:#fff;border:2px solid #0057b8;border-radius:14px;padding:36px;text-align:center;display:none;}
+.adv-quiz-results.show{display:block;animation:aqZoom .4s ease;}
+.adv-quiz-score-pct{font-size:60px;font-weight:800;background:linear-gradient(135deg,#0057b8,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.adv-quiz-score-label{font-size:20px;color:#475569;margin:8px 0 4px;}
+.adv-quiz-score-detail{font-size:15px;color:#94a3b8;margin-bottom:20px;}
+.adv-quiz-feedback{font-size:17px;color:#1e293b;background:#eef6ff;border-radius:10px;padding:16px 20px;margin-bottom:22px;}
+@keyframes aqSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes aqZoom{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+
+</style>
+</head>
+
+<body>
+    <!-- Global Back Button -->
+<div class="global-back-btn" onclick="goBackGlobal()" title="Go Back"></div>
+  ←
+</div>
+
+
+<canvas id="fireworks"></canvas>
+
+<header>
+  <img src="jntu_logo.png">
+  <h2>Measurement Collapse</h2>
+</header>
+
+<main>
+
+<!-- THEORY -->
+<div class="section">
+  <h2>What is Measurement Collapse?</h2>
+
+  <p>
+    A qubit can exist in a <strong>superposition</strong> of states.
+    When the qubit is measured, this superposition disappears and
+    the qubit collapses into one definite classical result.
+  </p>
+
+  <p>
+    This irreversible process is known as <strong>measurement collapse</strong>.
+  </p>
+
+  <ul>
+    <li>Before measurement → quantum state (many possibilities)</li>
+    <li>After measurement → classical outcome |0⟩ or |1⟩</li>
+  </ul>
+</div>
+
+<!-- MEASUREMENT SYMBOL -->
+<div class="section">
+  <h3>Measurement Gate in Quantum Circuits</h3>
+
+  <p>
+    In quantum circuit diagrams, measurement is represented by the
+    <strong>meter symbol Ⓜ</strong>.
+  </p>
+
+  <ul>
+    <li>Single line → quantum wire (qubit)</li>
+    <li>Ⓜ → measurement operation</li>
+    <li>Double line → classical wire (bit)</li>
+  </ul>
+</div>
+
+<!-- INTERACTIVE CIRCUIT -->
+<div class="section">
+  <h3>Interactive Measurement Collapse (Industry-Style)</h3>
+
+  <p>
+    Watch the quantum state travel through the circuit.
+    When it reaches the measurement gate, the state collapses.
+  </p>
+
+  <div id="circuit">
+    <div class="qwire"></div>
+    <div class="cwire"></div>
+
+    <div id="state" class="wave">∿ |ψ⟩ ∿</div>
+
+    <div id="measureGate" onclick="runMeasurement()">Ⓜ</div>
+
+    <div id="output"></div>
+  </div>
+
+  <button onclick="runMeasurement()">Run Measurement</button>
+  <button onclick="reset()">Reset</button>
+
+  <div class="stats">
+    <div>|0⟩: <span id="count0">0</span></div>
+    <div>|1⟩: <span id="count1">0</span></div>
+  </div>
+</div>
+
+<div class="section">
+  
+
+  </div>
+</div>
+
+
+</main>
+
+<script>
+/* ---------- INTERACTION ---------- */
+let c0=0, c1=0;
+
+function runMeasurement(){
+  state.style.left="48%";
+
+  setTimeout(()=>{
+    const zero=Math.random()<0.5;
+    output.innerText = zero ? "|0⟩" : "|1⟩";
+
+    if(zero){count0.innerText=++c0}
+    else{count1.innerText=++c1}
+
+    state.style.opacity="0";
+  },1600);
+}
+
+function reset(){
+  state.style.left="5%";
+  state.style.opacity="1";
+  output.innerText="";
+}
+
+*/
+const fw=document.getElementById("fireworks");
+const ctx=fw.getContext("2d");
+fw.width=window.innerWidth;
+fw.height=window.innerHeight;
+
+function startFireworks(){
+  fw.style.display="block";
+  let p=[];
+  for(let i=0;i<120;i++){
+    p.push({
+      x:fw.width/2,
+      y:fw.height/2,
+      vx:(Math.random()-0.5)*7,
+      vy:(Math.random()-0.5)*7,
+      life:80
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,fw.width,fw.height);
+    p.forEach(a=>{
+      ctx.fillStyle="gold";
+      ctx.fillRect(a.x,a.y,3,3);
+      a.x+=a.vx;
+      a.y+=a.vy;
+      a.life--;
+    });
+    p=p.filter(a=>a.life>0);
+    if(p.length>0) requestAnimationFrame(draw);
+    else fw.style.display="none";
+  }
+  draw();
+}
+</script>
+<script src="global-ui.js"></script>
+
+<!-- ── Advanced Measurement Collapse Quiz (self-contained) ─────────────────────── -->
+<style>
+/* ── Advanced Quiz ─────────────────────────────────────────────────────── */
+.adv-quiz-section{background:#fff;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.08);margin:28px 0;padding:28px;}
+.adv-quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.adv-quiz-title{font-size:15px;font-weight:700;color:#003366;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:7px;}
+.adv-quiz-title::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:#0057b8;box-shadow:0 0 8px #0057b8;}
+.adv-quiz-prog-label{font-size:13px;color:#64748b;font-weight:500;}
+.adv-quiz-bar{height:5px;background:#e2e8f0;border-radius:4px;margin-bottom:18px;overflow:hidden;}
+.adv-quiz-bar-fill{height:100%;background:linear-gradient(90deg,#0057b8,#00b4d8);border-radius:4px;transition:width .35s ease;}
+.adv-quiz-card{background:#fff;border:2px solid #e2e8f0;border-radius:14px;padding:26px 28px;box-shadow:0 4px 16px rgba(0,70,150,.07);}
+.adv-quiz-q{font-size:17px;font-weight:600;color:#1e293b;line-height:1.55;margin-bottom:20px;}
+.adv-quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.adv-quiz-opt{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:13px 16px;cursor:pointer;transition:all .22s;display:flex;align-items:center;gap:14px;}
+.adv-quiz-opt:hover{border-color:#0057b8;background:rgba(0,87,184,.05);}
+.adv-quiz-opt.selected{border-color:#0057b8;background:rgba(0,87,184,.12);}
+.adv-quiz-opt.correct{border-color:#10b981;background:rgba(16,185,129,.12);}
+.adv-quiz-opt.incorrect{border-color:#ef4444;background:rgba(239,68,68,.12);}
+.adv-quiz-opt.disabled{cursor:not-allowed;}
+.adv-opt-letter{width:32px;height:32px;border-radius:50%;border:2px solid #cbd5e1;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#64748b;flex-shrink:0;transition:all .22s;}
+.adv-quiz-opt.selected .adv-opt-letter{background:#0057b8;border-color:#0057b8;color:#fff;}
+.adv-quiz-opt.correct .adv-opt-letter{background:#10b981;border-color:#10b981;color:#fff;}
+.adv-quiz-opt.incorrect .adv-opt-letter{background:#ef4444;border-color:#ef4444;color:#fff;}
+.adv-opt-text{flex:1;font-size:15px;color:#475569;line-height:1.4;}
+.adv-quiz-opt.selected .adv-opt-text{color:#1e293b;}
+.adv-quiz-explain{display:none;margin-top:14px;background:#eef6ff;border-left:4px solid #0057b8;border-radius:8px;padding:14px 16px;}
+.adv-quiz-explain.show{display:block;animation:aqSlide .3s ease;}
+.adv-explain-title{font-size:11px;font-weight:700;color:#0057b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;}
+.adv-explain-text{font-size:14px;color:#334155;line-height:1.6;}
+.adv-quiz-controls{display:flex;justify-content:center;gap:12px;margin-top:20px;}
+.adv-quiz-btn{padding:10px 24px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.adv-quiz-btn:disabled{opacity:.45;cursor:not-allowed;}
+.adv-quiz-btn-primary{background:linear-gradient(135deg,#0057b8,#0094d4);color:#fff;}
+.adv-quiz-btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,87,184,.35);}
+.adv-quiz-btn-secondary{background:transparent;border:2px solid #e2e8f0;color:#475569;}
+.adv-quiz-btn-secondary:hover:not(:disabled){border-color:#0057b8;color:#0057b8;}
+.adv-quiz-results{background:#fff;border:2px solid #0057b8;border-radius:14px;padding:36px;text-align:center;display:none;}
+.adv-quiz-results.show{display:block;animation:aqZoom .4s ease;}
+.adv-quiz-score-pct{font-size:60px;font-weight:800;background:linear-gradient(135deg,#0057b8,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.adv-quiz-score-label{font-size:20px;color:#475569;margin:8px 0 4px;}
+.adv-quiz-score-detail{font-size:15px;color:#94a3b8;margin-bottom:20px;}
+.adv-quiz-feedback{font-size:17px;color:#1e293b;background:#eef6ff;border-radius:10px;padding:16px 20px;margin-bottom:22px;}
+@keyframes aqSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes aqZoom{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+</style>
+
+<div style="max-width:1100px;margin:28px auto;padding:0 24px;">
+<div class="adv-quiz-section">
+  <div id="advQuizMount_measurementQuizData"></div>
+</div>
+</div>
+
+<script>
+(function(){
+
+class AdvQuiz {
+  constructor(data, mountId) {
+    this.data=data; this.mount=document.getElementById(mountId);
+    this.cur=0; this.score=0; this.answers=[]; this.answered=false;
+    this.render();
+  }
+  render() {
+    if(!this.mount)return;
+    const q=this.data.questions[this.cur];
+    const pct=(this.cur/this.data.questions.length)*100;
+    this.mount.innerHTML=`
+      <div class="adv-quiz-header">
+        <div class="adv-quiz-title">${this.data.topicName} Quiz</div>
+        <div class="adv-quiz-prog-label">Q${this.cur+1}&nbsp;/&nbsp;${this.data.questions.length}</div>
+      </div>
+      <div class="adv-quiz-bar"><div class="adv-quiz-bar-fill" style="width:${pct}%"></div></div>
+      <div class="adv-quiz-card">
+        <div class="adv-quiz-q">${q.question}</div>
+        <div class="adv-quiz-opts">
+          ${q.options.map((o,i)=>`
+            <div class="adv-quiz-opt" data-i="${i}">
+              <div class="adv-opt-letter">${'ABCD'[i]}</div>
+              <div class="adv-opt-text">${o}</div>
+            </div>`).join('')}
+        </div>
+        <div class="adv-quiz-explain" id="aqqExp">
+          <div class="adv-explain-title">Explanation</div>
+          <div class="adv-explain-text">${q.explanation}</div>
+        </div>
+      </div>
+      <div class="adv-quiz-controls">
+        <button class="adv-quiz-btn adv-quiz-btn-secondary" id="aqPrev" ${this.cur===0?'disabled':''}>&larr; Prev</button>
+        <button class="adv-quiz-btn adv-quiz-btn-primary" id="aqSubmit" disabled>Submit</button>
+        <button class="adv-quiz-btn adv-quiz-btn-secondary" id="aqNext" style="display:none">Next &rarr;</button>
+      </div>`;
+    this.restoreAnswer(); this.bind();
+  }
+  bind() {
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach(el=>el.addEventListener('click',()=>{if(!this.answered)this.select(el);}));
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.addEventListener('click',()=>this.submit());
+    const prv=this.mount.querySelector('#aqPrev'); if(prv)prv.addEventListener('click',()=>{this.cur--;this.answered=!!this.answers[this.cur];this.render();});
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt)nxt.addEventListener('click',()=>{
+      if(this.cur<this.data.questions.length-1){this.cur++;this.answered=!!this.answers[this.cur];this.render();}
+      else this.showResults();
+    });
+  }
+  select(el){
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.disabled=false;
+  }
+  submit(){
+    const sel=this.mount.querySelector('.adv-quiz-opt.selected'); if(!sel)return;
+    this.answered=true;
+    const i=parseInt(sel.dataset.i),q=this.data.questions[this.cur],ok=i===q.correct;
+    if(ok&&!this.answers[this.cur])this.score++;
+    this.answers[this.cur]={selected:i,correct:ok};
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach((o,idx)=>{
+      o.classList.add('disabled');
+      if(idx===q.correct)o.classList.add('correct');
+      else if(idx===i&&!ok)o.classList.add('incorrect');
+    });
+    const exp=this.mount.querySelector('#aqqExp'); if(exp)exp.classList.add('show');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.style.display='none';
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt){
+      nxt.style.display='inline-flex';
+      if(this.cur===this.data.questions.length-1)nxt.textContent='View Results';
+    }
+    if(ok&&typeof startFireworks==='function')startFireworks();
+  }
+  restoreAnswer(){
+    const prev=this.answers[this.cur]; if(!prev)return;
+    this.answered=true;
+    const q=this.data.questions[this.cur];
+    this.mount.querySelectorAll('.adv-quiz-opt').forEach((o,idx)=>{
+      o.classList.add('disabled');
+      if(idx===q.correct)o.classList.add('correct');
+      if(idx===prev.selected){o.classList.add('selected');if(!prev.correct)o.classList.add('incorrect');}
+    });
+    const exp=this.mount.querySelector('#aqqExp'); if(exp)exp.classList.add('show');
+    const sub=this.mount.querySelector('#aqSubmit'); if(sub)sub.style.display='none';
+    const nxt=this.mount.querySelector('#aqNext'); if(nxt)nxt.style.display='inline-flex';
+  }
+  showResults(){
+    const pct=Math.round((this.score/this.data.questions.length)*100);
+    const fb=pct>=90?'Outstanding! You have mastered this topic!':pct>=70?'Great job! Solid understanding of the concepts.':pct>=50?'Good effort! Review the material to strengthen your understanding.':'Keep learning! Re-read the theory and try again.';
+    this.mount.innerHTML=`
+      <div class="adv-quiz-results show">
+        <div class="adv-quiz-score-pct">${pct}%</div>
+        <div class="adv-quiz-score-label">Your Score</div>
+        <div class="adv-quiz-score-detail">${this.score} out of ${this.data.questions.length} correct</div>
+        <div class="adv-quiz-feedback">${fb}</div>
+        <div class="adv-quiz-controls">
+          <button class="adv-quiz-btn adv-quiz-btn-secondary" onclick="location.reload()">Try Again</button>
+        </div>
+      </div>`;
+  }
+}
+
+const measurementQuizData = {
+  topicName: "Measurement Collapse",
+  questions: [
+    {
+      question: "What happens when a qubit in superposition is measured?",
+      options: ["It remains in superposition", "The wavefunction collapses to a definite state", "It becomes entangled with the detector", "The amplitudes are averaged"],
+      correct: 1,
+      explanation: "Measurement causes irreversible wavefunction collapse — the qubit randomly collapses to |0⟩ or |1⟩ with probabilities given by the Born rule."
+    },
+    {
+      question: "Which symbol represents measurement in quantum circuit diagrams?",
+      options: ["⊗ (tensor product)", "≈ (approximation)", "Ⓜ (meter symbol)", "⊕ (XOR gate)"],
+      correct: 2,
+      explanation: "The meter symbol Ⓜ is the standard notation for a measurement gate. It reads the qubit state and outputs a classical bit."
+    },
+    {
+      question: "What is the output of a quantum measurement?",
+      options: ["A continuous value between 0 and 1", "A classical bit (0 or 1)", "A complex amplitude", "Another qubit in superposition"],
+      correct: 1,
+      explanation: "Measurement always produces a classical outcome — a definite bit value of 0 or 1."
+    },
+    {
+      question: "Why is quantum measurement said to be 'irreversible'?",
+      options: ["Because the qubit is destroyed", "Because the collapse cannot be undone by any quantum operation", "Because the energy is lost", "Because the classical bit turns back into a qubit"],
+      correct: 1,
+      explanation: "Unlike unitary quantum gates (which are reversible), wavefunction collapse is irreversible — the pre-measurement quantum state is permanently lost."
+    },
+    {
+      question: "If |ψ⟩ = 0.6|0⟩ + 0.8|1⟩, what is P(measuring |1⟩)?",
+      options: ["0.8", "0.64", "0.36", "0.48"],
+      correct: 1,
+      explanation: "Born rule: P(|1⟩) = |0.8|² = 0.64. Amplitudes must be squared to get probabilities."
+    },
+    {
+      question: "What connects the measurement gate output to classical registers?",
+      options: ["A quantum wire (single line)", "A double classical wire", "A Hadamard channel", "A CNOT link"],
+      correct: 1,
+      explanation: "A double line (classical wire) carries the classical bit result from the measurement to classical registers or conditional controls."
+    },
+    {
+      question: "What state is the qubit in immediately AFTER measurement gives |0⟩?",
+      options: ["Back in superposition", "|0⟩ (the eigenstate of the outcome)", "A maximally mixed state", "An entangled state"],
+      correct: 1,
+      explanation: "Post-measurement, the qubit collapses into the eigenstate corresponding to the observed outcome — |0⟩ if 0 was observed."
+    },
+    {
+      question: "Which quantum rule governs measurement outcome probabilities?",
+      options: ["Heisenberg Uncertainty Principle", "Born Rule", "Bell's Theorem", "No-Cloning Theorem"],
+      correct: 1,
+      explanation: "The Born Rule: P(outcome) = |amplitude|². This bridges the quantum wavefunction and experimentally observed frequencies."
+    },
+  ]
+};
+// Wait for DOM to be ready
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', function(){ new AdvQuiz(measurementQuizData, 'advQuizMount_measurementQuizData'); });
+} else {
+  new AdvQuiz(measurementQuizData, 'advQuizMount_measurementQuizData');
+}
+})();
+</script>
+
+
+<!-- QT-ENHANCEMENTS-v1 -->
+<style>
+/* ── QT Enhancements ─────────────────────────────────────────────────── */
+.qt-enhance-wrap{max-width:1100px;margin:0 auto;padding:0 24px 48px;}
+/* Key Concepts */
+.qt-concepts{background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,40,120,.08);padding:28px 32px;margin-bottom:24px;}
+.qt-concepts-title{font-size:13px;font-weight:700;letter-spacing:.12em;color:#0057b8;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.qt-concepts-title::before{content:'';width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#0057b8,#00b4d8);display:inline-block;flex-shrink:0;}
+.qt-concepts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.qt-concept-card{background:linear-gradient(135deg,#f0f7ff,#e8f4ff);border:1.5px solid #c7deff;border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;}
+.qt-concept-card::before{content:'';position:absolute;top:-20px;right:-20px;width:70px;height:70px;border-radius:50%;background:rgba(0,87,184,.07);}
+.qt-concept-card h4{margin:0 0 7px;font-size:14px;color:#003380;font-weight:700;}
+.qt-concept-card p{margin:0;font-size:13px;color:#475569;line-height:1.6;}
+.qt-concept-card.green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;}
+.qt-concept-card.green h4{color:#166534;}
+.qt-concept-card.purple{background:linear-gradient(135deg,#faf5ff,#ede9fe);border-color:#c4b5fd;}
+.qt-concept-card.purple h4{color:#581c87;}
+.qt-concept-card.orange{background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:#fed7aa;}
+.qt-concept-card.orange h4{color:#9a3412;}
+/* Formula reference */
+.qt-formula-box{background:#0f172a;border-radius:14px;padding:24px 28px;margin-bottom:24px;color:#e2e8f0;}
+.qt-formula-box-title{font-size:12px;font-weight:700;letter-spacing:.15em;color:#38bdf8;text-transform:uppercase;margin-bottom:16px;}
+.qt-formula-row{display:flex;align-items:flex-start;gap:16px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.qt-formula-row:last-child{border-bottom:none;}
+.qt-formula-tag{background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.3);color:#38bdf8;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.qt-formula-math{font-family:'Courier New',monospace;font-size:15px;color:#f1f5f9;flex:1;}
+.qt-formula-desc{font-size:12px;color:#94a3b8;margin-top:3px;}
+/* Did You Know */
+.qt-dyk{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:14px;padding:22px 26px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px;color:#fff;}
+.qt-dyk-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.qt-dyk-title{font-size:11px;font-weight:700;letter-spacing:.14em;color:#a5b4fc;text-transform:uppercase;margin-bottom:6px;}
+.qt-dyk-text{font-size:14px;color:#e0e7ff;line-height:1.7;}
+/* Notebook */
+.qt-notebook{background:#fff;border-radius:16px;box-shadow:0 4px 18px rgba(0,40,120,.1);overflow:hidden;margin-bottom:24px;}
+.qt-nb-header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:16px 22px;display:flex;align-items:center;gap:10px;}
+.qt-nb-dots{display:flex;gap:6px;}
+.qt-nb-dot{width:12px;height:12px;border-radius:50%;}
+.qt-nb-dot.red{background:#ff5f57;}
+.qt-nb-dot.yellow{background:#febc2e;}
+.qt-nb-dot.green{background:#28c840;}
+.qt-nb-title{color:#94a3b8;font-size:13px;font-family:monospace;margin-left:8px;}
+.qt-nb-body{padding:20px 22px;}
+.qt-nb-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:#0057b8;text-transform:uppercase;margin-bottom:8px;}
+.qt-nb-tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.qt-nb-tab{padding:5px 13px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid #e2e8f0;color:#64748b;background:#f8fafc;transition:all .18s;}
+.qt-nb-tab:hover,.qt-nb-tab.active{background:#0057b8;border-color:#0057b8;color:#fff;}
+.qt-nb-editor{position:relative;}
+.qt-nb-code{
+  width:100%;min-height:120px;background:#0f172a;color:#a5f3fc;
+  font-family:'Courier New',monospace;font-size:13px;line-height:1.7;
+  border:2px solid #1e293b;border-radius:10px;padding:14px;
+  resize:vertical;outline:none;box-sizing:border-box;
+  transition:border-color .2s;
+}
+.qt-nb-code:focus{border-color:#0057b8;}
+.qt-nb-actions{display:flex;gap:10px;margin-top:10px;}
+.qt-nb-run{background:linear-gradient(135deg,#0057b8,#0094d4);color:#fff;border:none;border-radius:8px;padding:9px 22px;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;}
+.qt-nb-run:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,87,184,.4);}
+.qt-nb-clear{background:transparent;border:2px solid #e2e8f0;border-radius:8px;padding:9px 16px;font-size:13px;color:#64748b;cursor:pointer;transition:all .2s;}
+.qt-nb-clear:hover{border-color:#ef4444;color:#ef4444;}
+.qt-nb-output{margin-top:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px 16px;min-height:56px;font-family:monospace;font-size:13px;color:#334155;white-space:pre-wrap;line-height:1.7;}
+.qt-nb-output.error{background:#fff1f2;border-color:#fca5a5;color:#991b1b;}
+.qt-nb-output.success{background:#f0fdf4;border-color:#86efac;color:#166534;}
+@media(max-width:600px){.qt-concepts-grid{grid-template-columns:1fr;}.qt-formula-row{flex-direction:column;gap:6px;}}
+</style>
+<div class="qt-enhance-wrap">
+
+  <!-- Key Concepts -->
+  <div class="qt-concepts">
+    <div class="qt-concepts-title">Key Concepts</div>
+    <div class="qt-concepts-grid">
+      <div class="qt-concept-card"><h4>📊 Wavefunction Collapse</h4><p>Measurement collapses superposition to a definite state. |ψ⟩ = α|0⟩+β|1⟩ becomes |0⟩ or |1⟩ probabilistically.</p></div>
+<div class="qt-concept-card green"><h4>🎯 Born Rule</h4><p>P(|0⟩) = |α|². The outcome is random — the pre-measurement state determines only the probability.</p></div>
+<div class="qt-concept-card purple"><h4>⛔ Irreversibility</h4><p>Unlike unitary gates, measurement cannot be undone. The quantum state information is lost.</p></div>
+<div class="qt-concept-card orange"><h4>📡 Post-Measurement</h4><p>After measuring |0⟩, the qubit IS in |0⟩. Measuring again gives |0⟩ with 100% probability.</p></div>
+
+    </div>
+  </div>
+
+  <!-- Formula Reference -->
+  <div class="qt-formula-box">
+    <div class="qt-formula-box-title">📐 Formula Reference</div>
+    <div class="qt-formula-row">
+  <span class="qt-formula-tag">Born Rule</span>
+  <div><div class="qt-formula-math">P(k) = |⟨k|ψ⟩|²</div><div class="qt-formula-desc">Probability of outcome k</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">Collapse</span>
+  <div><div class="qt-formula-math">|ψ⟩ → |k⟩ (with prob P(k))</div><div class="qt-formula-desc">State after measurement</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">2-qubit</span>
+  <div><div class="qt-formula-math">P(00) = |α₀₀|²</div><div class="qt-formula-desc">Born rule for 2-qubit state</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">Expectation</span>
+  <div><div class="qt-formula-math">⟨O⟩ = ⟨ψ|O|ψ⟩</div><div class="qt-formula-desc">Average of observable O</div></div>
+</div>
+<div class="qt-formula-row">
+  <span class="qt-formula-tag">Post-state</span>
+  <div><div class="qt-formula-math">|ψ'⟩ = Π_k|ψ⟩ / √P(k)</div><div class="qt-formula-desc">Normalised post-measurement state</div></div>
+</div>
+
+  </div>
+
+  <!-- Did You Know -->
+  <div class="qt-dyk">
+    <div class="qt-dyk-icon">💡</div>
+    <div>
+      <div class="qt-dyk-title">Did You Know?</div>
+      <div class="qt-dyk-text">Quantum measurement is fundamentally different from classical observation. Looking at a quantum system changes it — this isn't a hardware limitation but a deep physical law (Heisenberg, 1927).</div>
+    </div>
+  </div>
+
+  <!-- Quantum Notebook -->
+  <div class="qt-notebook">
+    <div class="qt-nb-header">
+      <div class="qt-nb-dots">
+        <div class="qt-nb-dot red"></div>
+        <div class="qt-nb-dot yellow"></div>
+        <div class="qt-nb-dot green"></div>
+      </div>
+      <div class="qt-nb-title">📓 measurement_collapse.ipynb</div>
+    </div>
+    <div class="qt-nb-body">
+      <div class="qt-nb-label">Interactive Quantum Notebook</div>
+      <p style="font-size:13px;color:#64748b;margin:0 0 10px;">Run JavaScript code to explore quantum concepts. Select an example or write your own:</p>
+      <div class="qt-nb-tabs" id="qtnbTabs_measurement">
+        <div class="qt-nb-tab active" onclick="qtnbSetTab(this,'measurement',0)">Single Measure</div><div class="qt-nb-tab" onclick="qtnbSetTab(this,'measurement',1)">1000 Shots</div><div class="qt-nb-tab" onclick="qtnbSetTab(this,'measurement',2)">Non-demolition</div>
+      </div>
+      <div class="qt-nb-editor">
+        <textarea class="qt-nb-code" id="qtnbCode_measurement" spellcheck="false"></textarea>
+      </div>
+      <div class="qt-nb-actions">
+        <button class="qt-nb-run" onclick="qtnbRun('measurement')">▶ Run Code</button>
+        <button class="qt-nb-clear" onclick="qtnbClear('measurement')">✕ Clear</button>
+      </div>
+      <div class="qt-nb-output" id="qtnbOut_measurement">// Output will appear here...</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const _examples_measurement = [
+`// Simulate measuring |ψ⟩ = 0.6|0⟩ + 0.8|1⟩
+const alpha = 0.6, beta = 0.8;
+const p0 = alpha**2, p1 = beta**2;
+console.log(\`P(|0⟩) = \${p0.toFixed(4)} = \${(p0*100).toFixed(1)}%\`);
+console.log(\`P(|1⟩) = \${p1.toFixed(4)} = \${(p1*100).toFixed(1)}%\`);
+const outcome = Math.random() < p0 ? '|0⟩' : '|1⟩';
+console.log(\`Measurement result: \${outcome}\`);
+console.log(\`Post-measurement state: \${outcome} (collapsed!)\`);`,
+`// Run 1000 measurement shots
+const alpha=0.6, shots=1000;
+const p0=alpha**2; let c0=0,c1=0;
+for(let i=0;i<shots;i++) Math.random()<p0?c0++:c1++;
+console.log(\`Expected P(0)=\${p0.toFixed(3)}, Got: \${(c0/shots).toFixed(3)}\`);
+console.log(\`Expected P(1)=\${(1-p0).toFixed(3)}, Got: \${(c1/shots).toFixed(3)}\`);
+console.log(\`Law of large numbers confirms Born rule!\`);`,
+`// Sequential measurements (same state)
+const alpha=0.8; const p0=alpha**2;
+const first = Math.random()<p0 ? 0 : 1;
+const second = first; // post-measurement state is definite
+console.log(\`First measurement:  |\${first}⟩\`);
+console.log(\`Second measurement: |\${second}⟩ (always same — state collapsed)\`);
+console.log(\`This shows quantum state memory after collapse.\`);`
+];
+  window.qtnbSetTab = window.qtnbSetTab || function(el,pg,idx){
+    el.closest('[id^="qtnbTabs_"]').querySelectorAll('.qt-nb-tab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('qtnbCode_'+pg).value=window['_nbex_'+pg][idx];
+  };
+  window['_nbex_measurement'] = _examples_measurement;
+  window.qtnbRun = window.qtnbRun || function(pg){
+    const code=document.getElementById('qtnbCode_'+pg).value;
+    const out=document.getElementById('qtnbOut_'+pg);
+    const logs=[]; const origLog=console.log;
+    console.log=(...a)=>logs.push(a.map(x=>typeof x==='object'?JSON.stringify(x,null,2):String(x)).join(' '));
+    try{
+      new Function(code)();
+      out.textContent=logs.join('\n')||'(no output)';
+      out.className='qt-nb-output success';
+    }catch(e){
+      out.textContent='❌ Error: '+e.message;
+      out.className='qt-nb-output error';
+    }finally{console.log=origLog;}
+  };
+  window.qtnbClear = window.qtnbClear || function(pg){
+    document.getElementById('qtnbCode_'+pg).value='';
+    const out=document.getElementById('qtnbOut_'+pg);
+    out.textContent='// Output will appear here...';
+    out.className='qt-nb-output';
+  };
+  // Load first example by default
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){
+      document.getElementById('qtnbCode_measurement').value=_examples_measurement[0];
+    });
+  } else {
+    document.getElementById('qtnbCode_measurement').value=_examples_measurement[0];
+  }
+})();
+</script>
+
+</body>
+</html>

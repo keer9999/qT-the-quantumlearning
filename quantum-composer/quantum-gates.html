@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Gates - The Quanta</title>
+    <link rel="stylesheet" href="quantum-gates.css">
+    <link rel="stylesheet" href="../global-ui.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="../index.html" style="display:flex;align-items:center;text-decoration:none;color:inherit;">
+                <img src="../jntu_logo.png" alt="JNTU Logo">
+                <span>JNTUACEA</span>
+            </a>
+        </div>
+        <div class="title">
+            <h1>Quantum Gates</h1>
+            <p>Complete Guide to Quantum Operations</p>
+        </div>
+        <nav>
+            <a href="../about.html">About</a>
+            <a href="#">Team</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-title">Quantum Gates Encyclopedia</div>
+        <div class="page-subtitle">Master all quantum gates with interactive visualizations and descriptions</div>
+
+        <!-- SINGLE QUBIT GATES -->
+        <div class="gates-section">
+            <h2 class="section-title">Single-Qubit Gates</h2>
+            <div class="gates-grid">
+                <!-- Pauli X Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">⊗</span>
+                        <h3>Pauli-X (NOT Gate)</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Flips the qubit state. Rotates π radians around X-axis on Bloch sphere.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[0, 1], [1, 0]]</p>
+                        </div>
+                        <p class="gate-action">Maps |0⟩ → |1⟩ and |1⟩ → |0⟩</p>
+                    </div>
+                </div>
+
+                <!-- Pauli Y Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">⊗</span>
+                        <h3>Pauli-Y Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Rotates π radians around Y-axis on Bloch sphere.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[0, -i], [i, 0]]</p>
+                        </div>
+                        <p class="gate-action">Combines bit flip and phase flip</p>
+                    </div>
+                </div>
+
+                <!-- Pauli Z Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">⊗</span>
+                        <h3>Pauli-Z Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Applies phase flip. Rotates π radians around Z-axis on Bloch sphere.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[1, 0], [0, -1]]</p>
+                        </div>
+                        <p class="gate-action">Maps |0⟩ → |0⟩ and |1⟩ → -|1⟩</p>
+                    </div>
+                </div>
+
+                <!-- Hadamard Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">H</span>
+                        <h3>Hadamard Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Creates equal superposition. Fundamental gate for quantum computing.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>1/√2 × [[1, 1], [1, -1]]</p>
+                        </div>
+                        <p class="gate-action">Maps |0⟩ → (|0⟩+|1⟩)/√2</p>
+                    </div>
+                </div>
+
+                <!-- S Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">S</span>
+                        <h3>S Gate (Phase Gate)</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Applies π/2 phase shift. Quarter turn around Z-axis.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[1, 0], [0, i]]</p>
+                        </div>
+                        <p class="gate-action">Rotates 90° around Z-axis</p>
+                    </div>
+                </div>
+
+                <!-- T Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">T</span>
+                        <h3>T Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Applies π/4 phase shift. Eighth turn around Z-axis.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[1, 0], [0, e^(iπ/4)]]</p>
+                        </div>
+                        <p class="gate-action">Rotates 45° around Z-axis</p>
+                    </div>
+                </div>
+
+                <!-- RX Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">Rx</span>
+                        <h3>RX Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Rotation around X-axis by angle θ.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[cos(θ/2), -i·sin(θ/2)], [-i·sin(θ/2), cos(θ/2)]]</p>
+                        </div>
+                        <p class="gate-action">Parameterized rotation gate</p>
+                    </div>
+                </div>
+
+                <!-- RY Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">Ry</span>
+                        <h3>RY Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Rotation around Y-axis by angle θ.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[cos(θ/2), -sin(θ/2)], [sin(θ/2), cos(θ/2)]]</p>
+                        </div>
+                        <p class="gate-action">Parameterized rotation gate</p>
+                    </div>
+                </div>
+
+                <!-- RZ Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">Rz</span>
+                        <h3>RZ Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Rotation around Z-axis by angle θ.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Matrix:</strong></p>
+                            <p>[[e^(-iθ/2), 0], [0, e^(iθ/2)]]</p>
+                        </div>
+                        <p class="gate-action">Parameterized rotation gate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TWO-QUBIT GATES -->
+        <div class="gates-section">
+            <h2 class="section-title">Two-Qubit Gates</h2>
+            <div class="gates-grid">
+                <!-- CNOT Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">⊕</span>
+                        <h3>CNOT (CX Gate)</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Controlled-NOT gate. Flips target qubit if control qubit is |1⟩.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>|a,b⟩ → |a, a⊕b⟩</p>
+                        </div>
+                        <p class="gate-action">Creates entanglement</p>
+                    </div>
+                </div>
+
+                <!-- SWAP Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">⇄</span>
+                        <h3>SWAP Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Exchanges states of two qubits.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>|a,b⟩ → |b,a⟩</p>
+                        </div>
+                        <p class="gate-action">Qubit exchange operation</p>
+                    </div>
+                </div>
+
+                <!-- CZ Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">Z</span>
+                        <h3>CZ Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Controlled-Z gate. Applies phase if both qubits are |1⟩.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>Applies phase to |11⟩ state</p>
+                        </div>
+                        <p class="gate-action">Creates entanglement</p>
+                    </div>
+                </div>
+
+                <!-- iSWAP Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">iS</span>
+                        <h3>iSWAP Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Swaps qubits and applies phase.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>Swap with imaginary phase</p>
+                        </div>
+                        <p class="gate-action">Superconducting qubit native gate</p>
+                    </div>
+                </div>
+
+                <!-- XX Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">XX</span>
+                        <h3>XX Coupling Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Two-qubit interaction along X-axis.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>Parameterized XX interaction</p>
+                        </div>
+                        <p class="gate-action">Native gate on some platforms</p>
+                    </div>
+                </div>
+
+                <!-- YY Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">YY</span>
+                        <h3>YY Coupling Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Two-qubit interaction along Y-axis.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>Parameterized YY interaction</p>
+                        </div>
+                        <p class="gate-action">Native gate on some platforms</p>
+                    </div>
+                </div>
+
+                <!-- ZZ Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">ZZ</span>
+                        <h3>ZZ Coupling Gate</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Two-qubit interaction along Z-axis.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>Parameterized ZZ interaction</p>
+                        </div>
+                        <p class="gate-action">Native gate on some platforms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THREE-QUBIT GATES -->
+        <div class="gates-section">
+            <h2 class="section-title">Three-Qubit Gates</h2>
+            <div class="gates-grid">
+                <!-- Toffoli Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">T</span>
+                        <h3>Toffoli Gate (CCX)</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Controlled-Controlled-NOT. Universal for classical computation.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>Flips target if both controls are |1⟩</p>
+                        </div>
+                        <p class="gate-action">Quantum AND gate</p>
+                    </div>
+                </div>
+
+                <!-- Fredkin Gate -->
+                <div class="gate-card">
+                    <div class="gate-header">
+                        <span class="gate-icon">F</span>
+                        <h3>Fredkin Gate (CSWAP)</h3>
+                    </div>
+                    <div class="gate-body">
+                        <p class="gate-description">Controlled-SWAP. Swaps two qubits if control is |1⟩.</p>
+                        <div class="gate-matrix">
+                            <p><strong>Action:</strong></p>
+                            <p>Conditional qubit swap</p>
+                        </div>
+                        <p class="gate-action">Quantum multiplexer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPOSER SECTION -->
+        <div class="composer-section">
+            <h2 class="section-title">Quantum Circuit Composers</h2>
+            <div class="composer-grid">
+                <!-- JNTU Quantum Composer -->
+                <div class="composer-card">
+                    <div class="composer-header">
+                        <span class="composer-level">Beginner</span>
+                        <h3>JNTU Quantum Composer</h3>
+                    </div>
+                    <div class="composer-body">
+                        <p>Perfect for learning quantum circuits. Simple drag-and-drop interface with visual Bloch sphere.</p>
+                        <ul class="features-list">
+                            <li>✓ Drag & Drop Gates</li>
+                            <li>✓ Visual Bloch Sphere</li>
+                            <li>✓ State Vector View</li>
+                            <li>✓ Measurement</li>
+                        </ul>
+                        <a href="jntu-composer.html" class="composer-btn beginner-btn">Launch JNTU Composer</a>
+                    </div>
+                </div>
+
+                <!-- Advanced Quantum Composer (IBM-style) -->
+                <div class="composer-card">
+                    <div class="composer-header">
+                        <span class="composer-level">Advanced</span>
+                        <h3>Advanced Quantum Composer</h3>
+                    </div>
+                    <div class="composer-body">
+                        <p>Professional-grade circuit design. IBM Qiskit style with advanced features and visualizations.</p>
+                        <ul class="features-list">
+                            <li>✓ Advanced Drag & Drop</li>
+                            <li>✓ 3D Bloch Sphere</li>
+                            <li>✓ State Vector & Density Matrix</li>
+                            <li>✓ Automatic Code Generation</li>
+                            <li>✓ Measurement & Statistics</li>
+                            <li>✓ Circuit Optimization</li>
+                        </ul>
+                        <a href="advanced-composer.html" class="composer-btn advanced-btn">Launch Advanced Composer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="global-back-btn" onclick="goBackGlobal()"></div>
+
+    <script>
+        function goBackGlobal() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

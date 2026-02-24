@@ -1,0 +1,385 @@
+/* Physics Foundations Page Styles */
+
+:root {
+    --primary-blue: #0057b8;
+    --primary-teal: #00d4aa;
+    --primary-red: #ff6b6b;
+    --primary-gold: #ffd700;
+    --primary-purple: #9d4edd;
+    --primary-pink: #ff006e;
+    --light-bg: #f6f8fb;
+    --card-shadow: 0 6px 16px rgba(0,0,0,.08);
+    --hover-shadow: 0 10px 24px rgba(0,0,0,.12);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Topics Grid with proper responsive behavior */
+.topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* Topic Cards with Color Coding */
+.topic-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-left: 5px solid;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.topic-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--hover-shadow);
+}
+
+/* Color Classes for Each Topic */
+.topic-card.color-1 {
+    border-left-color: var(--primary-blue);
+}
+
+.topic-card.color-2 {
+    border-left-color: var(--primary-teal);
+}
+
+.topic-card.color-3 {
+    border-left-color: var(--primary-red);
+}
+
+.topic-card.color-4 {
+    border-left-color: var(--primary-gold);
+}
+
+.topic-card.color-5 {
+    border-left-color: var(--primary-purple);
+}
+
+.topic-card.color-6 {
+    border-left-color: var(--primary-pink);
+}
+
+/* Card Header with Gradient Background */
+.card-header {
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fb 0%, #eef3f9 100%);
+    border-bottom: 1px solid #e0e8f0;
+}
+
+.card-header.bg-1 {
+    background: linear-gradient(135deg, rgba(0, 87, 184, 0.08) 0%, rgba(0, 87, 184, 0.04) 100%);
+}
+
+.card-header.bg-2 {
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.08) 0%, rgba(0, 212, 170, 0.04) 100%);
+}
+
+.card-header.bg-3 {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.08) 0%, rgba(255, 107, 107, 0.04) 100%);
+}
+
+.card-header.bg-4 {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 215, 0, 0.04) 100%);
+}
+
+.card-header.bg-5 {
+    background: linear-gradient(135deg, rgba(157, 78, 221, 0.08) 0%, rgba(157, 78, 221, 0.04) 100%);
+}
+
+.card-header.bg-6 {
+    background: linear-gradient(135deg, rgba(255, 0, 110, 0.08) 0%, rgba(255, 0, 110, 0.04) 100%);
+}
+
+/* Topic Icon */
+.topic-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+/* Topic Title in Header */
+.topic-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #003366;
+    margin-bottom: 8px;
+}
+
+/* Topic Description */
+.topic-description {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.4;
+}
+
+/* Card Body */
+.card-body {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card Content Text */
+.card-content {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+/* Study Button Styling */
+.study-button {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #0047a0 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    margin-top: auto;
+}
+
+/* Color-specific Button Gradients */
+.topic-card.color-2 .study-button {
+    background: linear-gradient(135deg, var(--primary-teal) 0%, #00b896 100%);
+}
+
+.topic-card.color-3 .study-button {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #ee5a52 100%);
+}
+
+.topic-card.color-4 .study-button {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, #ffb700 100%);
+    color: #333;
+}
+
+.topic-card.color-5 .study-button {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, #8338ec 100%);
+}
+
+.topic-card.color-6 .study-button {
+    background: linear-gradient(135deg, var(--primary-pink) 0%, #d4006e 100%);
+}
+
+/* Button Hover and Active States */
+.study-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,.15);
+}
+
+.study-button:active {
+    transform: translateY(0);
+}
+
+/* Introduction Section */
+.intro-section {
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    margin-bottom: 40px;
+    box-shadow: var(--card-shadow);
+}
+
+.intro-section h2 {
+    color: #003366;
+    font-size: 24px;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.intro-section p {
+    color: #555;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* Page Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Page Title */
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #003366;
+    margin-bottom: 10px;
+}
+
+/* Page Subtitle */
+.page-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* Footer */
+footer {
+    background: #eef3f7;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 60px;
+}
+
+/* Responsive Design for Tablets */
+@media (max-width: 1024px) {
+    .topics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .container {
+        padding: 30px 16px;
+    }
+
+    .page-title {
+        font-size: 28px;
+    }
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .topics-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+    }
+
+    .card-header {
+        padding: 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .topic-title {
+        font-size: 16px;
+    }
+
+    .topic-icon {
+        font-size: 28px;
+    }
+
+    .container {
+        padding: 20px 12px;
+    }
+
+    .intro-section {
+        padding: 20px;
+    }
+
+    .intro-section h2 {
+        font-size: 20px;
+    }
+
+    .intro-section p {
+        font-size: 14px;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+        font-size: 13px;
+        margin-bottom: 24px;
+    }
+
+    .container {
+        padding: 16px 12px;
+    }
+
+    .card-header {
+        padding: 16px;
+    }
+
+    .card-body {
+        padding: 16px;
+    }
+
+    .study-button {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .intro-section {
+        padding: 16px;
+    }
+
+    .intro-section h2 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    footer {
+        padding: 16px;
+        font-size: 12px;
+    }
+}
+
+/* Accessibility Improvements */
+.study-button:focus {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+.topic-card:focus-within {
+    box-shadow: var(--hover-shadow);
+}
+
+/* Print Styles */
+@media print {
+    header, footer, .global-back-btn {
+        display: none;
+    }
+
+    .topic-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}

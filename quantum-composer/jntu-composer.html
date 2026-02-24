@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JNTU Quantum Composer - The Quanta</title>
+    <link rel="stylesheet" href="jntu-composer.css">
+    <link rel="stylesheet" href="../global-ui.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+</head>
+<body>
+    <div class="composer-container">
+        <!-- Header -->
+        <div class="composer-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>JNTU Quantum Composer</h1>
+                    <p>Beginner-Friendly Quantum Circuit Designer</p>
+                </div>
+                <button class="back-btn" onclick="window.history.back()">← Back to Gates</button>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="composer-layout">
+            <!-- Left Panel: Gate Palette -->
+            <div class="panel left-panel">
+                <div class="panel-header">
+                    <h3>Gate Palette</h3>
+                </div>
+                <div class="panel-content">
+                    <div class="gate-category">
+                        <h4>Single-Qubit Gates</h4>
+                        <div class="gate-buttons">
+                            <button class="gate-btn" draggable="true" data-gate="X" data-qubits="1">X (NOT)</button>
+                            <button class="gate-btn" draggable="true" data-gate="Y" data-qubits="1">Y</button>
+                            <button class="gate-btn" draggable="true" data-gate="Z" data-qubits="1">Z</button>
+                            <button class="gate-btn" draggable="true" data-gate="H" data-qubits="1">H</button>
+                            <button class="gate-btn" draggable="true" data-gate="S" data-qubits="1">S</button>
+                            <button class="gate-btn" draggable="true" data-gate="T" data-qubits="1">T</button>
+                        </div>
+                    </div>
+
+                    <div class="gate-category">
+                        <h4>Two-Qubit Gates</h4>
+                        <div class="gate-buttons">
+                            <button class="gate-btn" draggable="true" data-gate="CNOT" data-qubits="2">CNOT</button>
+                            <button class="gate-btn" draggable="true" data-gate="SWAP" data-qubits="2">SWAP</button>
+                            <button class="gate-btn" draggable="true" data-gate="CZ" data-qubits="2">CZ</button>
+                        </div>
+                    </div>
+
+                    <div class="gate-category">
+                        <h4>Measurement</h4>
+                        <div class="gate-buttons">
+                            <button class="gate-btn" draggable="true" data-gate="MEASURE" data-qubits="1">Measure</button>
+                        </div>
+                    </div>
+
+                    <div class="gate-category">
+                        <h4>Circuit Control</h4>
+                        <div class="control-buttons">
+                            <button class="control-btn" onclick="resetCircuit()">Clear Circuit</button>
+                            <button class="control-btn" onclick="runSimulation()">Run Simulation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Panel: Circuit -->
+            <div class="panel middle-panel">
+                <div class="panel-header">
+                    <h3>Quantum Circuit</h3>
+                </div>
+                <div class="panel-content">
+                    <div class="circuit-area" id="circuitArea">
+                        <div class="qubit-row" id="qubit0" ondrop="dropGate(event)" ondragover="allowDrop(event)">
+                            <span class="qubit-label">q[0]</span>
+                            <div class="circuit-line"></div>
+                        </div>
+                        <div class="qubit-row" id="qubit1" ondrop="dropGate(event)" ondragover="allowDrop(event)">
+                            <span class="qubit-label">q[1]</span>
+                            <div class="circuit-line"></div>
+                        </div>
+                        <div class="qubit-row" id="qubit2" ondrop="dropGate(event)" ondragover="allowDrop(event)">
+                            <span class="qubit-label">q[2]</span>
+                            <div class="circuit-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Visualization & Results -->
+            <div class="panel right-panel">
+                <div class="panel-header">
+                    <h3>Visualizations</h3>
+                </div>
+                <div class="panel-content">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="switchTab('bloch')">Bloch Sphere</button>
+                        <button class="tab-btn" onclick="switchTab('statevector')">State Vector</button>
+                        <button class="tab-btn" onclick="switchTab('measurements')">Measurements</button>
+                    </div>
+
+                    <div id="bloch" class="tab-content active">
+                        <div class="bloch-container" id="blochContainer"></div>
+                    </div>
+
+                    <div id="statevector" class="tab-content">
+                        <div class="state-vector" id="stateVector">
+                            <p>Run simulation to see state vector</p>
+                        </div>
+                    </div>
+
+                    <div id="measurements" class="tab-content">
+                        <div class="measurements" id="measurements">
+                            <p>Run simulation to see measurement results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Output -->
+        <div class="code-section">
+            <div class="code-header">
+                <h3>Qiskit Code</h3>
+                <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+            </div>
+            <div class="code-content">
+                <pre id="codeOutput">from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
+
+# Initialize circuit
+qr = QuantumRegister(3, 'q')
+cr = ClassicalRegister(3, 'c')
+qc = QuantumCircuit(qr, cr)
+
+# Add your gates here
+
+# Measurement
+qc.measure(qr, cr)</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="global-back-btn" onclick="window.history.back()"></div>
+
+    <script src="jntu-composer.js"></script>
+</body>
+</html>

@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Algorithms - qT Learning Platform</title>
+
+    <!-- MathJax Configuration (must come before loading MathJax) -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady();
+                }
+            }
+        };
+    </script>
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6f8fb 0%, #e8f0fe 100%);
+            color: #1f2d3d;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-section h1 {
+            font-size: 24px;
+            color: #003366;
+            font-weight: 700;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #0057b8 0%, #0047a0 100%);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 87, 184, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #003366 0%, #0057b8 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-100px);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Search Bar */
+        .search-section {
+            max-width: 1400px;
+            margin: -30px auto 40px;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: #1f2d3d;
+        }
+
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Algorithms Container */
+        .algorithms-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 60px;
+        }
+
+        .intro-section {
+            background: white;
+            border-radius: 14px;
+            padding: 32px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .intro-section h3 {
+            color: #003366;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .intro-section p {
+            color: #5a6c7d;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        /* Algorithm Card */
+        .algorithm-card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 32px;
+        }
+
+        .algorithm-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 87, 184, 0.15);
+        }
+
+        .algorithm-header {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e0f0ff 100%);
+            padding: 28px;
+            border-bottom: 3px solid #0057b8;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .algorithm-name {
+            font-size: 28px;
+            color: #003366;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .algorithm-tagline {
+            font-size: 16px;
+            color: #0057b8;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .complexity-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4aa, #0057b8);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .expand-indicator {
+            position: absolute;
+            right: 28px;
+            top: 28px;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .algorithm-card.expanded .expand-indicator {
+            transform: rotate(180deg);
+        }
+
+        .algorithm-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease;
+        }
+
+        .algorithm-card.expanded .algorithm-body {
+            max-height: 10000px;
+        }
+
+        .algorithm-content {
+            padding: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #0057b8;
+            font-weight: 700;
+            margin: 32px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0f0ff;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .content-block {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 16px 0;
+            border-left: 4px solid #0057b8;
+        }
+
+        .content-block p {
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .content-block ul,
+        .content-block ol {
+            margin-left: 24px;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .content-block li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.1), rgba(0, 87, 184, 0.1));
+            border: 2px solid #00d4aa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 16px 0;
+        }
+
+        .highlight-box strong {
+            color: #0057b8;
+        }
+
+        .formula-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+            border: 2px solid #e0f0ff;
+            overflow-x: auto;
+        }
+
+        .step-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 16px 0;
+            border-left: 4px solid #00d4aa;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #0057b8, #00d4aa);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            color: #003366;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .application-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0f0ff;
+            transition: all 0.3s ease;
+        }
+
+        .application-card:hover {
+            border-color: #0057b8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 87, 184, 0.15);
+        }
+
+        .application-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .application-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #003366;
+            margin-bottom: 8px;
+        }
+
+        .application-desc {
+            font-size: 14px;
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #0057b8, #0047a0);
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 16px;
+            border-bottom: 1px solid #e0f0ff;
+            color: #475569;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .algorithm-name {
+                font-size: 24px;
+            }
+
+            .applications-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1>📊 Quantum Algorithms Library</h1>
+            </div>
+            <button class="back-btn" onclick="history.back()">← Back</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Master Quantum Algorithms</h2>
+            <p>Explore the revolutionary algorithms that demonstrate quantum supremacy with comprehensive, step-by-step
+                explanations</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Search for algorithms... (e.g., Grover, Shor, Deutsch)">
+        </div>
+    </div>
+
+    <!-- Algorithms Container -->
+    <div class="algorithms-container">
+        <!-- Introduction -->
+        <div class="intro-section">
+            <h3>🌟 Why Quantum Algorithms Matter</h3>
+            <p>
+                Quantum algorithms leverage the unique properties of quantum mechanics—superposition, entanglement, and
+                interference—to solve certain problems exponentially faster than classical computers. These algorithms
+                represent the frontier of computational science and have profound implications for cryptography,
+                optimization, simulation, and beyond.
+            </p>
+            <p>
+                This library provides detailed, step-by-step explanations of the most important quantum algorithms,
+                designed for learners at all levels. Each algorithm includes mathematical foundations, circuit
+                diagrams, and real-world applications.
+            </p>
+        </div>
+
+        <!-- DEUTSCH-JOZSA ALGORITHM -->
+        <div class="algorithm-card" data-algorithm="deutsch-jozsa">
+            <div class="algorithm-header" onclick="toggleAlgorithm(this)">
+                <div class="algorithm-name">Deutsch-Jozsa Algorithm</div>
+                <div class="algorithm-tagline">The First Quantum Speedup</div>
+                <div class="complexity-badge">Classical: O(2<sup>n-1</sup> + 1) | Quantum: O(1)</div>
+                <div class="expand-indicator">▼</div>
+            </div>
+            <div class="algorithm-body">
+                <div class="algorithm-content">
+                    <!-- What is it? -->
+                    <div class="section-title">📖 What is the Deutsch-Jozsa Algorithm?</div>
+                    <div class="content-block">
+                        <p>
+                            The Deutsch-Jozsa algorithm was one of the first examples of a quantum algorithm that
+                            outperforms the best classical algorithm. It solves a specific problem with a single query,
+                            whereas a classical computer would need up to $2^{n-1} + 1$ queries in the worst case.
+                        </p>
+                        <p>
+                            This algorithm demonstrates the power of quantum parallelism and interference, showing that
+                            quantum computers can fundamentally change how we approach computation.
+                        </p>
+                    </div>
+
+                    <!-- The Problem -->
+                    <div class="section-title">🎯 The Problem</div>
+                    <div class="content-block">
+                        <p><strong>Problem Statement:</strong></p>
+                        <p>
+                            You are given a black-box function (oracle) $f: \{0,1\}^n \rightarrow \{0,1\}$ that is
+                            guaranteed to be either:
+                        </p>
+                        <ul>
+                            <li><strong>Constant:</strong> $f(x) = 0$ for all $x$, or $f(x) = 1$ for all $x$</li>
+                            <li><strong>Balanced:</strong> $f(x) = 0$ for exactly half of all inputs, $f(x) = 1$ for
+                                the other half</li>
+                        </ul>
+                        <p>
+                            <strong>Goal:</strong> Determine whether $f$ is constant or balanced with the minimum number
+                            of queries.
+                        </p>
+                    </div>
+
+                    <!-- Classical vs Quantum -->
+                    <div class="section-title">⚖️ Classical vs Quantum Approach</div>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Classical Computer</th>
+                            <th>Quantum Computer</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Queries Needed</strong></td>
+                            <td>Up to $2^{n-1} + 1$ queries</td>
+                            <td>1 query</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time Complexity</strong></td>
+                            <td>$O(2^n)$ (exponential)</td>
+                            <td>$O(1)$ (constant)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Strategy</strong></td>
+                            <td>Evaluate function multiple times until pattern is clear</td>
+                            <td>Evaluate all inputs simultaneously using superposition</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Certainty</strong></td>
+                            <td>100% deterministic</td>
+                            <td>100% deterministic</td>
+                        </tr>
+                    </table>
+
+                    <!-- How it Works -->
+                    <div class="section-title">⚙️ How It Works: Step-by-Step</div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">1</span>Initialization</div>
+                        <p>Start with $n$ qubits in state $|0\rangle$ and 1 ancilla qubit in state $|1\rangle$:</p>
+                        <div class="formula-box">
+                            $$|\psi_0\rangle = |0\rangle^{\otimes n} |1\rangle$$
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">2</span>Apply Hadamard Gates</div>
+                        <p>Apply Hadamard gate to all qubits to create uniform superposition:</p>
+                        <div class="formula-box">
+                            $$|\psi_1\rangle = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} |x\rangle \otimes
+                            \frac{1}{\sqrt{2}}(|0\rangle - |1\rangle)$$
+                        </div>
+                        <p>This creates a superposition of all possible $2^n$ input states simultaneously.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">3</span>Apply Oracle</div>
+                        <p>The oracle $U_f$ performs: $U_f|x\rangle|y\rangle = |x\rangle|y \oplus f(x)\rangle$</p>
+                        <p>With the ancilla in state $(|0\rangle - |1\rangle)/\sqrt{2}$, this creates phase kickback:
+                        </p>
+                        <div class="formula-box">
+                            $$|\psi_2\rangle = \frac{1}{\sqrt{2^n}} \sum_{x=0}^{2^n-1} (-1)^{f(x)} |x\rangle \otimes
+                            \frac{1}{\sqrt{2}}(|0\rangle - |1\rangle)$$
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">4</span>Second Hadamard Transform</div>
+                        <p>Apply Hadamard to the $n$ qubits again:</p>
+                        <div class="formula-box">
+                            $$|\psi_3\rangle = \frac{1}{2^n} \sum_{x=0}^{2^n-1} \sum_{y=0}^{2^n-1} (-1)^{f(x) + x \cdot
+                            y} |y\rangle$$
+                        </div>
+                        <p>Where $x \cdot y = x_0y_0 \oplus x_1y_1 \oplus \cdots \oplus x_{n-1}y_{n-1}$ (bitwise dot
+                            product).</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">5</span>Measure</div>
+                        <p>Measure all $n$ qubits:</p>
+                        <ul>
+                            <li><strong>If $f$ is constant:</strong> All constructive interference at
+                                $|0\rangle^{\otimes
+                                n}$ → Measure $|00...0\rangle$ with 100% probability</li>
+                            <li><strong>If $f$ is balanced:</strong> Destructive interference at $|0\rangle^{\otimes n}$
+                                → Measure anything except $|00...0\rangle$</li>
+                        </ul>
+                    </div>
+
+                    <!-- Key Concepts -->
+                    <div class="section-title">💡 Key Concepts</div>
+                    <div class="highlight-box">
+                        <p><strong>Quantum Parallelism:</strong> The ability to evaluate $f(x)$ for all $2^n$ values of
+                            $x$ simultaneously using superposition.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Phase Kickback:</strong> The oracle doesn't change the computational basis states but
+                            adds a phase $(-1)^{f(x)}$ that encodes information about $f$.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Quantum Interference:</strong> The second Hadamard transform creates constructive or
+                            destructive interference patterns that reveal global properties of $f$.</p>
+                    </div>
+
+                    <!-- Applications -->
+                    <div class="section-title">🚀 Applications & Significance</div>
+                    <div class="applications-grid">
+                        <div class="application-card">
+                            <div class="application-icon">🎓</div>
+                            <div class="application-title">Educational Foundation</div>
+                            <div class="application-desc">First algorithm proving quantum advantage; teaches fundamental
+                                concepts</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🔬</div>
+                            <div class="application-title">Theoretical Importance</div>
+                            <div class="application-desc">Demonstrates separation between quantum and classical
+                                complexity classes</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🧪</div>
+                            <div class="application-title">Algorithm Testing</div>
+                            <div class="application-desc">Simple benchmark for testing quantum hardware and simulators
+                            </div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🌉</div>
+                            <div class="application-title">Foundation for Others</div>
+                            <div class="application-desc">Techniques used here inspire more powerful algorithms like
+                                Shor's</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GROVER'S SEARCH ALGORITHM -->
+        <div class="algorithm-card" data-algorithm="grover">
+            <div class="algorithm-header" onclick="toggleAlgorithm(this)">
+                <div class="algorithm-name">Grover's Search Algorithm</div>
+                <div class="algorithm-tagline">Quadratic Speedup for Unstructured Search</div>
+                <div class="complexity-badge">Classical: O(N) | Quantum: O(√N)</div>
+                <div class="expand-indicator">▼</div>
+            </div>
+            <div class="algorithm-body">
+                <div class="algorithm-content">
+                    <!-- What is it? -->
+                    <div class="section-title">📖 What is Grover's Search Algorithm?</div>
+                    <div class="content-block">
+                        <p>
+                            Grover's algorithm is a quantum search algorithm that finds a marked item in an unsorted
+                            database of $N$ items in approximately $\sqrt{N}$ steps. This represents a quadratic speedup
+                            over classical search algorithms.
+                        </p>
+                        <p>
+                            While not as dramatic as the exponential speedup of Shor's algorithm, Grover's quadratic
+                            speedup is provably optimal for unstructured search and has wide practical applications in
+                            optimization and database search.
+                        </p>
+                    </div>
+
+                    <!-- The Problem -->
+                    <div class="section-title">🎯 The Problem</div>
+                    <div class="content-block">
+                        <p><strong>Problem Statement:</strong></p>
+                        <p>
+                            Given a database with $N$ items and an oracle function $f(x)$ where:
+                        </p>
+                        <ul>
+                            <li>$f(x) = 1$ for exactly one marked item $x = \omega$ (the solution)</li>
+                            <li>$f(x) = 0$ for all other items</li>
+                        </ul>
+                        <p>
+                            <strong>Goal:</strong> Find the marked item $\omega$ with the minimum number of oracle
+                            queries.
+                        </p>
+                        <p>
+                            <strong>Examples:</strong> Finding a specific entry in a phone book, locating a defective
+                            item in inventory, solving SAT problems.
+                        </p>
+                    </div>
+
+                    <!-- Classical vs Quantum -->
+                    <div class="section-title">⚖️ Classical vs Quantum Approach</div>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Classical Search</th>
+                            <th>Grover's Algorithm</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Queries Needed</strong></td>
+                            <td>$O(N)$ on average, $N$ worst case</td>
+                            <td>$O(\sqrt{N})$ queries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Example (1M items)</strong></td>
+                            <td>~500,000 checks on average</td>
+                            <td>~1,000 iterations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Strategy</strong></td>
+                            <td>Check items one by one until found</td>
+                            <td>Amplify probability amplitude of solution through interference</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Success Probability</strong></td>
+                            <td>50% after N/2 checks</td>
+                            <td>~100% after π√N/4 iterations</td>
+                        </tr>
+                    </table>
+
+                    <!-- How it Works -->
+                    <div class="section-title">⚙️ How It Works: Step-by-Step</div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">1</span>Initialization</div>
+                        <p>Start with $n$ qubits (where $N = 2^n$) in state $|0\rangle$, then create uniform
+                            superposition:</p>
+                        <div class="formula-box">
+                            $$|s\rangle = H^{\otimes n}|0\rangle^{\otimes n} = \frac{1}{\sqrt{N}} \sum_{x=0}^{N-1}
+                            |x\rangle$$
+                        </div>
+                        <p>This state has equal amplitude $1/\sqrt{N}$ for every basis state.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">2</span>Grover Iteration (Repeat ~π√N/4 times)
+                        </div>
+                        <p>Each iteration consists of two operations:</p>
+
+                        <p><strong>2a. Oracle Call $U_\omega$:</strong></p>
+                        <div class="formula-box">
+                            $$U_\omega|x\rangle = \begin{cases} -|x\rangle & \text{if } x = \omega \\ |x\rangle &
+                            \text{otherwise} \end{cases}$$
+                        </div>
+                        <p>This operation inverts the phase of the marked item, marking it with a negative sign.</p>
+
+                        <p><strong>2b. Diffusion Operator $U_s$:</strong></p>
+                        <div class="formula-box">
+                            $$U_s = 2|s\rangle\langle s| - I$$
+                        </div>
+                        <p>This reflects the state around the average amplitude, amplifying states above average
+                            (especially the marked state) and suppressing states below average.</p>
+
+                        <p><strong>Combined Grover Operator:</strong></p>
+                        <div class="formula-box">
+                            $$G = U_s U_\omega$$
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">3</span>Amplitude Amplification</div>
+                        <p>Each Grover iteration rotates the state vector closer to the marked state $|\omega\rangle$:
+                        </p>
+                        <ul>
+                            <li>Initial amplitude of $|omega\rangle$: $1/\sqrt{N}$ (very small)</li>
+                            <li>After each iteration: amplitude increases by approximately $2/\sqrt{N}$</li>
+                            <li>After $\pi\sqrt{N}/4$ iterations: amplitude approaches 1 (nearly certain)</li>
+                        </ul>
+                        <p>Geometrically, this can be visualized as rotating in a 2D subspace spanned by
+                            $|s\rangle$ and $|\omega\rangle$.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">4</span>Measurement</div>
+                        <p>After approximately $\pi\sqrt{N}/4$ iterations, measure all qubits:</p>
+                        <ul>
+                            <li>With probability close to 1, measure the marked state $|\omega\rangle$</li>
+                            <li>Verify the result classically by checking $f(\omega) = 1$</li>
+                        </ul>
+                    </div>
+
+                    <!-- Key Concepts -->
+                    <div class="section-title">💡 Key Concepts</div>
+                    <div class="highlight-box">
+                        <p><strong>Amplitude Amplification:</strong> A general quantum technique where we iteratively
+                            increase the probability amplitude of desired states while decreasing others, based on
+                            quantum interference.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Optimal Number of Iterations:</strong> Too few iterations and the marked state won't
+                            have high probability. Too many and you "overshoot" – the amplitude starts decreasing.
+                            $\pi\sqrt{N}/4$ is optimal.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Oracle Independence:</strong> Grover's algorithm works for any oracle function. The
+                            algorithm doesn't need to know anything about the structure of the problem – it's truly
+                            unstructured search.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Provably Optimal:</strong> It's been proven that no quantum algorithm can search an
+                            unstructured database faster than $O(\sqrt{N})$. Grover's algorithm achieves this optimal
+                            bound.</p>
+                    </div>
+
+                    <!-- Applications -->
+                    <div class="section-title">🚀 Real-World Applications</div>
+                    <div class="applications-grid">
+                        <div class="application-card">
+                            <div class="application-icon">🔐</div>
+                            <div class="application-title">Cryptography Breaking</div>
+                            <div class="application-desc">Speeds up brute-force key search for symmetric encryption
+                                (AES, DES)</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🎲</div>
+                            <div class="application-title">SAT & Constraint Solving</div>
+                            <div class="application-desc">Finding satisfying assignments in Boolean satisfiability
+                                problems</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🗂️</div>
+                            <div class="application-title">Database Search</div>
+                            <div class="application-desc">Searching unsorted databases and data structures efficiently
+                            </div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">📊</div>
+                            <div class="application-title">Optimization Problems</div>
+                            <div class="application-desc">Finding optimal solutions in combinatorial optimization</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🧬</div>
+                            <div class="application-title">Protein Folding</div>
+                            <div class="application-desc">Searching configuration space for optimal protein structures
+                            </div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🤖</div>
+                            <div class="application-title">Machine Learning</div>
+                            <div class="application-desc">Speeding up certain ML algorithms like k-means clustering
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHOR'S FACTORING ALGORITHM -->
+        <div class="algorithm-card" data-algorithm="shor">
+            <div class="algorithm-header" onclick="toggleAlgorithm(this)">
+                <div class="algorithm-name">Shor's Factoring Algorithm</div>
+                <div class="algorithm-tagline">Breaking RSA Encryption</div>
+                <div class="complexity-badge">Classical: O(exp(n<sup>1/3</sup>)) | Quantum: O(n<sup>3</sup>)</div>
+                <div class="expand-indicator">▼</div>
+            </div>
+            <div class="algorithm-body">
+                <div class="algorithm-content">
+                    <!-- What is it? -->
+                    <div class="section-title">📖 What is Shor's Algorithm?</div>
+                    <div class="content-block">
+                        <p>
+                            Shor's algorithm is a quantum algorithm for integer factorization that runs in polynomial
+                            time, providing an exponential speedup over the best-known classical algorithms. This
+                            breakthrough threatens RSA encryption, which relies on the hardness of factoring large
+                            numbers.
+                        </p>
+                        <p>
+                            Discovered by Peter Shor in 1994, this algorithm was one of the first to demonstrate that
+                            quantum computers could solve practical problems exponentially faster than classical
+                            computers, sparking massive interest in quantum computing research.
+                        </p>
+                    </div>
+
+                    <!-- The Problem -->
+                    <div class="section-title">🎯 The Problem</div>
+                    <div class="content-block">
+                        <p><strong>Problem Statement:</strong></p>
+                        <p>
+                            Given a composite number $N$, find its prime factors $p$ and $q$ such that $N = pq$.
+                        </p>
+                        <p>
+                            <strong>Example:</strong> Factor $N = 15$ → Find that $15 = 3 \times 5$
+                        </p>
+                        <p>
+                            <strong>Why It's Hard Classically:</strong> The best classical algorithms (like the Number
+                            Field Sieve) have super-polynomial complexity, making it infeasible to factor large numbers
+                            (e.g., 2048-bit RSA keys) in reasonable time.
+                        </p>
+                    </div>
+
+                    <!-- Classical vs Quantum -->
+                    <div class="section-title">⚖️ Classical vs Quantum Approach</div>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Best Classical Algorithm</th>
+                            <th>Shor's Algorithm</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Time Complexity</strong></td>
+                            <td>$O(\exp(1.9(\ln N)^{1/3}(\ln \ln N)^{2/3}))$</td>
+                            <td>$O((\log N)^3)$ (polynomial!)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>For 2048-bit number</strong></td>
+                            <td>Billions of years</td>
+                            <td>Hours (with large quantum computer)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Key Technique</strong></td>
+                            <td>Number theory sieves</td>
+                            <td>Quantum Fourier Transform + Period Finding</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Impact on Cryptography</strong></td>
+                            <td>RSA is secure</td>
+                            <td>RSA can be broken</td>
+                        </tr>
+                    </table>
+
+                    <!-- How it Works -->
+                    <div class="section-title">⚙️ How It Works: Step-by-Step</div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">1</span>Choose Random Number</div>
+                        <p>Pick a random number $a < N$ where $\gcd(a, N)=1$.</p>
+                                <p>If $\gcd(a, N) \neq 1$, we've found a factor by luck! Otherwise, continue.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">2</span>Find the Period (Quantum Part)</div>
+                        <p>Find the period $r$ of the function $f(x) = a^x \mod N$, meaning:</p>
+                        <div class="formula-box">
+                            $$a^r \equiv 1 \pmod{N}$$
+                        </div>
+                        <p><strong>This is the quantum speedup!</strong> Finding the period classically is hard, but
+                            quantum period-finding using the Quantum Fourier Transform (QFT) is efficient.</p>
+
+                        <p><strong>Quantum Period Finding Steps:</strong></p>
+                        <ul>
+                            <li><strong>a.</strong> Initialize two registers: $|0\rangle^{\otimes n}|0\rangle^{\otimes
+                                n}$</li>
+                            <li><strong>b.</strong> Apply Hadamard to first register to create superposition</li>
+                            <li><strong>c.</strong> Apply modular exponentiation oracle: $|x\rangle|0\rangle \rightarrow
+                                |x\rangle|a^x \mod N\rangle$</li>
+                            <li><strong>d.</strong> Measure second register (causes first register to collapse to a
+                                superposition of states with the same period)</li>
+                            <li><strong>e.</strong> Apply inverse Quantum Fourier Transform to first register</li>
+                            <li><strong>f.</strong> Measure first register to extract period information</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">3</span>Classical Post-Processing</div>
+                        <p>Use the period $r$ to find factors:</p>
+                        <ul>
+                            <li>If $r$ is odd or $a^{r/2} \equiv -1 \pmod{N}$, go back to step 1</li>
+                            <li>Otherwise, compute:
+                                <div class="formula-box">
+                                    $$p = \gcd(a^{r/2} - 1, N)$$
+                                    $$q = \gcd(a^{r/2} + 1, N)$$
+                                </div>
+                            </li>
+                            <li>With high probability, $p$ and $q$ are non-trivial factors of $N$</li>
+                        </ul>
+                    </div>
+
+                    <!-- Key Concepts -->
+                    <div class="section-title">💡 Key Concepts</div>
+                    <div class="highlight-box">
+                        <p><strong>Quantum Fourier Transform (QFT):</strong> The quantum analog of the discrete Fourier
+                            transform. It can be computed exponentially faster on a quantum computer ($O(n^2)$ vs
+                            $O(n2^n)$) and is the key to extracting period information.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Period Finding:</strong> The hard part of factoring is finding the period of modular
+                            exponentiation. QFT allows us to extract this period from quantum interference patterns.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Reduction to Period Finding:</strong> Shor's brilliance was recognizing that
+                            factoring can be reduced to period finding, which quantum computers can do efficiently.</p>
+                    </div>
+
+                    <!-- Applications -->
+                    <div class="section-title">🚀 Impact & Applications</div>
+                    <div class="applications-grid">
+                        <div class="application-card">
+                            <div class="application-icon">🔓</div>
+                            <div class="application-title">Breaking RSA Encryption</div>
+                            <div class="application-desc">Can factor large numbers used in RSA, threatening current
+                                encryption standards</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🛡️</div>
+                            <div class="application-title">Post-Quantum Cryptography</div>
+                            <div class="application-desc">Motivates development of quantum-resistant encryption schemes
+                            </div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🔢</div>
+                            <div class="application-title">Number Theory Research</div>
+                            <div class="application-desc">Advances understanding of computational number theory</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">⚛️</div>
+                            <div class="application-title">Quantum Computing Motivation</div>
+                            <div class="application-desc">Major driver for building large-scale quantum computers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIMON'S ALGORITHM -->
+        <div class="algorithm-card" data-algorithm="simon">
+            <div class="algorithm-header" onclick="toggleAlgorithm(this)">
+                <div class="algorithm-name">Simon's Algorithm</div>
+                <div class="algorithm-tagline">Finding Hidden Periodicity</div>
+                <div class="complexity-badge">Classical: O(2<sup>n/2</sup>) | Quantum: O(n)</div>
+                <div class="expand-indicator">▼</div>
+            </div>
+            <div class="algorithm-body">
+                <div class="algorithm-content">
+                    <!-- What is it? -->
+                    <div class="section-title">📖 What is Simon's Algorithm?</div>
+                    <div class="content-block">
+                        <p>
+                            Simon's algorithm is a quantum algorithm that finds the hidden period (or "secret string")
+                            of a function with exponential speedup over classical methods. It's a precursor to Shor's
+                            algorithm and demonstrates the power of quantum interference.
+                        </p>
+                        <p>
+                            Discovered by Daniel Simon in 1994, this algorithm was historically important as it inspired
+                            Shor's factoring algorithm and provided one of the first clear examples of exponential
+                            quantum speedup.
+                        </p>
+                    </div>
+
+                    <!-- The Problem -->
+                    <div class="section-title">🎯 Simon's Problem</div>
+                    <div class="content-block">
+                        <p><strong>Problem Statement:</strong></p>
+                        <p>
+                            Given a black-box function $f: \{0,1\}^n \rightarrow \{0,1\}^n$ that is promised to have a
+                            special structure:
+                        </p>
+                        <ul>
+                            <li>There exists a secret string $s \in \{0,1\}^n$</li>
+                            <li>For all $x, y$: $f(x) = f(y)$ if and only if $x \oplus y \in \{0^n, s\}$</li>
+                            <li>Where $\oplus$ denotes bitwise XOR</li>
+                        </ul>
+                        <p>
+                            <strong>Goal:</strong> Find the secret string $s$.
+                        </p>
+                        <p>
+                            <strong>Two Cases:</strong><br>
+                            1. $s = 0^n$ (all zeros): $f$ is one-to-one<br>
+                            2. $s \neq 0^n$: $f$ is two-to-one (each output corresponds to exactly two inputs that
+                            differ by $s$)
+                        </p>
+                    </div>
+
+                    <!-- Classical vs Quantum -->
+                    <div class="section-title">⚖️ Classical vs Quantum Approach</div>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Classical Algorithm</th>
+                            <th>Simon's Algorithm</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Queries Needed</strong></td>
+                            <td>$\Omega(2^{n/2})$ queries (birthday paradox)</td>
+                            <td>$O(n)$ queries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>For n=256</strong></td>
+                            <td>~10<sup>38</sup> queries</td>
+                            <td>~256 queries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Strategy</strong></td>
+                            <td>Query randomly until collision found</td>
+                            <td>Use quantum interference to extract linear equations about $s$</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Success Probability</strong></td>
+                            <td>High after exponential queries</td>
+                            <td>High after polynomial queries</td>
+                        </tr>
+                    </table>
+
+                    <!-- How it Works -->
+                    <div class="section-title">⚙️ How It Works: Step-by-Step</div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">1</span>Initialization</div>
+                        <p>Start with two $n$-qubit registers in state $|0\rangle^{\otimes n}|0\rangle^{\otimes n}$</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">2</span>Create Superposition</div>
+                        <p>Apply Hadamard gates to the first register:</p>
+                        <div class="formula-box">
+                            $$|\psi_1\rangle = \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} |x\rangle|0\rangle$$
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">3</span>Apply Oracle</div>
+                        <p>Apply the function $f$ as a quantum oracle:</p>
+                        <div class="formula-box">
+                            $$|\psi_2\rangle = \frac{1}{\sqrt{2^n}} \sum_{x \in \{0,1\}^n} |x\rangle|f(x)\rangle$$
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">4</span>Measure Second Register</div>
+                        <p>Measuring the second register projects the first register to a superposition of states that
+                            map to the same output. If we measure some value $f(z)$:</p>
+                        <div class="formula-box">
+                            $$|\psi_3\rangle = \frac{1}{\sqrt{2}}(|z\rangle + |z \oplus s\rangle)$$
+                        </div>
+                        <p>The first register now contains a superposition of the two preimages that differ by $s$.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">5</span>Apply Hadamard Again</div>
+                        <p>Apply Hadamard to the first register:</p>
+                        <div class="formula-box">
+                            $$|\psi_4\rangle = \frac{1}{\sqrt{2^{n+1}}} \sum_{y \in \{0,1\}^n} [(-1)^{z \cdot y} +
+                            (-1)^{(z \oplus s) \cdot y}]|y\rangle$$
+                        </div>
+                        <p>Due to interference, we can only measure $y$ such that $y \cdot s = 0$ (mod 2).</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">6</span>Repeat & Solve</div>
+                        <p>Repeat steps 1-5 approximately $n$ times to collect $n$ linearly independent vectors $y_1,
+                            y_2, ..., y_n$ where each satisfies:</p>
+                        <div class="formula-box">
+                            $$y_i \cdot s = 0 \pmod{2}$$
+                        </div>
+                        <p>Solve this system of linear equations (using Gaussian elimination) to find $s$.</p>
+                    </div>
+
+                    <!-- Key Concepts -->
+                    <div class="section-title">💡 Key Concepts</div>
+                    <div class="highlight-box">
+                        <p><strong>Hidden Subgroup Problem:</strong> Simon's algorithm solves a special case of the
+                            hidden subgroup problem, which is a general framework that includes factoring, discrete log,
+                            and other problems.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Quantum Interference for Information Extraction:</strong> The second Hadamard
+                            transform creates constructive interference only for states orthogonal to $s$, effectively
+                            encoding information about $s$ in the measurement probabilities.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Linear Independence:</strong> We need approximately $n$ measurements to gather enough
+                            linearly independent equations. With high probability, $n$ random measurements give us $n$
+                            independent equations.</p>
+                    </div>
+
+                    <!-- Applications -->
+                    <div class="section-title">🚀 Applications & Significance</div>
+                    <div class="applications-grid">
+                        <div class="application-card">
+                            <div class="application-icon">🔑</div>
+                            <div class="application-title">Cryptanalysis</div>
+                            <div class="application-desc">Breaking certain symmetric encryption schemes with hidden
+                                structure</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🧬</div>
+                            <div class="application-title">Historical Importance</div>
+                            <div class="application-desc">Inspired Shor's algorithm and the hidden subgroup problem
+                                framework</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">📐</div>
+                            <div class="application-title">Theoretical Computer Science</div>
+                            <div class="application-desc">Demonstrates quantum/classical separation in query complexity
+                            </div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🎓</div>
+                            <div class="application-title">Educational Value</div>
+                            <div class="application-desc">Simpler than Shor's but demonstrates similar principles</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VQE ALGORITHM -->
+        <div class="algorithm-card" data-algorithm="vqe">
+            <div class="algorithm-header" onclick="toggleAlgorithm(this)">
+                <div class="algorithm-name">VQE - Variational Quantum Eigensolver</div>
+                <div class="algorithm-tagline">Hybrid Quantum-Classical for NISQ Era</div>
+                <div class="complexity-badge">NISQ-Friendly | Near-Term Applications</div>
+                <div class="expand-indicator">▼</div>
+            </div>
+            <div class="algorithm-body">
+                <div class="algorithm-content">
+                    <!-- What is it? -->
+                    <div class="section-title">📖 What is VQE?</div>
+                    <div class="content-block">
+                        <p>
+                            The Variational Quantum Eigensolver (VQE) is a hybrid quantum-classical algorithm designed
+                            for near-term quantum computers (NISQ devices). It finds the minimum eigenvalue of a
+                            Hamiltonian, which is crucial for computational chemistry, materials science, and
+                            optimization.
+                        </p>
+                        <p>
+                            Unlike fault-tolerant algorithms like Shor's, VQE is specifically designed to work on noisy
+                            quantum hardware with limited qubit counts and shallow circuit depths, making it one of the
+                            most promising near-term applications of quantum computing.
+                        </p>
+                    </div>
+
+                    <!-- The Problem -->
+                    <div class="section-title">🎯 The Problem</div>
+                    <div class="content-block">
+                        <p><strong>Problem Statement:</strong></p>
+                        <p>
+                            Given a Hamiltonian operator $H$ (typically representing the energy of a quantum system),
+                            find its minimum eigenvalue $E_{\text{min}}$ and corresponding eigenstate
+                            $|\psi_{\text{min}}\rangle$:
+                        </p>
+                        <div class="formula-box">
+                            $$E_{\text{min}} = \min_{\psi} \langle\psi|H|\psi\rangle$$
+                        </div>
+                        <p>
+                            <strong>Applications:</strong>
+                        </p>
+                        <ul>
+                            <li><strong>Molecular ground states:</strong> Finding the lowest energy configuration of
+                                molecules</li>
+                            <li><strong>Materials properties:</strong> Predicting properties of new materials</li>
+                            <li><strong>Optimization:</strong> Mapping combinatorial optimization to finding ground
+                                states</li>
+                        </ul>
+                    </div>
+
+                    <!-- Classical vs Quantum -->
+                    <div class="section-title">⚖️ Why Quantum?</div>
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Classical Methods</th>
+                            <th>VQE</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Scalability</strong></td>
+                            <td>Exponential memory: $2^n$ coefficients</td>
+                            <td>Linear in qubits: $n$ qubits</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Suitable For</strong></td>
+                            <td>Small molecules (~10-20 electrons)</td>
+                            <td>Larger systems with quantum hardware</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Circuit Depth</strong></td>
+                            <td>N/A</td>
+                            <td>Shallow circuits (NISQ-friendly)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Error Mitigation</strong></td>
+                            <td>N/A</td>
+                            <td>Variational nature provides some resilience</td>
+                        </tr>
+                    </table>
+
+                    <!-- How it Works -->
+                    <div class="section-title">⚙️ How It Works: Step-by-Step</div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">1</span>Choose Ansatz (Trial State)</div>
+                        <p>Design a parameterized quantum circuit (ansatz) $U(\theta)$ that prepares trial states:</p>
+                        <div class="formula-box">
+                            $$|\psi(\theta)\rangle = U(\theta)|0\rangle$$
+                        </div>
+                        <p>Common ansatzes include:</p>
+                        <ul>
+                            <li><strong>Hardware-efficient ansatz:</strong> Uses native gates of the quantum device</li>
+                            <li><strong>UCCSD (Unitary Coupled Cluster):</strong> Inspired by quantum chemistry</li>
+                            <li><strong>Problem-specific ansatzes:</strong> Tailored to the problem structure</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">2</span>Prepare Quantum State</div>
+                        <p>On the quantum computer, prepare the state $|\psi(\theta)\rangle$ using current parameters
+                            $\theta$.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">3</span>Measure Energy</div>
+                        <p>Measure the expectation value of the Hamiltonian:</p>
+                        <div class="formula-box">
+                            $$E(\theta) = \langle\psi(\theta)|H|\psi(\theta)\rangle$$
+                        </div>
+                        <p>Since $H = \sum_i c_i P_i$ (sum of Pauli strings), measure each $\langle P_i \rangle$
+                            separately and combine:
+                        </p>
+                        <div class="formula-box">
+                            $$E(\theta) = \sum_i c_i \langle\psi(\theta)|P_i|\psi(\theta)\rangle$$
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">4</span>Classical Optimization</div>
+                        <p>Use a classical optimizer (e.g., gradient descent, COBYLA, SPSA) to update parameters:</p>
+                        <div class="formula-box">
+                            $$\theta_{\text{new}} = \theta_{\text{old}} - \eta \nabla_\theta E(\theta)$$
+                        </div>
+                        <p>The classical computer finds better parameters to minimize the energy.</p>
+                    </div>
+
+                    <div class="step-box">
+                        <div class="step-title"><span class="step-number">5</span>Iterate</div>
+                        <p>Repeat steps 2-4 until convergence (energy stops decreasing significantly):</p>
+                        <ul>
+                            <li>Send new $\theta$ to quantum computer</li>
+                            <li>Measure new energy $E(\theta)$</li>
+                            <li>Optimize parameters further</li>
+                        </ul>
+                        <p>Converged energy $E(\theta^*)$ approximates the true ground state energy $E_{\text{min}}$.
+                        </p>
+                    </div>
+
+                    <!-- Key Concepts -->
+                    <div class="section-title">💡 Key Concepts</div>
+                    <div class="highlight-box">
+                        <p><strong>Variational Principle:</strong> For any trial state $|\psi\rangle$, the expectation
+                            value $\langle\psi|H|\psi\rangle \geq E_{\text{min}}$. This guarantees we always get an
+                            upper bound on the ground state energy.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Hybrid Approach:</strong> Quantum computer handles the exponentially hard part
+                            (representing quantum states), while classical computer does optimization. This division
+                            plays to each platform's strengths.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>NISQ-Friendly:</strong> Shallow circuits, error mitigation through averaging, and
+                            variational nature make VQE suitable for noisy near-term devices.</p>
+                    </div>
+                    <div class="highlight-box">
+                        <p><strong>Ansatz Design:</strong> The choice of ansatz is crucial. Too simple: can't reach
+                            ground state. Too complex: hard to optimize and train, susceptible to noise.</p>
+                    </div>
+
+                    <!-- Applications -->
+                    <div class="section-title">🚀 Real-World Applications</div>
+                    <div class="applications-grid">
+                        <div class="application-card">
+                            <div class="application-icon">⚗️</div>
+                            <div class="application-title">Drug Discovery</div>
+                            <div class="application-desc">Simulating molecular interactions for pharmaceutical design
+                            </div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🔋</div>
+                            <div class="application-title">Battery Materials</div>
+                            <div class="application-desc">Designing better catalysts and energy storage materials</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🧲</div>
+                            <div class="application-title">Condensed Matter Physics</div>
+                            <div class="application-desc">Studying quantum phases and phase transitions</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">🌱</div>
+                            <div class="application-title">Nitrogen Fixation</div>
+                            <div class="application-desc">Understanding catalysts for sustainable fertilizer production
+                            </div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">💎</div>
+                            <div class="application-title">Materials Science</div>
+                            <div class="application-desc">Predicting properties of novel materials and compounds</div>
+                        </div>
+                        <div class="application-card">
+                            <div class="application-icon">📈</div>
+                            <div class="application-title">Portfolio Optimization</div>
+                            <div class="application-desc">Financial optimization by mapping to quantum Hamiltonians
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real Example -->
+                    <div class="section-title">🧪 Real-World Success</div>
+                    <div class="content-block">
+                        <p><strong>H₂ Molecule Ground State (2017):</strong></p>
+                        <p>
+                            IBM demonstrated VQE on a 6-qubit quantum processor to calculate the ground state energy of
+                            molecular hydrogen. This was one of the first practical demonstrations of quantum advantage
+                            in chemistry simulations on real hardware.
+                        </p>
+                        <p><strong>Recent Achievements:</strong></p>
+                        <ul>
+                            <li>Google: Simulated water molecule (H₂O) and lithium hydride (LiH)</li>
+                            <li>Rigetti: Solved optimization problems for portfolio management</li>
+                            <li>IonQ: Calculated properties of small organic molecules</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        function toggleAlgorithm(header) {
+            const card = header.closest('.algorithm-card');
+            card.classList.toggle('expanded');
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.algorithm-card');
+
+            cards.forEach(card => {
+                const name = card.querySelector('.algorithm-name').textContent.toLowerCase();
+                const tagline = card.querySelector('.algorithm-tagline').textContent.toLowerCase();
+                const algorithm = card.dataset.algorithm;
+
+                if (name.includes(searchTerm) || tagline.includes(searchTerm) || algorithm.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

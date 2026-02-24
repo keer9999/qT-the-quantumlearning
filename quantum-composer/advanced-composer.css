@@ -1,0 +1,600 @@
+/* Advanced Quantum Composer - Professional Edition */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'IBM Plex Mono', 'Monaco', 'Courier New', monospace;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a2a4a 50%, #0a0e27 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.advanced-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Header */
+.advanced-header {
+    background: linear-gradient(90deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 15px 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid #e94560;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.header-left h1 {
+    font-size: 26px;
+    color: #e94560;
+    margin-bottom: 3px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.header-left p {
+    font-size: 12px;
+    color: #a8b3d1;
+    letter-spacing: 0.5px;
+}
+
+.back-btn {
+    background: rgba(233, 69, 96, 0.1);
+    border: 1px solid #e94560;
+    color: #e94560;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #e94560;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(233, 69, 96, 0.4);
+}
+
+/* Main Layout */
+.advanced-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr 380px;
+    gap: 12px;
+    padding: 12px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.panel {
+    background: rgba(26, 26, 46, 0.7);
+    border: 1px solid rgba(233, 69, 96, 0.2);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+.panel-header {
+    background: linear-gradient(90deg, rgba(233, 69, 96, 0.1), rgba(15, 52, 96, 0.1));
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.panel-header h3 {
+    font-size: 14px;
+    color: #e94560;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.panel-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Code Panel */
+.code-panel {
+    grid-column: 1;
+}
+
+.panel-btn {
+    background: rgba(233, 69, 96, 0.15);
+    border: 1px solid rgba(233, 69, 96, 0.4);
+    color: #e94560;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.panel-btn:hover {
+    background: #e94560;
+    color: #ffffff;
+}
+
+#codeOutput {
+    background: rgba(0, 0, 0, 0.4);
+    color: #00d4ff;
+    padding: 15px;
+    font-size: 10px;
+    line-height: 1.5;
+    font-family: 'IBM Plex Mono', 'Monaco', monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Circuit Panel */
+.circuit-panel {
+    grid-column: 2;
+}
+
+.header-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.qubit-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(233, 69, 96, 0.3);
+    color: #e94560;
+    padding: 6px 10px;
+    border-radius: 4px;
+    width: 50px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.qubit-input:focus {
+    outline: none;
+    border-color: #e94560;
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
+}
+
+.control-btn {
+    background: linear-gradient(135deg, #e94560, #d63031);
+    border: none;
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+    transform: translateY(-2px);
+}
+
+.circuit-canvas {
+    background: linear-gradient(135deg, rgba(15, 15, 30, 0.5), rgba(10, 30, 60, 0.3));
+    border-radius: 6px;
+    padding: 20px;
+    min-height: 300px;
+    height: 100%;
+}
+
+.qubit-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.qubit-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 30px;
+    position: relative;
+}
+
+.qubit-label {
+    min-width: 45px;
+    color: #e94560;
+    font-weight: 700;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.circuit-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, #e94560, transparent);
+    position: relative;
+}
+
+.circuit-gate {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.3), rgba(26, 42, 152, 0.5));
+    border: 1px solid #e94560;
+    color: #e94560;
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    margin-right: 5px;
+    transition: all 0.3s ease;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.circuit-gate:hover {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.6), rgba(26, 42, 152, 0.8));
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.6);
+    transform: scale(1.05);
+}
+
+/* Right Panel: Gates & Visualizations */
+.right-panel {
+    grid-column: 3;
+}
+
+.tabs-header {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    background: linear-gradient(90deg, rgba(233, 69, 96, 0.1), rgba(15, 52, 96, 0.1));
+    border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+    overflow-x: auto;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #a8b3d1;
+    padding: 8px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    color: #e94560;
+}
+
+.tab-btn.active {
+    color: #e94560;
+    border-bottom-color: #e94560;
+}
+
+.tab-content {
+    display: none;
+    padding: 15px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Gates Tab */
+.gate-section {
+    margin-bottom: 20px;
+}
+
+.gate-section h4 {
+    color: #e94560;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+}
+
+.gate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.gate-btn {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.2), rgba(26, 42, 152, 0.3));
+    border: 1px solid rgba(233, 69, 96, 0.4);
+    color: #e94560;
+    padding: 10px 8px;
+    border-radius: 4px;
+    cursor: move;
+    font-size: 10px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.gate-btn:hover {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.4), rgba(26, 42, 152, 0.6));
+    box-shadow: 0 0 10px rgba(233, 69, 96, 0.4);
+    transform: translateY(-2px);
+}
+
+.gate-btn.two-qubit {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(26, 42, 152, 0.3));
+    border-color: rgba(0, 212, 255, 0.4);
+    color: #00d4ff;
+}
+
+.gate-btn.two-qubit:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.4), rgba(26, 42, 152, 0.6));
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+.gate-btn.three-qubit {
+    background: linear-gradient(135deg, rgba(100, 200, 150, 0.2), rgba(26, 42, 152, 0.3));
+    border-color: rgba(100, 200, 150, 0.4);
+    color: #64c896;
+}
+
+.gate-btn.three-qubit:hover {
+    background: linear-gradient(135deg, rgba(100, 200, 150, 0.4), rgba(26, 42, 152, 0.6));
+    box-shadow: 0 0 10px rgba(100, 200, 150, 0.4);
+}
+
+.gate-btn.measure {
+    background: linear-gradient(135deg, rgba(255, 200, 100, 0.2), rgba(26, 42, 152, 0.3));
+    border-color: rgba(255, 200, 100, 0.4);
+    color: #ffc864;
+}
+
+.gate-btn.measure:hover {
+    background: linear-gradient(135deg, rgba(255, 200, 100, 0.4), rgba(26, 42, 152, 0.6));
+    box-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
+}
+
+/* Bloch Container */
+.bloch-container {
+    width: 100%;
+    height: 300px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(15, 30, 60, 0.5), rgba(10, 20, 50, 0.3));
+    border: 1px solid rgba(233, 69, 96, 0.2);
+}
+
+/* State Vector */
+.state-vector {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 4px;
+    max-height: 100%;
+    overflow-y: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+}
+
+.state-vector p {
+    color: #a8b3d1;
+}
+
+.state-amplitude {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    padding: 6px;
+    background: rgba(233, 69, 96, 0.05);
+    border-left: 2px solid #e94560;
+    border-radius: 2px;
+    gap: 8px;
+}
+
+.amplitude-label {
+    color: #e94560;
+    font-weight: 700;
+    min-width: 40px;
+    font-size: 9px;
+}
+
+.amplitude-bar {
+    flex: 1;
+    height: 12px;
+    background: rgba(233, 69, 96, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.amplitude-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e94560, #ff6b7a);
+    transition: width 0.5s ease;
+}
+
+.amplitude-value {
+    color: #e94560;
+    font-weight: 700;
+    min-width: 45px;
+    text-align: right;
+    font-size: 9px;
+}
+
+/* Measurements */
+.measurements {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 4px;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.measurements p {
+    color: #a8b3d1;
+}
+
+.measurement-result {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    padding: 6px;
+    background: rgba(233, 69, 96, 0.05);
+    border-left: 2px solid #e94560;
+    border-radius: 2px;
+    gap: 8px;
+}
+
+.measurement-state {
+    color: #e94560;
+    font-weight: 700;
+    font-family: 'IBM Plex Mono', monospace;
+    min-width: 45px;
+    font-size: 9px;
+}
+
+.measurement-bar {
+    flex: 1;
+    height: 12px;
+    background: rgba(233, 69, 96, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.measurement-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e94560, #ff6b7a);
+    transition: width 0.5s ease;
+}
+
+.measurement-count {
+    color: #e94560;
+    font-weight: 700;
+    min-width: 45px;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+}
+
+/* Status Bar */
+.status-bar {
+    background: linear-gradient(90deg, rgba(26, 26, 46, 0.9), rgba(15, 52, 96, 0.9));
+    border-top: 1px solid rgba(233, 69, 96, 0.3);
+    padding: 10px 40px;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 11px;
+}
+
+.status-label {
+    color: #a8b3d1;
+    font-weight: 600;
+}
+
+.status-value {
+    color: #e94560;
+    font-weight: 700;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.status-select {
+    background: rgba(233, 69, 96, 0.1);
+    border: 1px solid rgba(233, 69, 96, 0.3);
+    color: #e94560;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: #e94560;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(233, 69, 96, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(233, 69, 96, 0.3);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(233, 69, 96, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+    .advanced-layout {
+        grid-template-columns: 300px 1fr 350px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .advanced-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .code-panel, .circuit-panel, .right-panel {
+        grid-column: 1;
+    }
+
+    .status-bar {
+        padding: 10px 20px;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .advanced-layout {
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .advanced-header {
+        padding: 10px 15px;
+    }
+
+    .header-left h1 {
+        font-size: 18px;
+    }
+
+    .status-bar {
+        padding: 8px 15px;
+        font-size: 10px;
+    }
+}
