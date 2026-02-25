@@ -539,11 +539,12 @@ body.theme-freefire .landing-content::after {
 }
 
 body.light-mode .jntu-main-text {
-    background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
     -webkit-background-clip: text;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-shadow: none;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+    filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.2));
 }
 
 body.light-mode .college-name {
@@ -552,15 +553,17 @@ body.light-mode .college-name {
 }
 
 body.light-mode .qt-highlight {
-    background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #92400e 100%);
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ea580c 100%);
     -webkit-background-clip: text;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 body.light-mode .qt-highlight::after {
-    background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #92400e 100%);
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ea580c 100%);
     -webkit-background-clip: text;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
     filter: blur(10px);
     opacity: 0.3;
 }
