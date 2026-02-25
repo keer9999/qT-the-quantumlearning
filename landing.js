@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!container) return;
 
     const scene = new THREE.Scene();
+    window.landingScene = scene; // Expose for theme switching
     // Dark experiential fog - high end look
     scene.fog = new THREE.FogExp2(0x020205, 0.0015);
 
@@ -186,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lighting - INCREASED INTENSITY FOR VISIBILITY
     const ambientLight = new THREE.AmbientLight(0xffffff, 2.0); // Bright ambient
+    window.landingAmbientLight = ambientLight; // Expose for theme switching
     scene.add(ambientLight);
 
     // Blue glow from bottom (Quantum effect)
@@ -583,6 +585,17 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 canvasContainer.style.display = 'block';
                 setTimeout(() => { canvasContainer.style.opacity = '1'; }, 50);
+
+                // Adjust 3D Fog and Lighting for Daylight vs Void
+                if (window.landingScene && window.landingScene.fog) {
+                    if (theme.id === 'light') {
+                        window.landingScene.fog.color.setHex(0xf8fafc);
+                        if (window.landingAmbientLight) window.landingAmbientLight.intensity = 3.0;
+                    } else {
+                        window.landingScene.fog.color.setHex(0x020205);
+                        if (window.landingAmbientLight) window.landingAmbientLight.intensity = 2.0;
+                    }
+                }
             }
         }
         localStorage.setItem('themeId', theme.id);

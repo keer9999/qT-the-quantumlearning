@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="../global-ui.css">
     <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 </head>
+
 <body>
     <div class="advanced-container">
         <!-- Header -->
@@ -66,7 +68,8 @@ plot_histogram(counts).show()</pre>
                 <div class="panel-header">
                     <h3>Quantum Circuit Designer</h3>
                     <div class="header-controls">
-                        <input type="number" id="qubitCount" min="1" max="10" value="4" class="qubit-input" onchange="updateCircuitQubits()">
+                        <input type="number" id="qubitCount" min="1" max="10" value="4" class="qubit-input"
+                            onchange="updateCircuitQubits()">
                         <span>Qubits</span>
                         <button class="control-btn" onclick="resetCircuit()">Clear</button>
                         <button class="control-btn" onclick="runSimulation()">Run</button>
@@ -108,28 +111,38 @@ plot_histogram(counts).show()</pre>
                     <div class="gate-section">
                         <h4>Two-Qubit Gates</h4>
                         <div class="gate-grid">
-                            <button class="gate-btn two-qubit" draggable="true" data-gate="CNOT" data-type="two">CNOT</button>
-                            <button class="gate-btn two-qubit" draggable="true" data-gate="SWAP" data-type="two">SWAP</button>
-                            <button class="gate-btn two-qubit" draggable="true" data-gate="CZ" data-type="two">CZ</button>
-                            <button class="gate-btn two-qubit" draggable="true" data-gate="iSWAP" data-type="two">iSWAP</button>
-                            <button class="gate-btn two-qubit" draggable="true" data-gate="XX" data-type="two">XX(θ)</button>
-                            <button class="gate-btn two-qubit" draggable="true" data-gate="YY" data-type="two">YY(θ)</button>
-                            <button class="gate-btn two-qubit" draggable="true" data-gate="ZZ" data-type="two">ZZ(θ)</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="CNOT"
+                                data-type="two">CNOT</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="SWAP"
+                                data-type="two">SWAP</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="CZ"
+                                data-type="two">CZ</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="iSWAP"
+                                data-type="two">iSWAP</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="XX"
+                                data-type="two">XX(θ)</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="YY"
+                                data-type="two">YY(θ)</button>
+                            <button class="gate-btn two-qubit" draggable="true" data-gate="ZZ"
+                                data-type="two">ZZ(θ)</button>
                         </div>
                     </div>
 
                     <div class="gate-section">
                         <h4>Three-Qubit Gates</h4>
                         <div class="gate-grid">
-                            <button class="gate-btn three-qubit" draggable="true" data-gate="Toffoli" data-type="three">Toffoli</button>
-                            <button class="gate-btn three-qubit" draggable="true" data-gate="Fredkin" data-type="three">Fredkin</button>
+                            <button class="gate-btn three-qubit" draggable="true" data-gate="Toffoli"
+                                data-type="three">Toffoli</button>
+                            <button class="gate-btn three-qubit" draggable="true" data-gate="Fredkin"
+                                data-type="three">Fredkin</button>
                         </div>
                     </div>
 
                     <div class="gate-section">
                         <h4>Measurement</h4>
                         <div class="gate-grid">
-                            <button class="gate-btn measure" draggable="true" data-gate="MEASURE" data-type="measure">Measure</button>
+                            <button class="gate-btn measure" draggable="true" data-gate="MEASURE"
+                                data-type="measure">Measure</button>
                         </div>
                     </div>
                 </div>
@@ -182,5 +195,7 @@ plot_histogram(counts).show()</pre>
     </div>
 
     <script src="advanced-composer.js"></script>
+    <script src="../global-ui.js" defer></script>
 </body>
+
 </html>

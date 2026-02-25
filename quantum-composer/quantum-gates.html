@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="quantum-gates.css">
     <link rel="stylesheet" href="../global-ui.css">
 </head>
+
 <body>
     <header>
         <div class="logo">
@@ -40,7 +42,8 @@
                         <h3>Pauli-X (NOT Gate)</h3>
                     </div>
                     <div class="gate-body">
-                        <p class="gate-description">Flips the qubit state. Rotates π radians around X-axis on Bloch sphere.</p>
+                        <p class="gate-description">Flips the qubit state. Rotates π radians around X-axis on Bloch
+                            sphere.</p>
                         <div class="gate-matrix">
                             <p><strong>Matrix:</strong></p>
                             <p>[[0, 1], [1, 0]]</p>
@@ -72,7 +75,8 @@
                         <h3>Pauli-Z Gate</h3>
                     </div>
                     <div class="gate-body">
-                        <p class="gate-description">Applies phase flip. Rotates π radians around Z-axis on Bloch sphere.</p>
+                        <p class="gate-description">Applies phase flip. Rotates π radians around Z-axis on Bloch sphere.
+                        </p>
                         <div class="gate-matrix">
                             <p><strong>Matrix:</strong></p>
                             <p>[[1, 0], [0, -1]]</p>
@@ -88,7 +92,8 @@
                         <h3>Hadamard Gate</h3>
                     </div>
                     <div class="gate-body">
-                        <p class="gate-description">Creates equal superposition. Fundamental gate for quantum computing.</p>
+                        <p class="gate-description">Creates equal superposition. Fundamental gate for quantum computing.
+                        </p>
                         <div class="gate-matrix">
                             <p><strong>Matrix:</strong></p>
                             <p>1/√2 × [[1, 1], [1, -1]]</p>
@@ -346,7 +351,8 @@
                         <h3>JNTU Quantum Composer</h3>
                     </div>
                     <div class="composer-body">
-                        <p>Perfect for learning quantum circuits. Simple drag-and-drop interface with visual Bloch sphere.</p>
+                        <p>Perfect for learning quantum circuits. Simple drag-and-drop interface with visual Bloch
+                            sphere.</p>
                         <ul class="features-list">
                             <li>✓ Drag & Drop Gates</li>
                             <li>✓ Visual Bloch Sphere</li>
@@ -364,7 +370,8 @@
                         <h3>Advanced Quantum Composer</h3>
                     </div>
                     <div class="composer-body">
-                        <p>Professional-grade circuit design. IBM Qiskit style with advanced features and visualizations.</p>
+                        <p>Professional-grade circuit design. IBM Qiskit style with advanced features and
+                            visualizations.</p>
                         <ul class="features-list">
                             <li>✓ Advanced Drag & Drop</li>
                             <li>✓ 3D Bloch Sphere</li>
@@ -382,10 +389,7 @@
 
     <div class="global-back-btn" onclick="goBackGlobal()"></div>
 
-    <script>
-        function goBackGlobal() {
-            window.history.back();
-        }
-    </script>
+    <script src="../global-ui.js" defer></script>
 </body>
+
 </html>

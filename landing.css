@@ -37,13 +37,20 @@ body.landing-active {
 }
 
 body.light-mode {
-    --bg-color: radial-gradient(circle at center, #f0f9ff 0%, #e0f2fe 100%);
+    --bg-color: #f8fafc;
     --text-color: #0f172a;
-    --glass-bg: rgba(255, 255, 255, 0.4);
-    --nav-bg: rgba(255, 255, 255, 0.5);
-    --card-bg: rgba(255, 255, 255, 0.6);
-    --accent-color: #0284c7;
-    --secondary-text: #475569;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --nav-bg: rgba(255, 255, 255, 0.85);
+    --card-bg: #ffffff;
+    --accent-color: #2563eb;
+    --secondary-text: #1e1b4b;
+    /* Premium Midnight Indigo instead of gray */
+}
+
+/* Light mode background with transparency for 3D visibility */
+body.light-mode #landing-overlay {
+    background: radial-gradient(circle at top right, rgba(241, 245, 249, 0.7) 0%, rgba(248, 2fafc, 0.8) 100%);
+    backdrop-filter: blur(8px);
 }
 
 
@@ -532,20 +539,93 @@ body.theme-freefire .landing-content::after {
 }
 
 body.light-mode .jntu-main-text {
-    background: linear-gradient(135deg, #0f172a 0%, #0369a1 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
     -webkit-background-clip: text;
     background-clip: text;
-    text-shadow: 0 5px 15px rgba(2, 132, 199, 0.2);
+    text-shadow: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+body.light-mode .college-name {
+    color: #047857;
+    /* Deep Emerald */
+}
+
+body.light-mode .qt-highlight {
+    background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #92400e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+body.light-mode .qt-highlight::after {
+    background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #92400e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: blur(10px);
+    opacity: 0.3;
 }
 
 body.light-mode .platform-name {
-    color: #1e293b;
+    color: #1e3a8a;
+    /* Deep Royal Blue */
+}
+
+body.light-mode .platform-desc {
+    color: #1e1b4b;
+    /* Midnight Indigo */
 }
 
 body.light-mode .section-subtitle,
 body.light-mode .platform-desc,
 body.light-mode .dept-text {
-    color: #475569;
+    color: #1e1b4b;
+    /* Midnight Indigo */
+    font-weight: 500;
+}
+
+body.light-mode .landing-presenting {
+    color: #1e1b4b;
+    /* Midnight Indigo */
+    font-weight: 600;
+}
+
+body.light-mode .landing-nav {
+    background: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .landing-nav-logo {
+    color: #047857;
+}
+
+body.light-mode .landing-nav-links a {
+    color: #1e1b4b;
+    /* Midnight Indigo */
+    font-weight: 700;
+}
+
+body.light-mode .landing-nav-links a:hover {
+    color: #2563eb;
+}
+
+body.light-mode .theme-arrow {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #1e293b;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .theme-arrow:hover {
+    background: #1e293b;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .theme-name-display {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1e293b;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 #landing-overlay.hidden {
@@ -1102,32 +1182,87 @@ body.light-mode .theme-toggle-btn {
 
 .social-links {
     display: flex;
-    gap: 20px;
+    gap: 28px;
+    justify-content: center;
+    align-items: center;
 }
 
-.social-link {
-    color: #94a3b8;
-    font-size: 1.5rem;
-    transition: color 0.3s, transform 0.3s;
-    text-decoration: none;
+/* Base social button: vertical stack, icon on top, label below */
+.social-btn {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 8px;
-    padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.25s ease, filter 0.25s ease;
 }
 
-.social-link span {
-    font-size: 0.9rem;
-    font-weight: 500;
+.social-btn:hover {
+    transform: translateY(-4px) scale(1.08);
+    filter: brightness(1.15);
 }
 
-.social-link:hover {
-    color: #fff;
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.1);
+.social-btn__icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.25s ease;
 }
+
+.social-btn__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* GitHub – black circle */
+.social-btn--github .social-btn__icon {
+    background: #1a1a1a;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.social-btn--github:hover .social-btn__icon {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+}
+
+.social-btn--github .social-btn__label {
+    color: #c9d1d9;
+}
+
+/* LinkedIn – brand blue rounded square */
+.social-btn--linkedin .social-btn__icon {
+    background: #0a66c2;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(10, 102, 194, 0.5);
+}
+
+.social-btn--linkedin:hover .social-btn__icon {
+    box-shadow: 0 6px 24px rgba(10, 102, 194, 0.7);
+}
+
+.social-btn--linkedin .social-btn__label {
+    color: #38bdf8;
+}
+
+/* Email – red rounded square */
+.social-btn--email .social-btn__icon {
+    background: #e03b3b;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(224, 59, 59, 0.5);
+}
+
+.social-btn--email:hover .social-btn__icon {
+    box-shadow: 0 6px 24px rgba(224, 59, 59, 0.7);
+}
+
+.social-btn--email .social-btn__label {
+    color: #fca5a5;
+}
+
 
 /* ================== JNTU BRANDING & SECTIONS ================== */
 

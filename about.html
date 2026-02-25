@@ -897,22 +897,35 @@
 
   <style>
     .qt-global-footer {
-      background: rgba(2,2,5,0.95);
-      border-top: 1px solid rgba(255,255,255,0.07);
+      background: rgba(2, 2, 5, 0.95);
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
       padding: 22px 40px;
       text-align: center;
       font-family: 'Segoe UI', Arial, sans-serif;
     }
+
     .qt-global-footer p {
       font-size: 0.8rem;
       color: #475569;
       line-height: 1.8;
       margin: 0;
     }
-    .qt-global-footer .ft-brand  { color: #38bdf8; font-weight: 700; }
-    .qt-global-footer .ft-sep    { color: #334155; margin: 0 6px; }
-    .qt-global-footer .ft-ref    { color: #64748b; }
+
+    .qt-global-footer .ft-brand {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .qt-global-footer .ft-sep {
+      color: #334155;
+      margin: 0 6px;
+    }
+
+    .qt-global-footer .ft-ref {
+      color: #64748b;
+    }
   </style>
+  <link rel="stylesheet" href="global-ui.css">
 </head>
 
 <body>
@@ -1470,42 +1483,50 @@
       </div>
     </section>
 
-    <!-- ─── DONATIONS ─────────────────────────────────────── -->
+    <!-- ─── DONATIONS LINK ──────────────────────────────────── -->
     <div class="section-divider"></div>
-    <div class="donations-section fade-up">
-      <div class="section-eyebrow" style="margin-bottom:36px;">
+    <div style="max-width:1100px;margin:0 auto;padding:60px 48px 80px;" class="fade-up">
+      <div class="section-eyebrow" style="margin-bottom:24px;">
         <div class="section-eyebrow-line"></div>
         <span>Support Our Causes</span>
       </div>
-      <p style="color:#64748b;font-size:0.95rem;max-width:620px;line-height:1.8;margin-bottom:36px;">
-        Help us support education, wildlife and the environment through these trusted organisations.
-      </p>
-      <div class="landing-donation-grid">
-        <div class="glass-card" onclick="window.open('https://wildlifesos.org/donate/', '_blank')">
-          <div class="donation-img"><img src="images/wildlife_sos.svg" alt="Wildlife SOS"></div>
-          <h3>Wildlife SOS</h3>
-          <p>Rescue and rehabilitation of wildlife across India.</p>
-          <button class="donate-btn-small">Donate</button>
+      <a href="donations.html" style="
+        display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;
+        background:rgba(15,23,42,0.7);
+        border:1px solid rgba(255,255,255,0.08);
+        border-left:4px solid var(--gold);
+        border-radius:20px;
+        padding:40px 44px;
+        text-decoration:none;
+        backdrop-filter:blur(14px);
+        transition:transform 0.3s,box-shadow 0.3s;
+      " onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 20px 60px rgba(212,168,83,0.15)'"
+        onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div>
+          <div
+            style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">
+            💛 Wildlife · Education · Humanity
+          </div>
+          <div style="font-size:1.35rem;font-weight:800;color:var(--white);margin-bottom:8px;">
+            Help Us Support Good Causes
+          </div>
+          <div style="font-size:0.88rem;color:var(--muted);line-height:1.7;max-width:500px;">
+            Wildlife SOS, Wildlife Trust of India, Pratham, and Goonj — four organisations
+            changing lives every single day. Your support makes it possible.
+          </div>
         </div>
-        <div class="glass-card" onclick="window.open('https://www.wti.org/donate/', '_blank')">
-          <div class="donation-img"><img src="images/wti.svg" alt="Wildlife Trust of India"></div>
-          <h3>Wildlife Trust of India</h3>
-          <p>Conservation programmes &amp; habitat restoration.</p>
-          <button class="donate-btn-small">Donate</button>
+        <div style="
+          display:flex;align-items:center;gap:10px;
+          background:linear-gradient(135deg,var(--gold),#b8883a);
+          color:#fff;font-weight:700;font-size:0.9rem;
+          padding:14px 28px;border-radius:12px;white-space:nowrap;flex-shrink:0;
+        ">
+          Visit Donations Page
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
         </div>
-        <div class="glass-card" onclick="window.open('https://www.pratham.org/donate', '_blank')">
-          <div class="donation-img"><img src="images/pratham.svg" alt="Pratham"></div>
-          <h3>Pratham</h3>
-          <p>Quality education for underprivileged children.</p>
-          <button class="donate-btn-small">Donate</button>
-        </div>
-        <div class="glass-card" onclick="window.open('https://goonj.org/donate/', '_blank')">
-          <div class="donation-img"><img src="images/goonj.svg" alt="Goonj"></div>
-          <h3>Goonj</h3>
-          <p>Disaster relief, clothing &amp; livelihood support.</p>
-          <button class="donate-btn-small">Donate</button>
-        </div>
-      </div>
+      </a>
     </div>
 
   </main>
@@ -1581,6 +1602,7 @@
       els.forEach(el => obs.observe(el));
     })();
   </script>
+  <script src="global-ui.js" defer></script>
 </body>
 
 </html>

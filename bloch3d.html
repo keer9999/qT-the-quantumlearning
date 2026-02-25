@@ -701,6 +701,113 @@
       <span class="bs-chip">Decoherence</span>
       <span class="bs-chip">Interactive 3D Simulator</span>
     </div>
+
+    <!-- ✨ SHINING DIAGRAM CTA ✨ -->
+    <style>
+      @keyframes bs-shimmer {
+        0% {
+          background-position: -300% center
+        }
+
+        100% {
+          background-position: 300% center
+        }
+      }
+
+      @keyframes bs-glow {
+
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 212, 255, .6), 0 10px 40px rgba(0, 87, 184, .55)
+        }
+
+        50% {
+          box-shadow: 0 0 0 12px rgba(0, 212, 255, 0), 0 14px 50px rgba(0, 87, 184, .8)
+        }
+      }
+
+      @keyframes bs-float {
+
+        0%,
+        100% {
+          transform: translateY(0)
+        }
+
+        50% {
+          transform: translateY(-5px)
+        }
+      }
+
+      .bscta-wrap {
+        margin-top: 36px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .bscta-eyebrow {
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: rgba(165, 200, 255, .55);
+        font-weight: 600;
+      }
+
+      .bscta-btn {
+        position: relative;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        padding: 15px 40px;
+        background: linear-gradient(110deg, #003d99 0%, #0057b8 25%, #00c8f0 50%, #0057b8 75%, #003d99 100%);
+        background-size: 300% 100%;
+        color: #fff;
+        border-radius: 60px;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: .4px;
+        text-decoration: none;
+        border: 1.5px solid rgba(255, 255, 255, .22);
+        animation: bs-shimmer 3.5s linear infinite, bs-glow 2.2s ease-in-out infinite, bs-float 3.5s ease-in-out infinite;
+        transition: filter .2s;
+      }
+
+      .bscta-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 60px;
+        background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, .28) 50%, transparent 70%);
+        background-size: 300% 100%;
+        animation: bs-shimmer 2.2s linear infinite;
+      }
+
+      .bscta-btn:hover {
+        filter: brightness(1.15);
+      }
+
+      .bscta-star {
+        font-size: 20px;
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, .9));
+      }
+
+      .bscta-sub {
+        font-size: 11.5px;
+        color: rgba(165, 200, 255, .5);
+        letter-spacing: .8px;
+      }
+    </style>
+    <div class="bscta-wrap">
+      <span class="bscta-eyebrow">✦ &nbsp; Visual Reference &nbsp; ✦</span>
+      <a href="bloch-sphere-diagram.html" target="_blank" class="bscta-btn">
+        <span class="bscta-star">⬡</span>
+        View Full Parameter Diagram
+        <span style="opacity:.65;font-size:18px;">→</span>
+      </a>
+      <span class="bscta-sub">All axes · θ φ angles · 6 states · formula · gate rotations</span>
+    </div>
   </div>
 
   <div class="bs-wrap">
@@ -1259,17 +1366,69 @@
             }
 
             window.bsApplyGate = function (g) {
-              let t = bsTheta, p = bsPhi;
+              // Convert current (theta, phi) → Bloch vector (x, y, z)
+              // Renderer convention: y = cos(theta), x = sin(theta)*cos(phi), z = sin(theta)*sin(phi)
+              let x = Math.sin(bsTheta) * Math.cos(bsPhi);
+              let y = Math.cos(bsTheta);
+              let z = Math.sin(bsTheta) * Math.sin(bsPhi);
+
+              // RENDERER CONVENTION:
+              //   y-axis = computational Z (|0⟩ at +y, |1⟩ at -y)
+              //   x-axis = Hadamard/X     (|+⟩ at +x, |−⟩ at -x)
+              //   z-axis = Phase/Y        (|+i⟩ at +z, |−i⟩ at -z)
+              let nx, ny, nz;
               switch (g) {
-                case 'X': t = Math.PI - t; p = Math.PI + p; break;
-                case 'Y': t = Math.PI - t; p = -p + Math.PI; break;
-                case 'Z': p += Math.PI; break;
-                case 'H': { const tmp = t; t = Math.PI / 2 - (t - Math.PI / 2); p = (p < 0.01 && p > -0.01) ? Math.PI : 0; break; }
-                case 'S': p += Math.PI / 2; break;
-                case 'T': p += Math.PI / 4; break;
+                case 'X':
+                  // Pauli-X: π rotation around renderer-x axis: (x,y,z)→(x,-y,-z)
+                  nx = x; ny = -y; nz = -z; break;
+
+                case 'Y':
+                  // Pauli-Y: π rotation around renderer-z (phase/Y axis): (x,y,z)→(-x,-y,z)
+                  nx = -x; ny = -y; nz = z; break;
+
+                case 'Z':
+                  // Pauli-Z: π rotation around renderer-y (computational axis): (x,y,z)→(-x,y,-z)
+                  nx = -x; ny = y; nz = -z; break;
+
+                case 'H': {
+                  // Hadamard: swap computational-Z ↔ Hadamard-X
+                  // In renderer: swap x ↔ y, negate z
+                  // H|0⟩=|+⟩: (0,+1,0) → (+1,0,0) ✓
+                  // H|+⟩=|0⟩: (+1,0,0) → (0,+1,0) ✓
+                  // H|1⟩=|-⟩: (0,-1,0) → (-1,0,0) ✓
+                  nx = y; ny = x; nz = -z; break;
+                }
+
+                case 'S': {
+                  // S = φ += π/2: rotate xz-plane by π/2
+                  const a = Math.PI / 2;
+                  nx = x * Math.cos(a) - z * Math.sin(a);
+                  ny = y;
+                  nz = x * Math.sin(a) + z * Math.cos(a);
+                  break;
+                }
+
+                case 'T': {
+                  // T = φ += π/4: rotate xz-plane by π/4
+                  const b = Math.PI / 4;
+                  nx = x * Math.cos(b) - z * Math.sin(b);
+                  ny = y;
+                  nz = x * Math.sin(b) + z * Math.cos(b);
+                  break;
+                }
+
+                default: nx = x; ny = y; nz = z;
               }
-              bsTheta = ((t % Math.PI) + Math.PI) % Math.PI;
-              bsPhi = ((p % (2 * Math.PI)) + (2 * Math.PI)) % (2 * Math.PI);
+
+              // Normalise (defensive)
+              const len = Math.sqrt(nx * nx + ny * ny + nz * nz);
+              if (len > 1e-6) { nx /= len; ny /= len; nz /= len; }
+
+              // Convert back to spherical: y = cos(theta)
+              bsTheta = Math.acos(Math.max(-1, Math.min(1, ny)));
+              bsPhi = Math.atan2(nz, nx);
+              if (bsPhi < 0) bsPhi += 2 * Math.PI;
+
               document.getElementById('bsTheta').value = (bsTheta * 180 / Math.PI).toFixed(1);
               document.getElementById('bsPhi').value = (bsPhi * 180 / Math.PI).toFixed(1);
               document.getElementById('bsThetaVal').textContent = (bsTheta * 180 / Math.PI).toFixed(0) + '°';

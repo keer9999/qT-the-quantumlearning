@@ -48,7 +48,7 @@ jntu-crypto/
 |       |-- simon.html            Simon's Algorithm
 |       |-- vqe.html              Variational Quantum Eigensolver (VQE)
 |
-|-- Advanced Topics
+|-- Topics
 |   |-- variational.html          Variational method overview
 |   |-- variationalMethod.html    Full variational method simulator
 |   |-- uncertainty.html          Quantum uncertainty principles
@@ -95,8 +95,8 @@ All seven basics modules include:
 - Key Concepts summary grid (4 colour-coded cards)
 - Formula Reference card (dark-theme, LaTeX or monospace notation)
 - "Did You Know?" callout with real-world context
-- Advanced Interactive Quantum Notebook (3 runnable JavaScript examples each)
-- Advanced Quiz with progress bar, A/B/C/D options, explanations, and score screen
+- Interactive Quantum Notebook (3 runnable JavaScript examples each)
+- Quiz with progress bar, A/B/C/D options, explanations, and score screen
 
 ### Quantum Gates
 
@@ -105,7 +105,6 @@ All seven basics modules include:
 Gates covered: Pauli X/Y/Z, Hadamard, S, T, Phase (P), Identity, Rx/Ry/Rz rotation gates, U3, SWAP, CNOT, CZ, CY, CP, Toffoli (CCX), Fredkin (CSWAP).
 
 ### Quantum Algorithms
-
 | Algorithm | File | Complexity | Type |
 |-----------|------|-----------|------|
 | BB84 Protocol | `bb84.html` / `bb84-enhanced.html` | O(n) | Cryptography / QKD |
@@ -135,7 +134,7 @@ Each algorithm module includes: circuit diagram, step-by-step walkthrough, compl
 
 ### Shared Components
 - **Global navigation bar** (`global-ui.css` / `global-ui.js`): back arrow floating button, consistent across all pages
-- **Advanced Quiz engine**: progress bar, lettered option cards, explanation reveal, score screen with percentage and feedback
+- **Quiz engine**: progress bar, lettered option cards, explanation reveal, score screen with percentage and feedback
 - **Interactive Quantum Notebook**: macOS-style dark editor, tab switcher for 3 examples per module, Run Code / Clear buttons, coloured output (green success, red error)
 - **Formula Reference cards**: dark `#0f172a` background, cyan-tagged category labels, JetBrains Mono math display
 - **Key Concepts grid**: 4-card responsive grid with colour-coded themes (blue/green/purple/orange)
