@@ -1,0 +1,67 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#003366;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0052a3;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffed4e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffa500;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Outer Circle -->
+  <circle cx="100" cy="100" r="98" fill="url(#bgGradient)" stroke="#ffd700" stroke-width="2"/>
+  
+  <!-- Inner Circle (Subtle) -->
+  <circle cx="100" cy="100" r="90" fill="none" stroke="#ffed4e" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Quantum Orbs (3 orbiting circles) -->
+  <g opacity="0.3">
+    <circle cx="155" cy="70" r="8" fill="#ffd700" filter="url(#glow)"/>
+    <circle cx="130" cy="150" r="7" fill="#ffed4e" filter="url(#glow)"/>
+    <circle cx="70" cy="135" r="6" fill="#ffa500" filter="url(#glow)"/>
+  </g>
+  
+  <!-- Quantum Wave Pattern -->
+  <path d="M 70 100 Q 80 85, 90 100 T 110 100" stroke="#ffed4e" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <path d="M 70 115 Q 80 130, 90 115 T 110 115" stroke="#ffa500" stroke-width="1.5" fill="none" opacity="0.4"/>
+  
+  <!-- Main Text: "qT" -->
+  <g filter="url(#shadow)">
+    <!-- Lowercase q -->
+    <text x="50" y="110" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="bold" fill="url(#textGradient)" letter-spacing="2">q</text>
+    
+    <!-- Uppercase T -->
+    <text x="105" y="110" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="bold" fill="url(#textGradient)" letter-spacing="2">T</text>
+  </g>
+  
+  <!-- Subtitle: Quantum Technology -->
+  <text x="100" y="160" font-family="Arial, Helvetica, sans-serif" font-size="11" font-weight="600" fill="#ffed4e" text-anchor="middle" letter-spacing="1" opacity="0.9">QUANTUM TECH</text>
+  
+  <!-- Top Accent Line -->
+  <line x1="70" y1="35" x2="130" y2="35" stroke="#ffd700" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Premium Corner Elements -->
+  <g opacity="0.5">
+    <circle cx="35" cy="35" r="3" fill="#ffed4e"/>
+    <circle cx="165" cy="35" r="3" fill="#ffed4e"/>
+    <circle cx="35" cy="165" r="3" fill="#ffa500"/>
+    <circle cx="165" cy="165" r="3" fill="#ffa500"/>
+  </g>
+</svg>
